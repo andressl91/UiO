@@ -1,0 +1,13 @@
+cl__1 = 0.3;
+Point(1) = {-5, 1, 0, cl};
+Point(2) = {-5, -1, 0, cl};
+Point(3) = {5, -1, 0, cl};
+Point(4) = {-5, -1, 0, cl};
+Point(5) = {5, -1, 0, cl};
+Point(6) = {5, 1, 0, cl};
+Line(1) = {1, 6};
+Line(2) = {6, 3};
+Line(3) = {3, 2};
+Line(4) = {2, 1};
+Line Loop(6) = {1, 2, 3, 4};
+Plane Surface(6) = {6};

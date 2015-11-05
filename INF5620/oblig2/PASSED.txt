@@ -1,0 +1,10 @@
+Some problems running the code, the plotting section is bugged
+Convergence rates aren't the ones that are expected due to an error in the creation of the x mesh. 
+  It would probably run well if you fix that.
+Very well formatted output
+The code is well written and understandable
+The report is super detailed
+
+GOOD JOB!
+
+Group 1: Giovanni, Vigdis, Audun, Christian

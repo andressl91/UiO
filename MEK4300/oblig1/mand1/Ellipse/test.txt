@@ -1,0 +1,137 @@
+Info    : Running 'gmsh -2 ellipse_mesh1.geo' [Gmsh 2.8.3, 1 node, max. 4 threads]
+Info    : Started on Fri Mar 13 14:10:03 2015
+Info    : Reading 'ellipse_mesh1.geo'...
+Info    : Done reading 'ellipse_mesh1.geo'
+Info    : Meshing 1D...
+Info    : Meshing curve 1 (Ellipse)
+Info    : Meshing curve 2 (Ellipse)
+Info    : Meshing curve 3 (Ellipse)
+Info    : Meshing curve 4 (Ellipse)
+Info    : Done meshing 1D (0.03805 s)
+Info    : Meshing 2D...
+Info    : Meshing surface 6 (Plane, Delaunay)
+Info    : Done meshing 2D (0.0114799 s)
+Info    : 262 vertices 525 elements
+Info    : Writing 'ellipse_mesh1.msh'...
+Info    : Done writing 'ellipse_mesh1.msh'
+Info    : Stopped on Fri Mar 13 14:10:03 2015
+Converting from Gmsh format (.msh, .gmsh) to DOLFIN XML format
+Expecting 261 vertices
+Found all vertices
+Expecting 468 cells
+Found all cells
+Conversion done
+Info    : Running 'gmsh -2 ellipse_mesh2.geo' [Gmsh 2.8.3, 1 node, max. 4 threads]
+Info    : Started on Fri Mar 13 14:10:04 2015
+Info    : Reading 'ellipse_mesh2.geo'...
+Info    : Done reading 'ellipse_mesh2.geo'
+Info    : Meshing 1D...
+Info    : Meshing curve 1 (Ellipse)
+Info    : Meshing curve 2 (Ellipse)
+Info    : Meshing curve 3 (Ellipse)
+Info    : Meshing curve 4 (Ellipse)
+Info    : Done meshing 1D (0.041137 s)
+Info    : Meshing 2D...
+Info    : Meshing surface 6 (Plane, Delaunay)
+Info    : Done meshing 2D (0.020963 s)
+Info    : 921 vertices 1843 elements
+Info    : Writing 'ellipse_mesh2.msh'...
+Info    : Done writing 'ellipse_mesh2.msh'
+Info    : Stopped on Fri Mar 13 14:10:04 2015
+Converting from Gmsh format (.msh, .gmsh) to DOLFIN XML format
+Expecting 920 vertices
+Found all vertices
+Expecting 1738 cells
+Found all cells
+Conversion done
+Info    : Running 'gmsh -2 ellipse_mesh3.geo' [Gmsh 2.8.3, 1 node, max. 4 threads]
+Info    : Started on Fri Mar 13 14:10:04 2015
+Info    : Reading 'ellipse_mesh3.geo'...
+Info    : Done reading 'ellipse_mesh3.geo'
+Info    : Meshing 1D...
+Info    : Meshing curve 1 (Ellipse)
+Info    : Meshing curve 2 (Ellipse)
+Info    : Meshing curve 3 (Ellipse)
+Info    : Meshing curve 4 (Ellipse)
+Info    : Done meshing 1D (0.048221 s)
+Info    : Meshing 2D...
+Info    : Meshing surface 6 (Plane, Delaunay)
+Info    : Done meshing 2D (0.0400739 s)
+Info    : 2030 vertices 4061 elements
+Info    : Writing 'ellipse_mesh3.msh'...
+Info    : Done writing 'ellipse_mesh3.msh'
+Info    : Stopped on Fri Mar 13 14:10:04 2015
+Converting from Gmsh format (.msh, .gmsh) to DOLFIN XML format
+Expecting 2029 vertices
+Found all vertices
+Expecting 3908 cells
+Found all cells
+Conversion done
+Info    : Running 'gmsh -2 ellipse_mesh4.geo' [Gmsh 2.8.3, 1 node, max. 4 threads]
+Info    : Started on Fri Mar 13 14:10:05 2015
+Info    : Reading 'ellipse_mesh4.geo'...
+Info    : Done reading 'ellipse_mesh4.geo'
+Info    : Meshing 1D...
+Info    : Meshing curve 1 (Ellipse)
+Info    : Meshing curve 2 (Ellipse)
+Info    : Meshing curve 3 (Ellipse)
+Info    : Meshing curve 4 (Ellipse)
+Info    : Done meshing 1D (0.051005 s)
+Info    : Meshing 2D...
+Info    : Meshing surface 6 (Plane, Delaunay)
+Info    : Done meshing 2D (0.062839 s)
+Info    : 3465 vertices 6931 elements
+Info    : Writing 'ellipse_mesh4.msh'...
+Info    : Done writing 'ellipse_mesh4.msh'
+Info    : Stopped on Fri Mar 13 14:10:05 2015
+Converting from Gmsh format (.msh, .gmsh) to DOLFIN XML format
+Expecting 3464 vertices
+Found all vertices
+Expecting 6730 cells
+Found all cells
+Conversion done
+Solving linear variational problem.
+Solving linear system of size 261 x 261 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 989 x 989 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 2185 x 2185 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 920 x 920 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 3577 x 3577 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 7972 x 7972 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 2029 x 2029 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 7965 x 7965 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 17809 x 17809 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 3464 x 3464 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 13657 x 13657 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+Solving linear variational problem.
+Solving linear system of size 30580 x 30580 (PETSc Krylov solver).
+*** Warning: No plots have been shown yet. Ignoring call to interactive().
+h=8.15E-02 Error=7.48E-05 r=2.08
+h=8.15E-02 Error=3.40E-05 r=2.03
+h=8.15E-02 Error=3.35E-05 r=2.02
+h=4.98E-02 Error=3.28E-05 r=1.67
+h=4.98E-02 Error=1.54E-05 r=1.61
+h=4.98E-02 Error=1.53E-05 r=1.60
+h=3.85E-02 Error=1.95E-05 r=2.03
+h=3.85E-02 Error=8.73E-06 r=2.20
+h=3.85E-02 Error=8.68E-06 r=2.19

@@ -1,0 +1,23 @@
+Solving linear variational problem.
+Solving linear variational problem.
+*** -------------------------------------------------------------------------
+*** Warning: Parameters *_domains of assemble has been deprecated in DOLFIN version 1.4.0.
+*** It will be removed from version 1.6.0.
+*** Parameter *_domains of assemble will be removed. Include this in the ufl form instead.
+*** -------------------------------------------------------------------------
+
+*** -------------------------------------------------------------------------
+*** Warning: Parameters *_domains of assemble has been deprecated in DOLFIN version 1.4.0.
+*** It will be removed from version 1.6.0.
+*** Parameter *_domains of assemble will be removed. Include this in the ufl form instead.
+*** -------------------------------------------------------------------------
+
+Solving linear variational problem.
+Solving linear variational problem.
+[[ 0.93508224  0.05647593]]
+*** -------------------------------------------------------------------------
+*** Warning: Parameters *_domains of assemble has been deprecated in DOLFIN version 1.4.0.
+*** It will be removed from version 1.6.0.
+*** Parameter *_domains of assemble will be removed. Include this in the ufl form instead.
+*** -------------------------------------------------------------------------
+

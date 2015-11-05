@@ -1,0 +1,133 @@
+Info    : Running 'gmsh -2 triangle_mesh1.geo' [Gmsh 2.8.3, 1 node, max. 4 threads]
+Info    : Started on Fri Mar 13 13:46:08 2015
+Info    : Reading 'triangle_mesh1.geo'...
+Info    : Done reading 'triangle_mesh1.geo'
+Info    : Meshing 1D...
+Info    : Meshing curve 1 (Line)
+Info    : Meshing curve 2 (Line)
+Info    : Meshing curve 3 (Line)
+Info    : Done meshing 1D (0.000515 s)
+Info    : Meshing 2D...
+Info    : Meshing surface 5 (Plane, Delaunay)
+Info    : Done meshing 2D (0.00384092 s)
+Info    : 22 vertices 45 elements
+Info    : Writing 'triangle_mesh1.msh'...
+Info    : Done writing 'triangle_mesh1.msh'
+Info    : Stopped on Fri Mar 13 13:46:08 2015
+Converting from Gmsh format (.msh, .gmsh) to DOLFIN XML format
+Expecting 22 vertices
+Found all vertices
+Expecting 27 cells
+Found all cells
+Conversion done
+Info    : Running 'gmsh -2 triangle_mesh2.geo' [Gmsh 2.8.3, 1 node, max. 4 threads]
+Info    : Started on Fri Mar 13 13:46:09 2015
+Info    : Reading 'triangle_mesh2.geo'...
+Info    : Done reading 'triangle_mesh2.geo'
+Info    : Meshing 1D...
+Info    : Meshing curve 1 (Line)
+Info    : Meshing curve 2 (Line)
+Info    : Meshing curve 3 (Line)
+Info    : Done meshing 1D (0.000341 s)
+Info    : Meshing 2D...
+Info    : Meshing surface 5 (Plane, Delaunay)
+Info    : Done meshing 2D (0.00851703 s)
+Info    : 73 vertices 147 elements
+Info    : Writing 'triangle_mesh2.msh'...
+Info    : Done writing 'triangle_mesh2.msh'
+Info    : Stopped on Fri Mar 13 13:46:09 2015
+Converting from Gmsh format (.msh, .gmsh) to DOLFIN XML format
+Expecting 73 vertices
+Found all vertices
+Expecting 114 cells
+Found all cells
+Conversion done
+Info    : Running 'gmsh -2 triangle_mesh3.geo' [Gmsh 2.8.3, 1 node, max. 4 threads]
+Info    : Started on Fri Mar 13 13:46:10 2015
+Info    : Reading 'triangle_mesh3.geo'...
+Info    : Done reading 'triangle_mesh3.geo'
+Info    : Meshing 1D...
+Info    : Meshing curve 1 (Line)
+Info    : Meshing curve 2 (Line)
+Info    : Meshing curve 3 (Line)
+Info    : Done meshing 1D (0.00046 s)
+Info    : Meshing 2D...
+Info    : Meshing surface 5 (Plane, Delaunay)
+Info    : Done meshing 2D (0.00905108 s)
+Info    : 154 vertices 309 elements
+Info    : Writing 'triangle_mesh3.msh'...
+Info    : Done writing 'triangle_mesh3.msh'
+Info    : Stopped on Fri Mar 13 13:46:10 2015
+Converting from Gmsh format (.msh, .gmsh) to DOLFIN XML format
+Expecting 154 vertices
+Found all vertices
+Expecting 261 cells
+Found all cells
+Conversion done
+Info    : Running 'gmsh -2 triangle_mesh4.geo' [Gmsh 2.8.3, 1 node, max. 4 threads]
+Info    : Started on Fri Mar 13 13:46:11 2015
+Info    : Reading 'triangle_mesh4.geo'...
+Info    : Done reading 'triangle_mesh4.geo'
+Info    : Meshing 1D...
+Info    : Meshing curve 1 (Line)
+Info    : Meshing curve 2 (Line)
+Info    : Meshing curve 3 (Line)
+Info    : Done meshing 1D (0.000332 s)
+Info    : Meshing 2D...
+Info    : Meshing surface 5 (Plane, Delaunay)
+Info    : Done meshing 2D (0.0099051 s)
+Info    : 259 vertices 519 elements
+Info    : Writing 'triangle_mesh4.msh'...
+Info    : Done writing 'triangle_mesh4.msh'
+Info    : Stopped on Fri Mar 13 13:46:11 2015
+Converting from Gmsh format (.msh, .gmsh) to DOLFIN XML format
+Expecting 259 vertices
+Found all vertices
+Expecting 456 cells
+Found all cells
+Conversion done
+Solving linear variational problem.
+Solving linear system of size 22 x 22 (PETSc Krylov solver).
+Solving linear system of size 22 x 22 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 70 x 70 (PETSc Krylov solver).
+Solving linear system of size 70 x 70 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 145 x 145 (PETSc Krylov solver).
+Solving linear system of size 145 x 145 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 73 x 73 (PETSc Krylov solver).
+Solving linear system of size 73 x 73 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 259 x 259 (PETSc Krylov solver).
+Solving linear system of size 259 x 259 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 559 x 559 (PETSc Krylov solver).
+Solving linear system of size 559 x 559 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 154 x 154 (PETSc Krylov solver).
+Solving linear system of size 154 x 154 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 568 x 568 (PETSc Krylov solver).
+Solving linear system of size 568 x 568 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 1243 x 1243 (PETSc Krylov solver).
+Solving linear system of size 1243 x 1243 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 259 x 259 (PETSc Krylov solver).
+Solving linear system of size 259 x 259 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 973 x 973 (PETSc Krylov solver).
+Solving linear system of size 973 x 973 (PETSc Krylov solver).
+Solving linear variational problem.
+Solving linear system of size 2143 x 2143 (PETSc Krylov solver).
+Solving linear system of size 2143 x 2143 (PETSc Krylov solver).
+h=9.17E-02 Error=3.33E-04 r=1.27
+h=9.17E-02 Error=6.74E-06 r=2.37
+h=9.17E-02 Error=2.48E-08 r=-2.13
+h=5.90E-02 Error=1.72E-04 r=1.50
+h=5.90E-02 Error=2.30E-06 r=2.44
+h=5.90E-02 Error=2.17E-08 r=0.31
+h=4.15E-02 Error=9.89E-05 r=1.58
+h=4.15E-02 Error=9.38E-07 r=2.56
+h=4.15E-02 Error=2.26E-08 r=-0.12

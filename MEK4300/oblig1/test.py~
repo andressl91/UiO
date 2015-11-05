@@ -1,0 +1,13 @@
+from dolfin import *
+
+
+mu = 0.1
+d = 0.1
+a = 0.1
+
+u_exact = Expression('sqrt(2)*a*mu*x[1]*x[2]', a=a,d=d, mu=mu)
+
+
+#u_exact = Expression('-d/(2.0*sqrt(3)*a*mu)*(x[2]-0.5*a*sqrt(3))*(3.0*pow(x[1],2)-pow(x[2],2)',mu=mu,a=a,d=d)
+
+

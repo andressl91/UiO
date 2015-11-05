@@ -1,0 +1,17 @@
+from dolfin import *
+import os
+
+for k in range(1,3):
+		print k
+		number = 0.5*k
+		b = str(number)
+
+		#Reducing the mesh size with a half
+		os.system('python write.py %s' % b)
+		os.system('gmsh -2 ellipse_mesh.geo ')
+		os.system('dolfin-convert ellipse_mesh.geo ellipse_mesh.xml')
+
+		#Mesh made in gmsh
+		mesh = Mesh('ellipse_mesh.xml')
+		plot(mesh)
+		interactive()

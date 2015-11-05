@@ -1,0 +1,17 @@
+
+PASS.
+
+GOOD:
+* Detailed derivation of the scheme. 
+* Many unit tests included in the program.
+* Nice use of "code-pieces" in throughout the report.
+* Great animations. Nice chioce of physical problems.
+
+NOT GOOD:
+* Should have tried to get a manufactured solution working.
+
+All over:
+Amazing report and working programs: PASS!
+
+
+Krister Stræte Karlsen

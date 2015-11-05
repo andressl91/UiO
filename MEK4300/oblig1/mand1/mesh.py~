@@ -1,0 +1,6 @@
+from dolfin import * 
+
+mesh = Mesh('test.xml')
+
+plot(mesh)
+interactive()

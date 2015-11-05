@@ -1,0 +1,18 @@
+import sys
+cl = sys.argv[1]
+
+#with open('ellipse_mesh.geo', 'r') as file:
+    # read a list of lines into data
+    #data = file.readlines()
+
+file = open('ellipse_mesh.geo', 'r')
+data = file.readlines()
+# now change the first line
+data[0] = 'cl = %s; \n' % cl
+
+# and write everything back
+with open('ellipse_mesh.geo', 'w') as file:
+    file.writelines( data )
+data.replace('ellipse_mesh.geo', 'hei.geo')
+file.close()
+

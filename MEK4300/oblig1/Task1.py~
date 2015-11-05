@@ -1,0 +1,35 @@
+from dolfin import *
+
+
+#Mesh made in GMSH
+mesh = Mesh("triangle_mesh.xml")
+
+#Setting constants, runs smoother in C++
+mu = Constant(0.2)
+dpdx = Constant(-1.0)
+a = Constant(0.2) 
+
+#Define variational problems
+V = FunctionSpace(mesh, 'CG', 1)
+u = TrialFunction(V)
+v = TestFunction(V)
+F = inner(grad(u),grad(v))*dx + 1.0/mu*dpdx*v*dx
+
+#Boundary conditions
+bc = DirichletBC(V, Constant(0), DomainBoundary()) 
+
+#Solving
+u_ = Function(V)
+solve(lhs(F) == rhs(F), u_, bc)
+
+
+#Analythical solution
+
+u_exact = Expression('-dpdx/(2.0*sqrt(3)*a*mu)*(x[2]-0.5*a*sqrt(3))*(3.0*x[1]*x[1]-x[2]*x[2])', mu=mu, a=a, dpdx=dpdx)
+u_exact = project(u_exact, V)
+
+plot(u_exact)
+
+interactive()
+
+

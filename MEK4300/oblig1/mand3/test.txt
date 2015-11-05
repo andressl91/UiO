@@ -1,0 +1,4 @@
+Solving linear variational problem.
+Solving linear variational problem.
+[ 0.2  0.3]
+Saving plot to file: stokes.png
