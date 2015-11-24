@@ -73,7 +73,7 @@ pipe = Pipe(
 		Cp = 2000., #Heat capasity
 		)
 welltemp = [pipe.temp(x[-1], Q[:])]
-pipe.plot(Q,x, welltemp, False)
+pipe.plot(Q,x, welltemp)
 
 
 
