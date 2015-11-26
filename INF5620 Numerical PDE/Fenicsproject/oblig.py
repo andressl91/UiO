@@ -11,7 +11,7 @@ class solver(object):
         self.u = None
         self.f = None
         self.alpha = None
-	
+	#DEFINE KAN FJERNES..FIX
     def define_mesh(self, mesh):
         self.mesh = mesh
 
@@ -105,7 +105,7 @@ class Verify(object):
                 u = self.sol.Piccard(1)
                 u_vector = u.vector().array()
                 #Have to use around due to small errors in solver
-                u_vector = np.around(u_vector)
+                u_vector = np.around(u_vector) 
                 test = all(x == u_vector[0] for x in u_vector)
                 assert(test == True)
                 dim += 1
@@ -145,28 +145,73 @@ class Verify(object):
             5*t*t*t *x[0]*x[0]*x[0]*x[0]/4 + \
             2*t*x[0]-t", t=0,q=sol.q))
             sol.define_alpha(lambda u: 1+u*u)
-            #getstep = [i*sol.dt for i in [1,3]]
-            getstep = [.1]
+            getstep = [i*sol.dt for i in [1,10,25]]
+            count = 0
             for i in getstep:
                 sol.Piccard(1, i)
                 ue.t = i
                 ue = interpolate(ue, sol.V)
-                plot(sol.u)
-                plot(ue)
-                interactive()
-                #import matplotlib.pyplot as plt
-                #plt.figure(1)
+                #plot(sol.u)
+                #plot(ue)
+                #interactive()
+                import matplotlib.pyplot as plt
+                fig = plt.figure()
+                ax = fig.add_subplot(111)
+                ax.set_title("Time %.4f seconds" % i)
+                ax.set_xlim([0, 1000]); ax.set_ylim([0, .02])
+                ax.plot(sol.u.vector().array())
+                ax.plot(ue.vector().array())
                 #plt.plot(sol.u.vector().array())
                 #plt.plot(ue.vector().array(), 'r')
-                #plt.show()
+                #plt.savefig('frame_%3d.png' % count)
+                #count += 1
+                #plt.close(fig)
                 
+        def convergence(self):
+            ue = Expression("(t-dt)*x[0]*x[0]*(0.5-x[0]/3.0)", t=0, dt = sol.dt)
+            sol.define_init(ue)
+            sol.define_f(Expression("q*pow(x[0],2)*(-2*x[0]+3)/6 -\
+                ( -12*t*x[0] + 3*t*(-2*x[0]+3) ) *\
+                ( pow(x[0],4)*pow(-dt+t,2)*pow(-2*x[0] + 3,2) + 36 )/324 -\
+                ( -6*t*pow(x[0],2) + 6*t*x[0]*(-2*x[0]+3) ) *\
+                ( 36*pow(x[0],4)*(-dt+t)*(-dt+t)*(2*x[0]-3) +\
+                36*x[0]*x[0]*x[0]*(-dt+t)*(-dt+t) *\
+                (-2*x[0]+3)*(-2*x[0]+3) )/5832", t=0.0,dt=sol.dt,q=sol.q))
+            sol.alpha = lambda u: 1+u*u
+            Nx = int(1./np.sqrt(sol.dt))
+            sol.mesh = IntervalMesh(Nx, 0, 1)
+            #Watch value for dt
+            getstep = sol.dt*20
+            cut = 6
+            E = np.zeros(cut)
+            h = np.zeros(cut)
+            for i in range(cut): 
+                h[i] = sol.dt
+                E[i] = sol.Piccard(1, getstep)
+                sol.dt = sol.dt/2.
+                Nx = int(1./np.sqrt(sol.dt))
+                sol.mesh = IntervalMesh(Nx, 0, 1)
+                
+            r = np.zeros(len(E)-1)
+            r[:] = np.log(E[:-1]/E[1:])/np.log(h[:-1]/h[1:])
+            print r
+    
+        def gaussian(self, sigma = 1.0, beta = 1.0):
+            Dim2 =UnitSquareMesh(100, 100)
+            sol.define_init(Expression("exp(-1/(2*sigma*sigma)*\
+                        (x[0]*x[0]+x[1]*x[1]))", sigma = sigma))
+            sol.alpha = lambda u: 1+u*u
+            sol.f = Expression("t*0",t=0)
+            sol.Piccard(1)
+            plot(sol.get_solution())
+            interactive()
 
 if __name__ == "__main__":
-    #dt = 0.1; q = 0.1; t = 0
-    #T = 2.0; test = 10
     sol = solver(dt = 0.01, T = 1.0, q = 1.0)
  
     v = Verify(sol)
     #v.constant()
     #v.analytic()
-    v.manufactured()
+    #v.manufactured()
+    #v.convergence()
+    v.gaussian()
