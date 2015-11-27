@@ -1,0 +1,114 @@
+\documentclass[a4paper,norsk]{article}
+\usepackage{preamble}
+
+\begin{document}
+\maketitle
+\section*{Introduction and numerical implementation}
+In this exercise we were tasked to take a closer look on a wave equation with variable wave velocity on the form.
+\begin{align*}
+u_{tt} = (qu_x)_x + f(x,t)
+\end{align*}
+Where $f(x,t)$ is the added source term, which is used to verify the implementation. For this exercise we were to compare different discretizations of Neumann conditions, for the manifactured solution 
+\begin{align*}
+u(x,t) = cos(\frac{\pi x}{L})cos(\omega t)
+\end{align*}
+To discretize the PDE probelm we have to take a closer look at the wave velocity. Introducing $\phi$ such that $\phi = q(x) \frac{\partial u}{\partial x} $, and using centered differentiating on this parameter we end up with
+
+\begin{align*}
+\big[\frac{\partial \phi}{\partial x} \big]_i^n \approx \frac{\phi_{i+\frac{1}{2}}-\phi_{i-\frac{1}{2}}}{\Delta x}
+\end{align*}
+Where \textbf{n} represents position in time, while \textbf{i} is the position in space. Using the relation for $\phi$ we get
+
+\begin{align*}
+\phi_{i + \frac{1}{2}} = q_{i+\frac{1}{2}} \Big[\frac{\partial u}{\partial x} \Big]_{i+\frac{1}{2}}^n \approx
+q_{i+\frac{1}{2}} \frac{u_{i+1}^n-u_i^n}{\Delta x} \\
+\phi_{i - \frac{1}{2}} = q_{i-\frac{1}{2}} \Big[\frac{\partial u}{\partial x} \Big]_{i-\frac{1}{2}}^n \approx
+q_{i-\frac{1}{2}} \frac{u_{i}^n-u_{i-1}^n}{\Delta x} \\
+\Big[\frac{\partial}{\partial x} \big(q(x)\frac{\partial u}{\partial x} \big) \Big]_i^n \approx
+\frac{1}{\Delta x^2} \Big( q_{i+\frac{1}{2}}(u_{i+1}-u_i^n) - q_{i-\frac{1}{2}}(u_i^n-u_{i-1}^n)  \Big) 
+\end{align*}
+Finally rewriting the discretized PDE with respect to $u_i^{n+1}$ and using arithmetic mean for the $q$ values, the numerical scheme for calculating the inner points yields
+
+
+\begin{align*}
+\frac{u_i^{n+1}-2u_i^n+u_i^{n-1}}{\Delta t^2} = \frac{1}{\Delta x^2} \Big( q_{i+\frac{1}{2}}(u_{i+1}-u_i^n) - q_{i-\frac{1}{2}}(u_i^n-u_{i-1}^n) + f_i^n \\
+u_i^{n+1} = -u_i^{n-1}+2u_i^n + \Big(\frac{\Delta t}{\Delta x}\Big)^2 \Big(\frac{1}{2}(q_i+q_{i+1})(u_{i+1}^n-u_i^n)  
+-\frac{1}{2}(q_i+q_{i-1})(u_i^n-u_{i-1}^n)  \Big) +f_i^n
+\end{align*}
+\newpage
+Now considering the first timestep for $n = 0$, we face a problem calculating the $u_i^{-1}$ term due to the fact that this point lies outside the meshgrid. This can be solved by the centered discretized initial velocity condition 
+\begin{align*}
+\frac{\partial u}{\partial t}(x,0) = V \hspace{1 cm} \frac{u_i^{1}-u_i^{-1}}{2\Delta t} = V \hspace{1 cm} 
+u_i^{-1} = u_i^1 - 2\Delta t V \\
+u_i^{n+1} = \Delta tV+u_i^n + \frac{1}{2}\Big(\frac{\Delta t}{\Delta x}\Big)^2 \Big(\frac{1}{2}(q_i+q_{i+1})(u_{i+1}^n-u_i^n)  
+-\frac{1}{2}(q_i+q_{i-1})(u_i^n-u_{i-1}^n)  \Big) +\frac{1}{2}f_i^n
+\end{align*}
+
+For all timesteps, we observe we run upon points outside of meshpoints in space when $i =0,L$. Here we use the Neumann condition to help us out, but not only for $u$ but also $q$ such that
+\begin{align*}
+\frac{\partial u}{\partial x}(x,t) \Big|_{i=0,L}^n = 0 \hspace{1cm} \frac{\partial q}{\partial x}(x) \Big|_{i=0,L} = 0
+\end{align*}
+In other words $q_{i+1} = q_{i-1}$. Using this result, the boundary calculations can be rewritten such that for $i=L$, we end up with
+\begin{align*}
+u_i^{n+1} = -u_i^{n-1}+2u_i^n + \Big(\frac{\Delta t}{\Delta x}\Big)^2 2q_{i-\frac{1}{2}}
+(u_{i-1}^n - u_i^n) + \Delta t^2 f_i^n \\ 
+u_i^{n+1} = \Delta t V+u_i^n + \frac{1}{2}\Big(\frac{\Delta t}{\Delta x}\Big)^2  2q_{i-\frac{1}{2}}
+(u_{i-1}^n - u_i^n) + \frac{1}{2}\Delta t^2 f_i^n
+\end{align*}
+
+
+Numerical results will be visually presented in gif files provided in my repository.
+
+\section*{Exercise a}
+In this test problem we implement q as $q = 1 + (x-\frac{L}{2})^4$. I use sympy to calculate f in my python method fvalues provided in the code. I get the following convergence rate
+
+\begin{lstlisting}[style=terminal]
+Using V = 0, L = 2, dx = 0.0600, dt = 0.0300
+Dividing dt by 2, 4 times
+Convergence rate 0.25847 for dt = 0.03000
+Convergence rate 0.26126 for dt = 0.01500
+Convergence rate 0.34039 for dt = 0.00750
+Convergence rate 0.42694 for dt = 0.00375
+\end{lstlisting}
+We observe that the solution looks more or less good. Looking at the convergence rate it seems that it's closing in towards 0.5, which is really low. So it seems even though the scheme solution looks good, the covergencerate is slow. It should be aroud 2.
+
+\section*{Exercise b}
+In this test problem we implement q as $q(x) = cos(\frac{\pi x}{L})$. Again I use sympy to calculate f in my python method fvalues provided in the code. Now the convergence rate yields
+
+\begin{lstlisting}[style=terminal]
+Using V = 0, L = 2, dx = 0.0600, dt = 0.0300
+Dividing dt by 2, 4 times
+Convergence rate 0.51569 for dt = 0.03000
+Convergence rate 0.50705 for dt = 0.01500
+Convergence rate 0.50332 for dt = 0.00750
+Convergence rate 0.50161 for dt = 0.00375
+\end{lstlisting}
+Here the convergence rate is better, stabilizing around 0.5 which is higher than in exercise a. But again, it should be around 2 so there might me some error in my scheme. 
+
+\section*{Exercise c}
+Here we use an approximation for the end points $i =0,L$ in the following way 
+\begin{align*}
+u_i-u_{i-1} = 0 \hspace{2mm} i = Nx \hspace{5mm} u_{i+1}-u_i = 0 \hspace{2mm} i=0
+\end{align*}
+In other words we say that the end points is the same as the neighbor value within the mesh. Printing the convergence rate 
+
+\begin{lstlisting}
+Using V = 0, L = 2, dx = 0.0600, dt = 0.0300
+Dividing dt by 2, 4 times
+Convergence rate 0.46944 for dt = 0.03000
+Convergence rate 0.48476 for dt = 0.01500
+Convergence rate 0.49993 for dt = 0.00750
+Convergence rate 0.49996 for dt = 0.00375
+\end{lstlisting}
+Even though we observe that this estimate gives a poor solution over time in the animation, we get convergence rate around 0.5.
+
+\section*{Exercise d}
+As far as I can see, we get the same scheme as in b, only with a factor of $\frac{1}{2}$.
+\newpage
+
+\lstinputlisting[caption=Scheduler, style=pythoncode,firstline=37, lastline=45]{wave.py}
+
+
+\end{document}
+
+

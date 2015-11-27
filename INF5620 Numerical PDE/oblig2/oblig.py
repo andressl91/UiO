@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import sympy as sym
 import os, glob
-
+ #FIX DX TIL EXAMEN; SJEKK s 46
 #os.remove('fig_*.png')
 #convert -delay 10 -loop 0 frame_*.png animation.gif
 def fvalues(task):
@@ -83,10 +83,6 @@ def solver(V, w, dx, L, dt, T, task):
 		if task == "c":
 			u1[0] = u1[1]
 			u1[-1] = u1[-2]
-			#u1[0] = -u_1[1] + 2*u[1]+c**2*0.5* ((q[1]+q[2])*(u[2]-u[1])-(q[1]+q[0])*(u[1]-u[0])) +\
-			#		dt**2*fval(x[1],t[1],L,w)
-			#u1[-1] = -u_1[-2] + 2*u[-2]+c**2*0.5* ((q[-2]+q[-1])*(u[-1]-u[-1])-(q[-2]+q[-3])*(u[-2]-u[-3])) +\
-			#		dt**2*fval(x[-2],t[-2],L,w)
 
 		if task == "d":
 			u1[0] = -u_1[0] +2*u[0]+c**2*0.5*(-(q[1]+q[0])*(u[1]-u[0])) + dt**2*fval(x[0],t[i],L,w)
@@ -100,7 +96,7 @@ def solver(V, w, dx, L, dt, T, task):
 			value = np.max(abs(u1[:]-exact(x, (i+1)*dt, L, w)[:]))
 			error[:] = u1[:]
 			time = (i+1)*dt
-		
+		"""
 		plt.figure()
 		plt.plot(x, exact(x,t[i],L,w),'g')
 		plt.plot(x, u1)
@@ -110,7 +106,7 @@ def solver(V, w, dx, L, dt, T, task):
 		plt.title("Exercise %s, numerical solution against analytical \n" \
 		 "Time = %d, dt = %.2f, L = %d, dx = %.2f" % (task, T,dt,L,dx))                               	
 		plt.savefig('frame_%04d.png' % i)
-		
+		"""
 	return error, time, x
 
 def convergence_rates(m, w, dx, L, dt, T, V, solver_function, task):
@@ -129,9 +125,9 @@ def convergence_rates(m, w, dx, L, dt, T, V, solver_function, task):
     r = [np.log(E_values[i-1]/E_values[i])/
          np.log(dt_values[i-1]/dt_values[i])
          for i in range(1, m, 1)]
-    return r, dt_values
+    return r, dt_values, E_values
 
-def main():
+def main(task):
 	import sys
 	V = 0.0
 	L = 2; T = 6
@@ -141,15 +137,17 @@ def main():
 		sys.exit(1)
 	w = 1
 	m = 5
-	task = "d"
 	#solver(V, w, dx, L, dt, T, task)
-	r, Dt = convergence_rates(m, w, dx, L, dt, T, V, solver, task) 
+	r, Dt, E = convergence_rates(m, w, dx, L, dt, T, V, solver, task) 
 	print "Using V = %d, L = %d, dx = %.4f, dt = %.4f" % (V, L, dx, dt)
 	print "Dividing dt by 2, %d times" % (m-1)
 	for i in range(m-1):
-		print "Convergence rate %.5f for dt = %.5f" % (r[i], Dt[i])
+		print "Convergence rate %.5f for dt = %.5f, Error %.5f" % (r[i], Dt[i], E[i])
 	
 
 if __name__ == '__main__':
-	main()
+	exercise = ["a", "b", "c", "d"]
+	for i in exercise:
+		print "Exercise %s" % i 
+		main(i)
 	
