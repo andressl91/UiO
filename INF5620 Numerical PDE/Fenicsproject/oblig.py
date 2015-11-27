@@ -188,6 +188,7 @@ class Verify(object):
             for i in range(cut): 
                 h[i] = sol.dt
                 E[i] = sol.Piccard(1, getstep)
+                print E[i], h[i]
                 sol.dt = sol.dt/2.
                 Nx = int(1./np.sqrt(sol.dt))
                 sol.mesh = IntervalMesh(Nx, 0, 1)
@@ -213,5 +214,5 @@ if __name__ == "__main__":
     #v.constant()
     #v.analytic()
     #v.manufactured()
-    #v.convergence()
-    v.gaussian()
+    v.convergence()
+    #v.gaussian()
