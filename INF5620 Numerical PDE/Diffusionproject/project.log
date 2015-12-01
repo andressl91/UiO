@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.13)  27 NOV 2015 11:01
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) (format=pdflatex 2015.3.13)  30 NOV 2015 11:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -900,40 +900,79 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 6.
 
 (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 21.
- [1
+) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 21.
+(/usr/share/texlive/texmf-dist/tex/latex/listings/lstlang1.sty
+File: lstlang1.sty 2013/08/26 1.5b listings language file
+)
+LaTeX Font Info:    Try loading font information for T1+cmtt on input line 71.
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+) [2] [3]
+<framea.png, id=110, 578.16pt x 433.62pt>
+File: framea.png Graphic file (type png)
+ <use framea.png>
+Package pdftex.def Info: framea.png used on input line 173.
+(pdftex.def)             Requested size: 169.62154pt x 127.21544pt.
+
+<frameb.png, id=112, 578.16pt x 433.62pt>
+File: frameb.png Graphic file (type png)
+ <use frameb.png>
+Package pdftex.def Info: frameb.png used on input line 174.
+(pdftex.def)             Requested size: 169.62154pt x 127.21544pt.
+
+<framec.png, id=113, 578.16pt x 433.62pt>
+File: framec.png Graphic file (type png)
+ <use framec.png>
+Package pdftex.def Info: framec.png used on input line 179.
+(pdftex.def)             Requested size: 169.62154pt x 127.21544pt.
+
+<framed.png, id=114, 578.16pt x 433.62pt>
+File: framed.png Graphic file (type png)
+ <use framed.png>
+Package pdftex.def Info: framed.png used on input line 180.
+(pdftex.def)             Requested size: 169.62154pt x 127.21544pt.
+ [4 <./framea.png> <./frameb.png> <./framec.png> <./framed.png>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 214.
+ [5]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 214.
  (./project.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 21.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 21.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 214.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 214.
 Package rerunfilecheck Info: File `project.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 21.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 214.
  ) 
 Here is how much of TeX's memory you used:
- 11758 strings out of 493304
- 170428 string characters out of 6139871
- 269106 words of memory out of 5000000
- 15038 multiletter control sequences out of 15000+600000
- 17692 words of font info for 50 fonts, out of 8000000 for 9000
+ 12402 strings out of 493304
+ 177315 string characters out of 6139871
+ 387579 words of memory out of 5000000
+ 15578 multiletter control sequences out of 15000+600000
+ 20805 words of font info for 56 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
- 44i,10n,45p,241b,347s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}</usr/share/texliv
-e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/
-fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/public/cm-supe
-r/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx1440.pfb></usr
-/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/texmf/fonts/t
-ype1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/public/cm-super
-/sfrm1728.pfb>
-Output written on project.pdf (1 page, 87920 bytes).
+ 44i,12n,49p,299b,1366s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texmf/
+fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/
+type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/
+public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/
+share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/t
+exmf/fonts/type1/public/cm-super/sfbi1000.pfb></usr/share/texmf/fonts/type1/pub
+lic/cm-super/sfbx1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfbx144
+0.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb></usr/share/te
+xmf/fonts/type1/public/cm-super/sfrm1200.pfb></usr/share/texmf/fonts/type1/publ
+ic/cm-super/sfrm1728.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfti1000
+.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt0900.pfb></usr/share/tex
+mf/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on project.pdf (5 pages, 326111 bytes).
 PDF statistics:
- 53 PDF objects out of 1000 (max. 8388607)
- 40 compressed objects within 1 object stream
- 5 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 215 PDF objects out of 1000 (max. 8388607)
+ 181 compressed objects within 2 object streams
+ 91 named destinations out of 1000 (max. 500000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 
