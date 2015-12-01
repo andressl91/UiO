@@ -35,7 +35,7 @@ class Pipe:
 		ax1.set_xlabel("Distance meters")
 		ax1.set_ylabel("Temperature Celcius")	
 		ax1.legend(["Q = %dKg/s" % b for b in Q ])
-		plt.savefig("TASK4wellhead.png")
+		#plt.savefig("TASK4wellhead.png")
 
 		welltemp = [pipe.temp(x[-1], Q[:])]
 		#From wellhead to shore
@@ -49,13 +49,14 @@ class Pipe:
 			fig2 = plt.figure(2)
 			ax2 = fig2.add_subplot(111)
 			ax2.plot(x, self.temp(x,Q[j]))
+			print self.temp(x,Q[j])[-1]
 			self.shore.append(self.temp(x[-1],Q[i]))
 			self.shorepipe.append(self.temp(x,Q[i]))
 
 		ax2.set_xlabel("Distance meters")
 		ax2.set_ylabel("Temperature Celcius")	
 		ax2.legend(["Q = %dKg/s" % b for b in Q ])
-		plt.savefig("TASK4shore.png")
+		#plt.savefig("TASK4shore.png")
 		if show == True:
 
 			plt.show()
@@ -69,7 +70,7 @@ pipe = Pipe(
 		Tres = 150., #Temperature reservoir
 		D = 5*0.0254, #Pipe diameter in meters
 		Tsea = (150.+7.)/2., #Average Temperature sea and reservoir
-		U = 9., #Heat transfe
+		U = 1., #Heat transfe
 		Cp = 2000., #Heat capasity
 		)
 welltemp = [pipe.temp(x[-1], Q[:])]

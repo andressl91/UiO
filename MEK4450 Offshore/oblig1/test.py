@@ -1,12 +1,12 @@
 import numpy as np
 
-b = 1.95
-f = 0.8
-ma = 2.7
+b = 2.05
+f = 0.3
+ma = 2.65
 
-rt = 2*10**1 #Formation water resistivity
-rw = 190*10**-3 #True formation resistivity
-
+rt = 80 #True formation resistivity
+rw = 0.2 #Formation water resistivity
+		
 
 def por(b,j,ma):
 	return (b-ma)/(f-ma)

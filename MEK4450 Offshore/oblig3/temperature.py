@@ -35,7 +35,7 @@ class Pipe:
 		ax1.set_xlabel("Distance meters")
 		ax1.set_ylabel("Temperature Celcius")	
 		ax1.legend(["Q = %dKg/s" % b for b in Q ])
-		plt.savefig("wellhead.png")
+		#plt.savefig("wellhead.png")
 
 		welltemp = [pipe.temp(x[-1], Q[:])]
 		#From wellhead to shore
@@ -55,7 +55,7 @@ class Pipe:
 		ax2.set_xlabel("Distance meters")
 		ax2.set_ylabel("Temperature Celcius")	
 		ax2.legend(["Q = %dKg/s" % b for b in Q ])
-		plt.savefig("shore.png")
+		#plt.savefig("shore.png")
 		if show == True:
 
 			plt.show()
