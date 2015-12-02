@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+#Makes geometry
 def points(N, a, b):	
 	if a == b:
 		o = 2.0*np.pi*a
@@ -21,72 +22,81 @@ plt.axis([-3,3,-3,3])
 plt.plot(x,y)
 plt.show()
 """
+#Makes angles between nodes from node j
 def theta(N, a, b, j):
 	x, y = points(N, a, b)
 	theta = np.zeros(N) 
 	initx = (x[j+1] + x[j])*0.5
 	inity = (y[j+1] + y[j])*0.5
-	theta = np.zeros(N)
-
-	theta[:-1] = np.arccos(((x[:-1]-initx)*(x[1:]-initx) + (y[:-1]-inity)*(y[1:]-inity))\
-	/(np.sqrt((x[:-1]-initx)**2+(y[:-1]-inity)**2)\
-	*np.sqrt((x[1:]-initx)**2+(y[1:]-inity)**2)))
-
-	xa = x[len(theta)-1] - initx; xb = x[0] - initx
-	ya = y[len(theta)-1] - inity; yb = y[0] - inity
-	theta[len(theta)-1] = np.arccos((xa*xb + ya*yb)/(np.sqrt(xa**2 + ya**2) * np.sqrt(xb**2 + yb**2)))
+	for i in range(len(theta)):
+		if i == len(theta)-1:
+			xa = x[i] - initx; xb = x[0] - initx
+			ya = y[i] - inity; yb = y[0] - inity
+			theta[i] = np.arccos((xa*xb + ya*yb)/(np.sqrt(xa**2 + ya**2) * np.sqrt(xb**2 + yb**2)))
+		else:
+			xa = x[i] - initx; xb = x[i+1] - initx
+			ya = y[i] - inity; yb = y[i+1] - inity
+			test = (xa*xb + ya*yb)/(np.sqrt(xa**2 + ya**2) * np.sqrt(xb**2 + yb**2))
+			if test < -1.0: #Due too round off error
+				theta[i] = np.arccos(-1.0)
+			#if test > 1.0: #Due too round off error
+			#	theta[i] = np.arccos(1.0)
+			else:
+				theta[i] = np.arccos(test)
 	return theta
 
+#Calculates the B matrix
 def integrate(N, eq, direction,a,b):
 	area = 0
 	x, y = eq
 	integral = np.zeros(N)
-	if direction == 11 or 66:
+	if direction == 11:
 		num = x
-		n1_a = -((x[:-2]+x[1:-1])/(2*a**2))/np.sqrt(((x[1:-1]+x[:-2])/(2*a**2))**2 + ((y[1:-1]+y[:-2])/(2*b**2))**2)
-		n2_a = -((y[:-2]+y[1:-1])/(2*b**2))/np.sqrt(((x[1:-1]+x[:-2])/(2*a**2))**2 + ((y[1:-1]+y[:-2])/(2*b**2))**2)
-		rx_a = 0.5*(x[:-2]+x[1:-1]); ry_a = 0.5*(y[:-2]+y[1:-1]); 
-
-		n1_b = -((x[1:-1]+x[2:])/(2*a**2))/np.sqrt(((x[2:]+x[1:-1])/(2*a**2))**2 + ((y[2:]+y[1:-1])/(2*b**2))**2)
-		n2_b = -((y[1:-1]+y[2:])/(2*b**2))/np.sqrt(((x[2:]+x[1:-1])/(2*a**2))**2 + ((y[2:]+y[1:-1])/(2*b**2))**2)
-		rx_b = 0.5*(x[1:-1]+x[2:]); ry_b = 0.5*(y[1:-1]+y[2:]); 
-	
 	if direction == 22:
 		num = y
+	for i in range(N-1):
+		x_0 = 0.5*(x[i]+x[i+1])
+		y_0 = 0.5*(y[i]+y[i+1])
 
-	x_0 = np.zeros(N-1); y_0 = np.zeros(N-1)
-	x_0[:] = 0.5*(x[:-1]+x[1:])
-	y_0[:] = 0.5*(y[:-1]+y[1:])
+		for j in range(N-2):
+			ds = np.sqrt((x[j+1]-x[j])**2 + (y[j+1]-y[j])**2)
+			#if x_0 == x[j] and y_0 == y[j] or x_0 == x[j+1] and y_0 == y[j+1]:
+			#	continue
 
-	ds = np.sqrt((x[1:-1]-x[:-2])**2 + (y[1:-1]-y[:-2])**2)
-	na = -(num[:-2]+num[1:-1])/(2*a**2)/np.sqrt(((x[:-2]+x[1:-1])/(2*a**2))**2 + ((y[:-2]+y[1:-1])/(2*b**2))**2)
-	nb = -(num[1:-1]+num[2:])/(2*a**2)/np.sqrt(((x[1:-1]+x[2:])/(2*a**2))**2 + ((y[1:-1]+y[2:])/(2*b**2))**2)
+			radius_a = np.sqrt((x_0 -x[j])**2 + (y_0 - y[j])**2)
+			radius_b = np.sqrt((x_0 -x[j+1])**2 + (y_0 - y[j+1])**2)
 
+			if direction == 66:
+				n1_a = -((x[j]+x[j+1])/(2*a**2))/np.sqrt(((x[j+1]+x[j])/(2*a**2))**2 + ((y[j+1]+y[j])/(2*b**2))**2)
+				n2_a = -((y[j]+y[j+1])/(2*b**2))/np.sqrt(((x[j+1]+x[j])/(2*a**2))**2 + ((y[j+1]+y[j])/(2*b**2))**2)
+				rx_a = 0.5*(x[j]+x[j+1]); ry_a = 0.5*(y[j]+y[j+1]); 
+				n_a = np.cross([n1_a,n2_a],[rx_a,ry_a])
 
-	for i in range(N-1): #N-1
-		radius_a = np.sqrt((x_0[i] -x[:-2])**2 + (y_0[i] - y[:-2])**2)
-		radius_b = np.sqrt((x_0[i] -x[1:-1])**2 + (y_0[i] - y[1:-1])**2)
-		
-		if direction == 66:
+				n1_b = -((x[j+1]+x[j+2])/(2*a**2))/np.sqrt(((x[j+2]+x[j+1])/(2*a**2))**2 + ((y[j+2]+y[j+1])/(2*b**2))**2)
+				n2_b = -((y[j+1]+y[j+2])/(2*b**2))/np.sqrt(((x[j+2]+x[j+1])/(2*a**2))**2 + ((y[j+2]+y[j+1])/(2*b**2))**2)
+				rx_b = 0.5*(x[j+1]+x[j+2]); ry_b = 0.5*(y[j+1]+y[j+2]); 
+				n_b = np.cross([n1_b,n2_b],[rx_b,ry_b])
+
+				f_a = np.log(radius_a) * n_a
+				f_b = np.log(radius_b) * n_b
+
+			else:
+				na = -(num[j]+num[j+1])/(2*a**2)/np.sqrt(((x[j]+x[j+1])/(2*a**2))**2 + ((y[j]+y[j+1])/(2*b**2))**2)
+				nb = -(num[j+1]+num[j+2])/(2*a**2)/np.sqrt(((x[j+1]+x[j+2])/(2*a**2))**2 + ((y[j+1]+y[j+2])/(2*b**2))**2)
+				f_a = np.log(radius_a) * na
+				f_b = np.log(radius_b) * nb
 			
-			n_a = np.cross([n1_a[i],n2_a[i]],[rx_a[i],ry_a[i]])
-			n_b = np.cross([n1_b[i],n2_b[i]],[rx_b[i],ry_b[i]])
-
-			f_a = np.log(radius_a[:]) * na
-			f_b = np.log(radius_b[:]) * nb
-			integral[i] = np.sum(0.5*(f_a[:] + f_b[:])*ds[:])
-
-	
-		else:
-			f_a = np.log(radius_a[:]) * na[:]
-			f_b = np.log(radius_b[:]) * nb[:]
-			integral[i] = np.sum(0.5*(f_a[:] + f_b[:])*ds[:])
+			area = area + 0.5*(f_a + f_b)*ds
+		integral[i] = area
+		area = 0
 	return integral
 
 a = 2.; b=2.; N = 6; direction = 22
 #print points(N,a,b)
 print integrate(N, points(N,a,b),direction,a,b)
 
+
+#Makes the A matrix
 def matrix(N, a, b):
 	mat = np.zeros((N,N))
 	for i in range(N):
@@ -173,5 +183,5 @@ def main():
 			print "Exact value: %.5f, Calculated mass: %.5f, error: %.5f %%" % (exact,mass, masse)
 
 if __name__ == "__main__":
-	main()
+	#main()
 	print 
