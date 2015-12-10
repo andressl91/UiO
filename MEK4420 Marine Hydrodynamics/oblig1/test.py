@@ -1,5 +1,7 @@
 import numpy as np 
 
 a = np.linspace(0,5,6)
-hyp = np.sqrt(1+1./4)
-print np.arctan(2)
+N = len(a)
+N = 3
+print a
+print a[:N], a[0:N+1]
