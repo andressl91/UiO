@@ -15,13 +15,13 @@ def points(N, a, b):
 		x[i] = a*np.cos(dx*i)
 		y[i] = b*np.sin(dx*i)
  	return x, y
-"""
-x, y = points(100,2,2)
+
+x, y = points(10,2,2)
 plt.figure()
 plt.axis([-3,3,-3,3])
 plt.plot(x,y)
 plt.show()
-"""
+
 #Makes angles between nodes from node j
 def theta(N, a, b, j):
 	x, y = points(N, a, b)
@@ -90,11 +90,6 @@ def integrate(N, eq, direction,a,b):
 		integral[i] = area
 		area = 0
 	return integral
-
-a = 2.; b=2.; N = 6; direction = 22
-#print points(N,a,b)
-print integrate(N, points(N,a,b),direction,a,b)
-
 
 #Makes the A matrix
 def matrix(N, a, b):
@@ -183,5 +178,5 @@ def main():
 			print "Exact value: %.5f, Calculated mass: %.5f, error: %.5f %%" % (exact,mass, masse)
 
 if __name__ == "__main__":
-	#main()
+	main()
 	print 
