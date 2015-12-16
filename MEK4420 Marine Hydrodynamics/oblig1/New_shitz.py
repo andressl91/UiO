@@ -34,7 +34,7 @@ def make_angle(N,r_a,r_b):
 				matrix_[i][k] = 0
 	#print "matrix", matrix_
 	return matrix_
-print make_angle(8,1,1)
+
 def integral(dirr,N,r_a,r_b,x1,x2,y1,y2):
 	x,y = make_points(N,r_a,r_b)
 	# middle of this segment
@@ -75,7 +75,10 @@ def integral_matrix(dirr,r_a,r_b,N):
 	for i in range(N):
 		integral_matrixes[i] = integral(dirr,N,r_a,r_b,x[i],x[i+1],y[i],y[i+1])
 	return integral_matrixes
-print integral_matrix(11,1,1,10)
+
+print integral_matrix(11, 2, 2, 8)
+
+print len(integral_matrix(11,1,1,10))
 def solver(dirr,N,r_a,r_b):
 	return np.linalg.solve(make_angle(N,r_a,r_b),integral_matrix(dirr,r_a,r_b,N))
 
@@ -88,6 +91,7 @@ def added_mass(dirr,r_a,r_b,N):
 	y_c = (y[:N]+y[1:N+1])*0.5
 	a = phi[:N]
 	b = phi[0:N+1]
+	#print len(a),len(b)
 
 	if dirr == 11:
 		n = ((-y_c)/(r_b**2)) \
@@ -106,7 +110,6 @@ def added_mass(dirr,r_a,r_b,N):
 		r_y = y_c
 		n = ny*r_x - nx*r_y
 		exact = np.pi*(r_a**2-r_b**2)**2/8.0
-	print len(a)
 	integ = 0.5*sum((a+b)*ds*n)
 	print  N," Elements"
 	print "Direction :", dirr
@@ -114,7 +117,7 @@ def added_mass(dirr,r_a,r_b,N):
 	print "Exact added mass:",exact
 	print 100-(100*integ/exact),"%"
 #added_mass(11,1,3,1000)
-#added_mass(11,1,1,10)
+#added_mass(11,1,1,100)
 def exact(r_a,N):
 	dtet = 2*pi/N
 	value = np.zeros(N)
@@ -126,4 +129,3 @@ print("--- %.2f seconds ---" % (time.time() - start_time))
 #print exact(1,10)
 #print exact(1,100) - solver(11,100,1,1)
 
-print added_mass(66,1,1,100)

@@ -29,12 +29,13 @@ class Figure:
 			test = ((x[:-1]-initx)*(x[1:]-initx) + (y[:-1]-inity)*(y[1:]-inity))\
 			/(np.sqrt((x[:-1]-initx)**2+(y[:-1]-inity)**2)\
 			*np.sqrt((x[1:]-initx)**2+(y[1:]-inity)**2)) 
-			#print i
+			test[np.where(test<-1)] = -1 #Secure valid values
+
 			theta = np.arccos(test[:])
-	
-			mat[i][:i+1] = theta[:(i+1)]
+			
+			mat[i][:i+1] = -theta[:(i+1)]
 			mat[i][i] = -np.pi
-			mat[i][i+1:] = theta[i+1:]
+			mat[i][i+1:] = -theta[i+1:]
 		self.mat = mat
 		return mat
 	def integrate(self, direction):
@@ -48,10 +49,10 @@ class Figure:
 		ds = np.sqrt((x[1:]-x[:-1])**2 + (y[1:]-y[:-1])**2)
 		if direction == 11:
 			num = x #PASS PAA RETNING
-			n = -(num[:-1]+num[1:])/(2*a**2)/np.sqrt(((x[:-1]+x[1:])/(2*a**2))**2 + ((y[:-1]+y[1:])/(2*b**2))**2)
+			n = -(num[:-1]+num[1:])/(2.*a**2)/np.sqrt(((x[:-1]+x[1:])/(2.*a**2))**2 + ((y[:-1]+y[1:])/(2.*b**2))**2)
 		if direction == 22:
 			num = y
-			n = -(num[:-1]+num[1:])/(2*a**2)/np.sqrt(((x[:-1]+x[1:])/(2*a**2))**2 + ((y[:-1]+y[1:])/(2*b**2))**2)
+			n = -(num[:-1]+num[1:])/(2.*b**2)/np.sqrt(((x[:-1]+x[1:])/(2.*a**2))**2 + ((y[:-1]+y[1:])/(2.*b**2))**2)
 		if direction == 66:
 			nx = (x_0/(a**2))/np.sqrt((x_0**2/(a**4)) + ((y_0**2)/(b**4)) )
 			ny = (y_0/(a**2))/np.sqrt((x_0**2/(a**4)) + ((y_0**2)/(b**4)) )
@@ -100,15 +101,48 @@ class Figure:
 		area = np.sum((sol)*ds*n)	
 		return area
 
-fig = Figure(3,2,1000)
-mat = fig.angles()
-direction = 11
-integ = fig.integrate(direction)
-test = np.linalg.solve(mat, integ)
-print fig.added(test,direction)
-print np.pi*2**2
-
-
+	def solve(self, direction):
+		fig = Figure(self.r_a,self.r_b, self.N)
+		mat = fig.angles()
+		integ = fig.integrate(direction)
+		test = np.linalg.solve(mat, integ)
+		return fig.added(test, direction)
+		
+if __name__ == "__main__":
+	r_a = 2; r_b = 2; N = 8
+	fig = Figure(r_a,r_b, N)
+	fig.angles()
+	print fig.integrate(11)
+	#print mat
+	
+	r_a = 2; r_b = 2; N = 1000
+	fig = Figure(r_a,r_b, N)
+	direction = [11, 22, 66]
+	exact = [np.pi*r_a**2, np.pi*r_b**2, 10**-10]
+	print "-----------------------------------"
+	print "Case Circle"
+	print "Radius chosen as %d, with %d nodes" % (r_a,N)
+	print "Added mass is Calculated as"
+	for i in range(len(exact)):
+		print " For direction %.d Numerical solution %.3f, exact solution %.3f" \
+			% (direction[i], fig.solve(direction[i]), exact[i])
+		print "Error %.3f %%" % ((abs(fig.solve(direction[i])-exact[i]))/exact[i])
+	print "-----------------------------------"
+	
+	r_a = 1; r_b = 4; N = 1000
+	fig = Figure(r_a,r_b, N)
+	direction = [11, 22, 66]
+	exact = [np.pi*r_b**2, np.pi*r_a**2, 1/8.*np.pi*(r_a**2-r_b**2)**2]
+	print "-----------------------------------"
+	print "Case Epsiloide"
+	print "Radius r_a = %d, r_b = %d , with %d nodes" % (r_a,r_b,N)
+	print "Added mass is Calculated as"
+	for i in range(len(exact)):
+		print " For direction %.d Numerical solution %.3f, exact solution %.3f" \
+			% (direction[i], fig.solve(direction[i]), exact[i])
+		print "Error %.3f %%" % ((abs(fig.solve(direction[i])-exact[i]))/exact[i])
+	print "---------------------------------"
+	
 def main():
 	N = 500
 	a = 2.0

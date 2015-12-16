@@ -1,7 +1,9 @@
-import numpy as np 
+import numpy as np
 
-a = np.linspace(0,5,6)
-N = len(a)
-N = 3
+a = np.zeros(4)
+a[1] = -1.2
+a[0] = 1
+
+i = np.where(a<-1)
+a[np.where(a<-1)] = -1
 print a
-print a[:N], a[0:N+1]
