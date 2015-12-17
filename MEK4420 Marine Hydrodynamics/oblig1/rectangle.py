@@ -113,22 +113,18 @@ class Figure:
 
 
 if __name__ == "__main__":
-	a = 4; N = 100
-	fig = Figure(a, N)
-	fig.angles()
-	#fig.solve(11)
 	case = "1"
 	if case == "1":
-		a = 4; N = 800
+		a = 2; N = 200
 		fig = Figure(a, N)
 		direction = [11, 22, 66]
 		exact = [1.51*np.pi*(a)**2,1.51*np.pi*(a)**2 , 0.234*np.pi*a**4]
-		print "-----------------------------------"
-		print "Square"
+		print "-----------------------------BEGIN EXPERIMENT SQUARE---------------------------------------------------"
 		print "Lenght chosen as %d, with %d nodes" % (a,N)
 		print "Added mass is Calculated as"
 		for i in range(len(direction)):
-			print " For direction %.d Numerical solution %.3f, exact solution %.3f" \
-				% (direction[i], fig.solve(direction[i]), exact[i])
-			print "Error %.3f %%" % ((np.abs(fig.solve(direction[i])))/exact[i])
-		print "-----------------------------------"
+			print "--------------------------------------------------------------------------------"
+			print " For direction %.d Numerical solution %.3f, exact solution %.3f error %.3f %%" \
+				% (direction[i], fig.solve(direction[i]), exact[i], \
+					(np.abs(fig.solve(direction[i])))/exact[i])
+		print "--------------------------------------------------------------------------------"

@@ -111,7 +111,6 @@ def added_mass(dirr,r_a,r_b,N):
 		n = y_c / ds
 		n[np.isnan(n)] = 0
 		#exact = 4.754*r_a**2
-		print "hei"
 		exact = 1.51*np.pi*r_a**2
 	if dirr == 22:
 		n = x_c / ds

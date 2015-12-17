@@ -143,7 +143,7 @@ def result(N, a, b, direction):
 	 return np.linalg.solve(matrix(N,a,b), integrate(N, points(N,a,b),direction,a,b))
 
 def main():
-	N = 300
+	N = 500
 	a = 2.0
 	b = 2.0
 	angle = np.zeros(N)
