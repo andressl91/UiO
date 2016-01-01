@@ -4,8 +4,6 @@ def density(pressure):
 def diff_press(p,del_h,f,L,D,u):
 	hydro = -density(p)*9.81*del_h
 	fric = f*L/D*0.5*density(p)*u*u
-	print hydro
-	print fric
 	return hydro + fric
 def Re(u,l,my):
 	return u*l/my
@@ -52,4 +50,4 @@ plt.axhline(y=50,color="red")
 
 print drop(pressure)
 #plt.savefig("Pressure.png")
-#plt.show()
+plt.show()

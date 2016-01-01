@@ -114,7 +114,7 @@ if __name__ == "__main__":
 		print "Radius chosen as %d, with %d nodes" % (r_a,N)
 		for i in range(len(exact)):
 			print "--------------------------------------------------------------------------------"
-			print " For direction %.d Numerical solution %.3f, exact solution %.3f, error %.3f %%" \
+			print " For direction %.d Numerical solution %.3f, exact solution %.3f, \n error %.3f %%" \
 				% (direction[i], fig.solve(direction[i]), exact[i],(abs(fig.solve(direction[i])))/exact[i])
 			if i == 0 and N== 200:
 				larg_error = np.max(fig.phi-(-r_a*np.cos(angle)))
@@ -138,5 +138,3 @@ Calculated added mass %.4f, Exact solution added mass %.4f" % (r_a, N, fig.solve
 			print " For direction %.d Numerical solution %.3f, exact solution %.3f" \
 				% (direction[i], fig.solve(direction[i]), exact[i])
 			print "Error %.3f %%" % ((abs(fig.solve(direction[i])-exact[i]))/exact[i])
-
-		
