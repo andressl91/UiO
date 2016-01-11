@@ -31,6 +31,8 @@ class Bottom(SubDomain):
 class Circle(SubDomain):
     def inside(self, x, on_boundary):
         return on_boundary and -1.8 < x[1] < 1.8 and -5.5 < x[0] < 5.5 
+        #return (between(x[1], (-1.8, 1.8)) and between(x[0], (-5.5, 5.5)) )
+        #This takes also all points, not just boundary...
 
 
 left = Left(); right = Right()
@@ -67,16 +69,17 @@ a = mu*inner(grad(v),grad(u))*dx - inner(div(v), p)*dx - inner(q, div(u))*dx
 #a = mu*inner(grad(v),grad(u))*dx - inner(q, div(u))*dx
 up = Function(W)
 solve(lhs(a) == rhs(a), up, bcs)
+
 u_, p_ = up.split()
 u, v = u_.split()
 
-plot(mesh)
-interactive()
-#file = File("stokes.pvd")
-#file << u
-
-
 plot(u_)
 interactive()
+file = File("stokes.pvd")
+file << u
+
+
+#plot(u_)
+#interactive()
 
 #The solve
