@@ -1,39 +1,47 @@
 from dolfin import *
-import numpy as np
-#Stokes challenge http://math.tifrbng.res.in/~fem2012/FeNICS_files/tifr_lecture_05.pdf
 
-mesh = Mesh('dolfin_fine.xml')
+#SJEKK DENNE http://www.jstor.org/stable/2100799?seq=1#page_scan_tab_contents
+ #Define space and mesh
+l = 5.0
+h = 1.0
+#mesh = RectangleMesh(0.0,0.0,l,h,50,10)
+mesh = Mesh("coin.xml")
 
-V = VectorFunctionSpace(mesh, 'Lagrange',2)
-Q = FunctionSpace(mesh,'Lagrange',1)
+#Different P1 and P2 due to stability
+V = VectorFunctionSpace(mesh, "Lagrange", 2)
+Q = FunctionSpace(mesh, "Lagrange", 1)
 W = V*Q
 
+#Defining boundaries
 class Left(SubDomain):
 	def inside(self, x, on_boundary):
-		return on_boundary and near(x[0],0)
+		return near(x[0],0.0)
 
 class Right(SubDomain):
 	def inside(self, x, on_boundary):
-		return on_boundary and near(x[0],1)
+		return near(x[0],1.0)
 
 class Top(SubDomain):
 	def inside(self, x, on_boundary):
-		return on_boundary and near(x[1],1)
+		return near(x[1],1.0)
 
 class Bottom(SubDomain):
 	def inside(self, x, on_boundary):
-		return on_boundary and near(x[1],0)
+		return near(x[1],0.0)
 
-class Dolfin(SubDomain):
-	def inside(self, x, on_boundary):
-		return on_boundary and not near(x[0],0) \
-				and not near(x[0],1) \
-				and not near(x[1],0) \
-				and not near(x[1],1)
+class Dolf(SubDomain):
+    def inside(self, x, on_boundary):
+        return on_boundary and not near(x[0],0.0) \
+        					and not near(x[0],1.0) \
+        					and not near(x[1],0.0) \
+        					and not near(x[1],1.0)
+
 
 left = Left(); right = Right()
 top = Top(); bottom = Bottom()
-dolf = Dolfin()
+dolfin = Dolf()
+
+#Interior domain Circle
 
 #Boundary domain
 boundaries = FacetFunction("size_t", mesh)
@@ -41,34 +49,31 @@ boundaries.set_all(0)
 left.mark(boundaries, 1)
 right.mark(boundaries, 2)
 top.mark(boundaries, 3)
-bottom.mark(boundaries, 4)
-dolf.mark(boundaries,5)
-#plot(boundaries)
-#interactive()
-from math import pi
-u_in = interpolate(Expression(('-sin(pi*x[1])','0'), pi=pi), V)
-p_in = interpolate(Expression('0'), Q)
+bottom.mark(boundaries, 3)
+dolfin.mark(boundaries, 3)
 
+bcnoslip = DirichletBC(W.sub(0), Constant((0,0)), boundaries, 3)
+bcright = DirichletBC(W.sub(0), Constant((-5.0,0.0)), boundaries, 2)
 
-bcleft = DirichletBC(Q, p_in, boundaries, 1)
+#plot(boundaries); interactive()
 
-bcright = DirichletBC(V, u_in, boundaries, 2)
-bctop = DirichletBC(V, Constant((0,0)), boundaries, 3)
-bcbottom = DirichletBC(V, Constant((0,0)), boundaries, 4)
-bcdolfin = DirichletBC(V, Constant((0,0)), boundaries, 5)
+bcs = [bcnoslip,  bcright]
 
-bcs = [bctop, bcbottom, bcright, bcleft, bcdolfin]
-
-nu = 1000
+#Define Variational problem
+mu = 0.1
 u, p = TrialFunctions(W)
 v, q = TestFunctions(W)
 
-#Variational Form
-a = inner(grad(v),nu*grad(u))*dx - p*div(v)*dx - q*div(u)*dx
+a = mu*inner(grad(v),grad(u))*dx - inner(div(v), p)*dx + inner(q, div(u))*dx
+#a = mu*inner(grad(v),grad(u))*dx - inner(q, div(u))*dx
+up = Function(W)
+solve(lhs(a) == rhs(a), up, bcs)
 
-u_p = Function(W)
-solve(lhs(a) == rhs(a), u_p, bcs)
-u_, p_ = split(u_p)
+u_, p_ = up.split()
+u, v = u_.split()
+
+file = File("stokes.pvd")
+file << u_
 
 plot(u_)
 interactive()

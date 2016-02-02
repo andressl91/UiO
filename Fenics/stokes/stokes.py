@@ -53,8 +53,8 @@ bottom.mark(boundaries, 4)
 
 bctop = DirichletBC(V, Constant((0,0)), boundaries, 3)
 bcbottom = DirichletBC(V, Constant((0,0)), boundaries, 4)
+bcleft = DirichletBC(V, Constant((1.0,0.0)), boundaries, 1)
 bccirle = DirichletBC(V, Constant((0,0)), domains, 1)
-bcleft = DirichletBC(V, Constant((1.0,0.0)), domains, 1)
 
 bcs = [bctop, bcbottom, bccirle, bcleft]
 
