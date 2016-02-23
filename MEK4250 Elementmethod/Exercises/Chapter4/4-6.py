@@ -1,15 +1,18 @@
 from dolfin import *
+import numpy as np
 import matplotlib.pyplot as plt
+#REMARK! Couldn't use higher order space for
+#analytical solution due to different array length
+#for computing norms
 
 def runcalc(n, k):
     #Spaces and Functions
     mesh = IntervalMesh(n, 0 , 1)
     V = FunctionSpace(mesh, 'CG', 1)
-    VH = FunctionSpace(mesh, 'CG', 2)
+    VH = FunctionSpace(mesh, 'CG', 1)
     u = TrialFunction(V)
     v = TestFunction(V)
 
-    k = 1
     f = Expression("k*k*sin(k*pi*x[0])", k = k)
 
     a = inner(grad(u), grad(v))*dx
@@ -25,24 +28,24 @@ def runcalc(n, k):
     u_ = Function(V)
     solve(a == L, u_, bcs)
 
+
+
+    u_a = interpolate(Expression("sin(k*pi*x[0])", k = k), VH)
+
+    L1 = np.sum(np.abs(u_.vector().array()-u_a.vector().array() ) )
+    L2 = norm(u_a, 'L2')
+
     xeta = Function(V)
     xeta = interpolate(Expression("x[0]"), V)
     xpoint  = xeta.vector().array()
+    h_1 = np.abs((xpoint[1]-xpoint[0]))**2
+    C = L1/(h_1*L2)
+    return C
 
-    u_ = u_.vector().array()
-    return u_, xpoint
 
 N = [100, 1000, 10000]
-for i in N:
-    u, xpoint = runcalc(i, 1)
-    fig1 = plt.figure(1)
-    ax1 = fig1.add_subplot(111)
-    ax1.plot(xpoint, u)
-
-ax1.set_xlabel("x")
-ax1.set_ylabel("u(x)")
-ax1.legend(["N =  %d" % p for p in N])
-
-plt.show()
-    #ana_u = interpolate(Expression("sin(k*pi*x[0])", k = k), VH)
-    #plot(func); interactive()
+K = [1, 10, 100]
+for n in N:
+    for k in K:
+        print "            N = %d ---- k = %d                    " % (n, k)
+        print "                 C = %.3f                          " % runcalc(n, k)

@@ -36,13 +36,13 @@ u, v = u_.split()
 w = v.dx(0) - u.dx(1) #Equation 136
 
 psi = TrialFunction(Q)
-psi_v = TestFunction(Q) 
+psi_v = TestFunction(Q)
 
 #Fetching the normal of the mesh
 n = FacetNormal(mesh)
 grad_psi = as_vector((-v,u))
 
-#Equation 162 WITH weak boundary 
+#Equation 162 WITH weak boundary
 F = -inner(grad(psi_v), grad(psi))*dx + inner(psi_v*grad_psi, n)*ds + psi_v*w*dx
 
 psi_s = Function(Q)
@@ -99,13 +99,13 @@ def reverse():
 	w = v.dx(0) - u.dx(1) #Equation 136
 
 	psi = TrialFunction(Q)
-	psi_v = TestFunction(Q) 
+	psi_v = TestFunction(Q)
 
 	#Fetching the normal of the mesh
 	n = FacetNormal(mesh)
 	grad_psi = as_vector((-v,u))
 
-	#Equation 162 WITH weak boundary 
+	#Equation 162 WITH weak boundary
 	F = -inner(grad(psi_v), grad(psi))*dx + inner(psi_v*grad_psi, n)*ds + psi_v*w*dx
 
 	psi_s = Function(Q)
