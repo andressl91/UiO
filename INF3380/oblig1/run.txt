@@ -1,0 +1,22 @@
+#include "../simple-jpeg/import_export_jpeg.h"
+#include <stdio.h>
+
+#Brukte cat commando på fila .h for a se arugumenter!
+#FIkk
+
+#exetern boind import_JPEG_file ( const char* filename,
+unsignet char** image_chars
+...........);
+
+int main () {
+  int image_height, image_width, num_components;
+  unsigned char *image_chars;
+  import_JPEG_file("index.jpeg", &image_chars, &image_height,
+  &image_width, &num, components);
+  printf("W: %d, H: %d, C: %d, name: %s",image_width, image_height, num_components
+  , "index.jpeg")
+  #tilfeldig fil...
+  #gives hight, width, number of chars.. and picture as 2d array
+}
+
+#terminal wrote make when in right folder, which was serial
