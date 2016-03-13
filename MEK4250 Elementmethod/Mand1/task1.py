@@ -7,78 +7,135 @@
 
 from dolfin import *
 import numpy as np
+from tabulate import tabulate
 #http://www.math.rutgers.edu/~falk/math575/Boundary-conditions.html
 
 
+class Poission():
+    def __init__(self, h):
+        self.y = np.zeros(len(h))
+        self.x = np.zeros(len(h))
+        self.L2list = []
+        self.H1list = []
+        self.count = 0
 
-kl = [1, 10, 100]
-h = [8, 16, 32, 64]
+    def set_mesh(self,i):
+        self.h = i
+        self.mesh = UnitSquareMesh(i, i)
 
-y = np.zeros(len(h)); x = np.zeros(len(h))
-for j in range(len(h)):
-
-    for i in kl:
-        mesh = UnitSquareMesh(h[j], h[j])
+    def calc(self, i, k, l, output=True):
+        mesh = self.mesh
 
         #Defining spaces and functions
-        V = FunctionSpace(mesh, 'CG', 1)
+        V = FunctionSpace(mesh, 'CG', i)
         u = TrialFunction(V)
         v = TestFunction(V)
 
         class Dirichlet(SubDomain):
             def inside(self, x, on_boundary):
-                return on_boundary and(near(x[0], 0) or near(x[0], 1) )
+                return on_boundary and( near(x[0], 0) or near(x[0], 1) )
 
         diri = Dirichlet()
         #Setting boundary values
         boundaries = FacetFunction("size_t", mesh)
         boundaries.set_all(0)
-
         diri.mark(boundaries,1)
+        bc0 = DirichletBC(V, 0, diri)
 
-        #plot(boundaries); interactive()
-
-        bc0 = DirichletBC(V, 0, boundaries, 1)
-
-        #Defining variational problem
-        k = 1; l = 1
-        u_e = interpolate(Expression('sin(pi*k*x[0])*cos(pi*l*x[1])', k=k, l=l), V)
-        #test = Expression("1")
-        a = inner(grad(u), grad(v))*dx
-        L = - div( grad(u_e) ) * v * dx   #-nabla(u_e) = f
-        #L = u_e*v*dx
+        #Defining and solving variational problem
+        my = 1
+        u_e = interpolate(Expression('sin(k*pi*x[0])*cos(l*pi*x[1])', k=k, l=l), V)
+        f = Expression("((pi*pi*k*k)+(pi*pi*l*l))*sin(pi*k*x[0])*cos(pi*l*x[1])",k=k,l=l)
+        a = my*inner(grad(u), grad(v))*dx
+        L = f*v*dx
+        #L = -div( grad(u_e))*v*dx   #-nabla(u_e) = f
 
         u_ = Function(V)
         solve(a == L, u_, bc0)
 
-
         #Norms of the error
-        L2 = errornorm(u_e, u_, norm_type='l2', degree_rise = 3)
+        L2 = errornorm(u_e, u_, norm_type='L2', degree_rise = 3)
         H1 = errornorm(u_e, u_, norm_type='H1', degree_rise = 3)
+        self.L2list.append(str(L2))
+        self.H1list.append(str(H1))
 
-        print "----------------------------------"
-        print "For %d points and k, l = %d" % (j, i)
-        print "L2 Norm = %.5f -----  H1 Norm = %.5f" % (L2, H1)
-        print
-        if i == 1:
+        if output == True:
+            print "----------------------------------"
+            print "For %d points and k, l = %d" % (self.h, k)
+            print "L2 Norm = %.5f -----  H1 Norm = %.5f" % (L2, H1)
+            print
+        if k == 1:
             d = mesh.coordinates()
-            y[j] = np.log(L2 / norm(u_e, 'H1') )
-            x[j] = np.log(d[1][0]-d[0][0])
+            self.x[self.count] = np.log(1./self.h)
+            self.y[self.count] = np.log( L2 / norm(u_e, "H1") )
+            self.count += 1
+
+    def l_square(self, h, fig):
+        A = np.zeros((2, 2))
+        b = np.zeros(2)
+
+        A[0][0] = len(h)
+        A[0][1] = np.sum(self.x); A[1][0] = A[0][1]
+        A[1][1] = np.sum(self.x*self.x)
+        b[0] = np.sum(self.y)
+        b[1] = np.sum(self.y*self.x)
+
+        a, b = np.linalg.solve(A, b)
+
+        if fig == True:
+            import matplotlib.pyplot as plt
+            plt.figure(1)
+            plt.plot(self.x, b*self.x + a, label='Linear approximation')
+            plt.plot(self.x, self.y, 'o', label='Points to be approximated')
+            plt.legend(loc = 'upper left')
+            plt.show()
+
+    def make_list(self, h):
+
+        k_1 = ['k_l = 1']; k_10 = ['k_1 = 10']; k_100 = ['k_l = 100']
+
+        for i in range(0, len(self.L2list)-2, 3 ):
+            k_1.append(str(self.L2list[i]) )
+            k_10.append( str(self.L2list[i+1]) )
+            k_100.append( str(self.L2list[i+2]) )
+
+        table = [k_1, k_10, k_100]
+        headers = ['Values of N']
+        for i in h:
+            headers.append(str(i))
+
+        print '#------------------------------------ L2 Norm ------------------------------------#\n'
+        print tabulate(table, headers, tablefmt="fancy_grid")
+
+        l_1 = ['k_l = 1']; l_10 = ['k_1 = 10']; l_100 = ['k_l = 100']
+
+        for i in range(0, len(self.H1list)-2, 3 ):
+            l_1.append(str(self.H1list[i]) )
+            l_10.append( str(self.H1list[i+1]) )
+            l_100.append( str(self.H1list[i+2]) )
+        table = [l_1, l_10, l_100]
+        print
+        print '#------------------------------------ H1 Norm ------------------------------------#\n'
+        print tabulate(table, headers, tablefmt="fancy_grid")
+        print
+
+        self.L2list = []
+        self.H1list = []
 
 
-import matplotlib.pyplot as plt
-#Error estimates
-A = np.zeros((2, 2))
-b = np.zeros(2)
-A[0][0] = len(h)
-A[0][1] = np.sum(x); A[1][0] = A[0][1]
-A[1][1] = A[0][1]*A[0][1]
-b[0] = np.sum(y); b[1] = np.sum(y*x)
-
-a, b = np.linalg.solve(A, b)
-print a
-
-plt.figure(1)
-plt.plot(a*x + b)
-#plt.plot(y)
-plt.show()
+set_log_active(False) #Removing all logging
+kl = [1, 10, 100]
+h = [2**(i+1) for i in range(5)]
+prob = Poission(h)
+for j in [1, 2]:
+    print '####################################################################################\n'
+    print '#-------------------------------- %d degree elements ------------------------------#\n' % j
+    print '####################################################################################\n'
+    print 
+    for i in h:
+        for k in kl:
+            prob.set_mesh(i)
+            prob.calc(j, k, k, output = False)
+    prob.l_square(h, fig = False)
+    prob.make_list(h)
+    prob.count = 0
