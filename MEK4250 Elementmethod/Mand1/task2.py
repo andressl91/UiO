@@ -8,8 +8,6 @@
 from dolfin import *
 import numpy as np
 from tabulate import tabulate
-#http://www.math.rutgers.edu/~falk/math575/Boundary-conditions.html
-
 
 class Poission():
     def __init__(self, h):
@@ -50,7 +48,8 @@ class Poission():
         bcs = [bc0, bc1]
 
         #Defining and solving variational problem
-        u_e = interpolate(Expression('1./(exp(1./my)-my ) * (exp(x[0]/my) - my)', my = my), V)
+        V_1 = FunctionSpace(mesh, 'CG', i+2)
+        u_e = interpolate(Expression('1./(exp(1./my)- 1 ) * (exp(x[0]/my) - 1)', my = my), V_1)
         f = Constant(0)
         if upwind == True:
             beta_val = 0.5
@@ -83,18 +82,21 @@ class Poission():
 
             d = mesh.coordinates()
             self.x[self.count] = np.log(1./self.h)
-            self.y[self.count] = np.log( L2) #/ norm(u_e, "H1") )
-            self.y1[self.count] = np.log( H1 )
-            if imp_norm == True:
-                e = u_e-u_
-                e = project(e, V)
-                i_norm = np.sqrt(mesh.hmin()*norm(e, 'l2')**2 )
 
+            if imp_norm == True:
+                e = u_e.dx(0)-u_.dx(0)
+                e = project(e, V)
+                i_norm = np.sqrt(mesh.hmin()*norm(e, 'l2')**2 + my*norm(e, 'l2') )
+                self.y[self.count] = np.log(i_norm)
+            else:
+                self.y[self.count] = np.log(L2)
             self.count += 1
 
     def l_square(self, norm, fig):
         A = np.zeros((2, 2))
         b = np.zeros(2)
+
+        mid = self.y
         if norm == 'H1':
             self.y = self.y1
 
@@ -107,11 +109,9 @@ class Poission():
         a, b = np.linalg.solve(A, b)
         self.beta = a ; self.alpha = b
 
-        print '####################################################################################\n'
-        print '#-------------------------------- Linear Approximation ------------------------------#\n'
-        print '                              my = %d' % my[0]
-        print '                              alpha = %.4f, beta = %.4f \n' % (prob.alpha, prob.beta)
-        print '####################################################################################\n'
+        print '                              Norm = %s     k_l = %d' % (norm ,1)
+        print '                              alpha = %.4f, Constant = %.4f \n' % (prob.alpha, prob.beta)
+
 
         if fig == True:
             import matplotlib.pyplot as plt
@@ -120,7 +120,7 @@ class Poission():
             plt.plot(self.x, self.y, 'o', label='Points to be approximated')
             plt.legend(loc = 'upper left')
             plt.show()
-
+        self.y = mid
     def make_list(self, h):
 
         k_1 = ['my = 1']; k_10 = ['my = 0.1']; k_100 = ['my = 0.01']
@@ -166,15 +166,18 @@ h = [2**(i+3) for i in range(4)] #5
 print my
 prob = Poission(h)
 for j in [1, 2]:
-    print '####################################################################################\n'
-    print '#-------------------------------- %d degree elements ------------------------------#\n' % j
-    print '####################################################################################\n'
+    print '###########################################################\n'
+    print '#-------------------- %d degree elements -----------------#\n' % j
+    print '###########################################################\n'
     print
     for i in h:
         for m in my:
             prob.set_mesh(i)
-            prob.calc(j, m, output = False, upwind = True, imp_norm = True)
-    prob.l_square('L2', fig = False)
-
+            prob.calc(j, m, output = False, upwind = False, imp_norm = False)
+    print '####################################################################################\n'
+    print '#-------------------------------- Linear Approximation ------------------------------#\n'
+    for k in ['L2', 'H1']:
+        prob.l_square(k, fig = False)
+    print '####################################################################################\n'
     prob.make_list(h)
     prob.count = 0
