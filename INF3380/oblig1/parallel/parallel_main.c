@@ -27,9 +27,21 @@ void allocate_image (image *u ,int j, int k) {
     u->m = j; u->n = k;
 }
 
+void convert_jpeg_to_image (unsigned char *image_chars, image *u) {
+
+    int i, j, count = 0;
+    for (i = 0; i < u->m; i++){ /*ROWS */
+        for(j = 0; j < u->n; j++){ /*COLUMS */
+            u->image_data[i][j] = (float)image_chars[count];
+            count += 1;
+            }
+        }
+    }
+
+
 
 int main(int argc, char *argv[]) {
-
+    int i;
     int m, n, c, iters = atoi(argv[1]);
     int my_m, my_n, my_rank, num_procs;
     double kappa = atof(argv[2]);
@@ -53,22 +65,23 @@ int main(int argc, char *argv[]) {
     MPI_Bcast (&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
     /* divide the m x n pixels evenly among the MPI processes */
 
-    if (my_rank==num_procs){
-        my_m = m % num_procs
-        my_n = n
-    }
+    if (my_rank==0){
+        my_m = m/num_procs + m % num_procs;
+
     else {
-        my_m = m % num_procs
-        my_n = n * m
+        my_m = m/num_procs;
     }
+    my_n = n;
     allocate_image (&u, my_m, my_n);
     allocate_image (&u_bar, my_m, my_n);
 
     /* each process asks process 0 for a partitioned region */
     /* of image_chars and copy the values into u */
-    /*  ...  */
-    /*
+        MPI_Scatter(whole_image-> image_data, my, MPI_INT, my_part,
+          1, MPI_INT, 0, MPI_COMM_WORLD);
+
     convert_jpeg_to_image (my_image_chars, &u);
+    /*
     iso_diffusion_denoising_parallel (&u, &u_bar, kappa, iters);
 */
     /* each process sends its resulting content of u_bar to process 0 */
