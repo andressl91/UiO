@@ -1,13 +1,31 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
-#include "parallel_main.h"
-// make use of two functions from the simplejpeg library
-void import_JPEG_file(const char *filename, unsigned char **image_chars,
-int *image_height, int *image_width, int *num_components);
-void export_JPEG_file(const char *filename, unsigned char *image_chars,
-int image_height, int image_width, int num_components, int quality);
 
+typedef struct
+{
+    float** image_data;
+    int m;
+    int n;
+}
+image;
+
+void import_JPEG_file(const char *filename, unsigned char **image_chars,
+                    int *image_height, int *image_width,
+                     int *num_components);
+
+void export_JPEG_file(const char *filename, unsigned char *image_chars,
+                    int image_height, int image_width,
+                    int num_components, int quality);
+
+void allocate_image (image *u ,int j, int k) {
+    int i;
+    u->image_data = (float**)malloc(j*sizeof(float*)); /*Y-LENGTH ROWS*/
+    for (i = 0; i < j; i++) {
+        u->image_data[i] = (float*)malloc(k*sizeof(float)); /*X-LENGTH COLUMNS*/
+    }
+    u->m = j; u->n = k;
+}
 
 
 int main(int argc, char *argv[]) {
@@ -28,17 +46,23 @@ int main(int argc, char *argv[]) {
 
     if (my_rank==0) {
         import_JPEG_file(input_jpeg_filename, &image_chars, &m, &n, &c);
-        allocate_image(&whole_image, m, n);
+        allocate_image (&whole_image, m, n);
 }
-        /*
+    /*Broadcast from ROOT to all processes in communicator */
     MPI_Bcast (&m, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    MPI_Bcast (&n, 1, MPI_INT, 0, MPI_COMM_WORLD); */
+    MPI_Bcast (&n, 1, MPI_INT, 0, MPI_COMM_WORLD);
     /* divide the m x n pixels evenly among the MPI processes */
 
-    /*my_m = ...;
-    my_n = ...;
+    if (my_rank==num_procs){
+        my_m = m % num_procs
+        my_n = n
+    }
+    else {
+        my_m = m % num_procs
+        my_n = n * m
+    }
     allocate_image (&u, my_m, my_n);
-    allocate_image (&u_bar, my_m, my_n);*/
+    allocate_image (&u_bar, my_m, my_n);
 
     /* each process asks process 0 for a partitioned region */
     /* of image_chars and copy the values into u */
