@@ -39,9 +39,8 @@ Let V be a inner product space, then
 \textbf{Poincare's Inequality}
 Let $v \in H_0^1(\Omega)$
 \begin{align*}
-||v||_{L^2(\Omega)} \leq C |v|_{H^1} (\Omega) \hspace{2mm} \text{Where} \hspace{2mm} \partial\Omega_N\\
+||v||_{L^2(\Omega)} \leq C |v|_{H^1} (\Omega) 
 \end{align*}
-
 
 
 
