@@ -18,13 +18,9 @@ int main() {
       for (i = 0; i < m; i++)
         A[i] = (double*)malloc(n*sizeof(double*));
 
-    double **A = (double**)malloc(m
-    *sizeof(double
-    *));
+    double **A = (double**)malloc(m*sizeof(double*));
     for (i=0; i<m; i++)
-    A[i] = (double
-    *)malloc(n
-    *sizeof(double));
+    A[i] = (double*)malloc(n*sizeof(double));
 
     for (i = 0; i < m; i++) {
       A[i] = i;

@@ -6,10 +6,11 @@
 #############################################
 
 from dolfin import *
+import matplotlib.pyplot as plt
 import numpy as np
 from tabulate import tabulate
 
-def poiseuille(N, v_deg, p_deg):
+def poiseuille(N, v_deg, p_deg, mu):
     mesh = UnitSquareMesh(N, N)
     V = VectorFunctionSpace(mesh, 'CG', v_deg)
     Q = FunctionSpace(mesh, 'CG', p_deg)
@@ -30,7 +31,6 @@ def poiseuille(N, v_deg, p_deg):
     #F = inner(grad(u), grad(v))*dx +p*div(v)*dx + div(v)*q*dx - inner(f,v)*dx
 
     #Define boundaries and BCS
-    noslip = AutoSubDomain(lambda x: "on_boundary" and not (near(x[0], 0) or near(x[0], 1) ))
 
     u_bc = DirichletBC(VQ.sub(0),u_e , "on_boundary")
     p_bc = DirichletBC(VQ.sub(1), p_e, "on_boundary")
@@ -43,59 +43,116 @@ def poiseuille(N, v_deg, p_deg):
     solve(a == L, up, bcs)
 
     u_h, p_h = up.split()
+
     #plot(u, interactive=True)
     H1 = errornorm(u_e, u_h, norm_type='h1', degree_rise=1)
     L2 = errornorm(p_e, p_h, norm_type='l2', degree_rise=1)
     E.append(H1); h.append(mesh.hmin())
     E_p.append(L2)
 
-    #left = errornorm(u_e, u_h, norm_type='h1', degree_rise=1) + \
-    #    errornorm(p_e, p_h, norm_type='l2', degree_rise=1)
-    #Left.append(left)
-    #right = mesh.hmin()**3*errornorm(u_e, u_h, norm_type='h2', degree_rise=1)
-    #te = derivative(u_e, du)
+    #WALL SHEAR STRESS
+    sides = DomainBoundary() #AutoSubDomain(lambda x: "on_boundary" and near(x[1],0))
+    boundaries = FacetFunction("size_t", mesh)
+    boundaries.set_all(0)
+    sides.mark(boundaries, 1)
+    ds = Measure("ds", subdomain_data=boundaries)
 
-#v_d = [3] ; p_d = [1]
+    def sigma (u_o):
+        return 2.0*mu*sym(grad(u_o)) #- p_o*Identity(len(u_o))
+
+    def eps(u):
+        return sym(grad(u))
+
+
+    #SHEAR STRESS
+    n = FacetNormal(mesh)
+    t = as_vector((n[1], -n[0]))
+
+    u_e = project(u_e, V)
+    #comp = assemble( dot(dot(sigma(u_h), n), t) * ds(1) )
+    #exact =  assemble( dot(dot(sigma(u_e), n), t) * ds(1) )
+
+    comp = assemble( dot(sigma(u_h), n)[0] * ds(1) )
+    exact =  assemble( dot(sigma(u_e), n)[0] * ds(1) )
+    Err = exact - comp
+    L2_shear = np.sqrt(Err*Err)
+    E_shear.append(L2_shear)
+
+
+set_log_active(False)
+
 v_d = [4,4,3,3]; p_d = [3,2,2,1]
-
 table = []; headers = ['',]
 table2 = [] ; headers2 = ['',]
-table3 = []
-N = [2**i for i in range(3, 7)]
-
+table3 = [] ; table4 = []
+N = [2**i for i in range(2, 7)]
 for i in range(len(v_d)):
-    E = []; E_p = []; h = []
+    E = []; E_p = []; h = []; E_shear = []
     Right = []; Left = []
-    print "Solving poiseuille flow for P%d-P%d elements" % (v_d[i], p_d[i])
+    if MPI.rank(mpi_comm_world()) == 0:
+        print "Solving poiseuille flow, P%d-P%d elements" % (v_d[i], p_d[i])
     for j in N:
-        poiseuille(N = j, v_deg = v_d[i], p_deg = p_d[i])
+        if MPI.rank(mpi_comm_world()) == 0:
+            print "N = %d" % j
+        poiseuille(N = j, v_deg = v_d[i], p_deg = p_d[i], mu = 1.)
         if i == len(v_d)-1:
             headers.append(str(j))
 
-    li = [];
-    li.append(str(v_d[i]) + "-" + str(p_d[i]))
-    for k in range(len(E)):
-        li.append(E[k])
-    table.append(li)
+    if MPI.rank(mpi_comm_world()) == 0:
+        #L2 norm error
+        li = [];
+        li.append(str(v_d[i]) + "-" + str(p_d[i]))
+        for k in range(len(E)):
+            li.append(E[k])
+        table.append(li)
 
-    u_h1 = []; p_l2 = []
-    u_h1.append(str(v_d[i]) + "-" + str(p_d[i]))
-    p_l2.append(str(v_d[i]) + "-" + str(p_d[i]))
-    for k in range(len(E)-1):
-        E_u = abs(E[k+1]/E[k]); h_ = abs(h[k+1]/h[k])
-        r = np.log(E_u)/np.log(h_)
-        u_h1.append(r)
-        Ep = abs(E_p[k+1]/E_p[k]);
-        r_p = np.log(Ep)/np.log(h_)
-        p_l2.append(r_p)
-        #print "Convergence from N = %d to N = %d" % (N[k], N[k+1])
-        if i == len(v_d)-1:
-            headers2.append("Conv %d to %d" % (N[k], N[k+1]))
-    table2.append(u_h1)
-    table3.append(p_l2)
+        #Convergence u, p, shear
+        u_h1 = []; p_l2 = []; u_shearl2 = []
+        u_h1.append(str(v_d[i]) + "-" + str(p_d[i]))
+        p_l2.append(str(v_d[i]) + "-" + str(p_d[i]))
+        u_shearl2.append(str(v_d[i]) + "-" + str(p_d[i]))
+        for k in range(len(E)-1):
+            #Velocity
+            E_u = abs(E[k+1]/E[k]); h_ = abs(h[k+1]/h[k])
+            r = np.log(E_u)/np.log(h_)
+            u_h1.append(r)
+            #Pressure
+            Ep = abs(E_p[k+1]/E_p[k]);
+            r_p = np.log(Ep)/np.log(h_)
+            p_l2.append(r_p)
+            #Shear
+            E_sh = abs(E_shear[k+1]/E_shear[k]); h_ = abs(h[k+1]/h[k])
+            r_sh = np.log(E_sh)/np.log(h_)
+            u_shearl2.append(r_sh)
 
-print tabulate(table, headers)
-print "CONVERGENCE RATE FOR VELOCITY"
-print tabulate(table2, headers2)
-print "CONVERGENCE RATE FOR PRESSURE"
-print tabulate(table3, headers2)
+            #print "Convergence from N = %d to N = %d" % (N[k], N[k+1])
+            if i == len(v_d)-1:
+                headers2.append("Conv %d to %d" % (N[k], N[k+1]))
+
+        #PLOT ERROR AGAINST h, loglog
+        plt.figure(1);
+        plt.title("Velocity norm H1")
+        plt.loglog(h, E, marker='o', linestyle='--', label = 'Velocity, P%d-P%d ' % ( v_d[i], p_d[i]))
+        plt.legend()
+        plt.figure(2)
+        plt.title("Pressure norm L2")
+        plt.loglog(h, E_p, marker='o', linestyle='--', label = 'Pressure, P%d-P%d ' % ( v_d[i], p_d[i]))
+        plt.legend()
+        plt.figure(3)
+        plt.title("Shear STRESS")
+        plt.loglog(h, E_shear, marker='o', linestyle='--', label = 'Shear, P%d-P%d ' % ( v_d[i], p_d[i]))
+        plt.legend()
+        table2.append(u_h1)
+        table3.append(p_l2)
+        table4.append(u_shearl2)
+
+plt.show()
+if MPI.rank(mpi_comm_world()) == 0:
+    print "L2 norm VELOCITY"
+    print tabulate(table, headers)
+    print "CONVERGENCE RATE FOR VELOCITY"
+    print tabulate(table2, headers2)
+    print "CONVERGENCE RATE FOR PRESSURE"
+    print tabulate(table3, headers2)
+    print "CONVERGENCE RATE FOR SHEAR STRESS"
+    print tabulate(table4, headers2)

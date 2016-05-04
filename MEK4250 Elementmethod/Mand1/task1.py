@@ -1,6 +1,7 @@
 ############################################
 #Author: Andreas Slyngstad
-#MEK
+#MEK 4250
+#EXERCISE 1
 #Solving Poission Equation with both Dirichlet
 #and Neumann conditions
 #############################################
@@ -43,11 +44,11 @@ class Poission():
         bc0 = DirichletBC(V, 0, diri)
 
         #Defining and solving variational problem
-        u_e = interpolate(Expression('sin(k*pi*x[0])*cos(l*pi*x[1])', k=k, l=l), V)
+        V_1 = FunctionSpace(mesh, 'CG', i+2)
+        u_e = interpolate(Expression('sin(k*pi*x[0])*cos(l*pi*x[1])', k=k, l=l), V_1)
         f = Expression("((pi*pi*k*k)+(pi*pi*l*l))*sin(pi*k*x[0])*cos(pi*l*x[1])",k=k,l=l)
         a = inner(grad(u), grad(v))*dx
         L = f*v*dx
-        #L = -div( grad(u_e))*v*dx   #-nabla(u_e) = f
 
         u_ = Function(V)
         solve(a == L, u_, bc0)
@@ -55,9 +56,8 @@ class Poission():
         #Norms of the error
         L2 = errornorm(u_e, u_, norm_type='L2', degree_rise = 3)
         H1 = errornorm(u_e, u_, norm_type='H1', degree_rise = 3)
-        H2 = L2 + H1
-        self.L2list.append(str(L2))
-        self.H1list.append(str(H1))
+        self.L2list.append(str(round(L2,4) ))
+        self.H1list.append(str(round(H1,4) ))
 
         if output == True:
             print "----------------------------------"
@@ -74,8 +74,12 @@ class Poission():
     def l_square(self, norm ,fig):
         A = np.zeros((2, 2))
         b = np.zeros(2)
+
+        mid = self.y #hold y values if norm = H1
+        test = self.y #Holds L2 errornorms
         if norm == 'H1':
             self.y = self.y1
+            test = self.y1 #Holds H! errornorms
 
         A[0][0] = len(self.h_list)
         A[0][1] = np.sum(self.x); A[1][0] = A[0][1]
@@ -86,6 +90,11 @@ class Poission():
         a, b = np.linalg.solve(A, b)
         self.beta = a ; self.alpha = b
 
+        print
+        print '                       Norm = %s     k_l = %d' % (norm ,1)
+        print '                     alpha = %.4f, Constant = %.4f \n' % (prob.alpha, exp(prob.beta))
+        for i in range(len(test)):
+            print 'Errornorm (u-u_h) < C*h^(alpha) is %s for N = %d' %(test[i]<b*self.h**a, self.h_list[i])
 
         if fig == True:
             import matplotlib.pyplot as plt
@@ -94,11 +103,11 @@ class Poission():
             plt.plot(self.x, self.y, 'o', label='Points to be approximated')
             plt.legend(loc = 'upper left')
             plt.show()
+        self.y = mid
 
     def make_list(self, h):
 
         k_1 = ['k_l = 1']; k_10 = ['k_1 = 10']; k_100 = ['k_l = 100']
-
         for i in range(0, len(self.L2list)-2, 3 ):
             k_1.append(str(self.L2list[i]) )
             k_10.append( str(self.L2list[i+1]) )
@@ -109,8 +118,8 @@ class Poission():
         for i in h:
             headers.append(str(i))
 
-        print '#------------------------------------ L2 Norm ------------------------------------#\n'
-        print tabulate(table, headers, tablefmt="fancy_grid")
+        print '#----------------------- L2 Norm ---------------------#\n'
+        print tabulate(table, headers, tablefmt='rst')
 
         l_1 = ['k_l = 1']; l_10 = ['k_1 = 10']; l_100 = ['k_l = 100']
 
@@ -120,8 +129,8 @@ class Poission():
             l_100.append( str(self.H1list[i+2]) )
         table = [l_1, l_10, l_100]
         print
-        print '#------------------------------------ H1 Norm ------------------------------------#\n'
-        print tabulate(table, headers, tablefmt="fancy_grid")
+        print '#----------------------- H1 Norm ---------------------#\n'
+        print tabulate(table, headers, tablefmt='rst')
         print
 
         self.L2list = []
@@ -134,20 +143,20 @@ h = [2**(i+3) for i in range(4)]
 
 prob = Poission(h)
 for j in [1, 2]:
-    print '####################################################################################\n'
-    print '#-------------------------------- %d degree elements ------------------------------#\n' % j
-    print '####################################################################################\n'
+    print '###########################################################\n'
+    print '#-------------------- %d degree elements -----------------#\n' % j
+    print '###########################################################\n'
     print
     for i in h:
         for k in kl:
             prob.set_mesh(i)
             prob.calc(j, k, k, output = False)
-    prob.l_square('H1', fig = False)
 
-    print '####################################################################################\n'
-    print '#-------------------------------- Linear Approximation ------------------------------#\n'
-    print '                                       k_l = %d' % kl[0]
-    print '                              alpha = %.4f, beta = %.4f \n' % (prob.alpha, prob.beta)
-    print '####################################################################################\n'
+    print '###########################################################\n'
+    print '#-------------------- Linear Approximation ---------------#\n'
+    for l in ['L2', 'H1']:
+        prob.l_square(l, fig = False)
+    print
+    print '###########################################################\n'
     prob.make_list(h)
     prob.count = 0
