@@ -14,7 +14,6 @@ u = g \hspace{2mm} \text{in} \hspace{2mm} \partial\Omega_N \\
 \frac{\partial u}{\partial x} - pn = h \hspace{2mm} \text{in} \hspace{2mm} \partial\Omega_N\\
 \end{align*}
 
-\subsection*{Exercise 7.1}
 First off we will define the weak formulation for the stokes problem. Let u $\in H_{D,g}^1$ and $p \in L^2$. Then
 the stokes problem can be defined as 
 \begin{align*}
@@ -24,7 +23,7 @@ b(q, u) = 0 \hspace{2mm} q \in L^2
 Where a and b defines the bilinear form, and f defines the linear form as
 
 \begin{align*}
-a(u, v) = \int \nabla u  \nabla v \hspace{1mm} dx \\
+a(u, v) = \int \nabla u : \nabla v \hspace{1mm} dx \\
 b(p, v) = \int p \nabla \cdot v \hspace{1mm} dx \\
 f(v) = \int f v \hspace{1mm} dx + \int_{\Omega_N} h v \hspace{1mm} ds
 \end{align*}
@@ -33,15 +32,100 @@ Further we will define to properties which will be usefull for solving the exerc
 \textbf{Cauchy-Schwarts inequality} \\
 Let V be a inner product space, then
 \begin{align*}
-|<v,w>| \hspace{1mm} \leq \hspace{1mm} ||u|| \cdot ||w|| \hspace{2mm} \forall \hspace{1mm} v,q \in V
+ |\langle u \,, v \rangle| \hspace{1mm} \leq \hspace{1mm} ||u|| \cdot ||w|| \hspace{2mm} \forall \hspace{1mm} v,q \in V
 \end{align*}
 \newline
 \textbf{Poincare's Inequality}
 Let $v \in H_0^1(\Omega)$
 \begin{align*}
-||v||_{L^2(\Omega)} \leq C |v|_{H^1} (\Omega) \hspace{2mm} \text{Where} \hspace{2mm} \partial\Omega_N\\
+||v||_{L^2(\Omega)} \leq C |v|_{H^1} (\Omega) 
 \end{align*}
 
+\newpage
+\subsection*{Exercise 7.1}
+In this section we are to prove the conditions (7.14-7.16) from the course lecturenotes. 
+Starting off with the first 
+\textbf{Condition 7.14}
+\begin{align*}
+a(u_h, v_h) \leq C_1 ||u_n||_{V_n} ||v_n||_{V_n} \hspace{2mm} \forall u_n, v_n \in V_n
+\end{align*}
+As for in all of these conditions we will assume that $V_h \in H_0^1$, and for later conditions that$Q_h \in L^2$.
+\newline
+First off we write out the term $a(u_h, v_h)$, and we observe we can use the Cauchy-Schwarts inequality since
+V is an inner product space. 
+\begin{align*}
+a(u_h, v_h) = \int_\Omega \nabla u_h : \nabla v_h \hspace{1mm} dx  = \langle \nabla u_h \,, \nabla v_h \rangle \\
+\langle \nabla u_h \,, \nabla v_h \rangle \leq |\langle \nabla u_h \,, \nabla v_h \rangle|_0 \leq ||\nabla u_h||\cdot ||\nabla v_h||
+\end{align*}
+Now since we have defined that $u_h, v_h \in V_h \in H_0^1$ we can use the Poincare inequality. First we observe that
+
+\begin{align*}
+||\nabla u_h ||^2_{L^2} \leq ||u_h||^2_{H^1} = ||u_h||^2_{L^2} + ||\nabla u_h||^2_{L^2} \leq C_1 |u_h|^2_{H_1} +  ||\nabla u_h||^2_{L^2} =
+C_1 ||\nabla u_h||^2_{L2} +  ||\nabla u_h||^2_{L^2} \\
+(C_1 + 1) ||\nabla u_h||^2_{L2} \leq D ||u_h||^2_{H^1} 
+\end{align*}
+
+
+
+\textbf{Condition 7.14}
+\begin{align*}
+b(u_h, q_h) \leq C_2 ||u_h||_{V_h} ||q_h||_{Q_h} \hspace{2mm}  V_h \in H_0^1, \hspace{2mm} Q_h \in L^2,
+\end{align*}
+By direct insertion we get 
+
+\begin{align*}
+b(u_h, q_h) = \int p \nabla \cdot v \hspace{1mm} dx = \langle p \,, \nabla \cdot u \rangle \leq | \langle p \,, \nabla \cdot u \rangle |_0
+\end{align*}
+Using the Cauchy-Schwarts inequality we can show that
+\begin{align*}
+| \langle q \,, \nabla \cdot u \rangle | \leq ||q||_0 \cdot ||\nabla \cdot u||_0
+\end{align*}
+Hence, it holds to show that
+\begin{align*}
+  ||q||_0 \cdot ||\nabla \cdot u||_0 \leq C_2 ||u_h||_{1} ||q_h||_{0} \\
+  ||\nabla \cdot u||_0 \leq C_2 ||u_h||_{1} 
+\end{align*}
+We choose square the left side of the inequality and expand the norm, in hope of finding a term to
+determine the upper bound of b. Applying the poincare inequality on line 2, we can determine that the bound must be
+determined by some constant $C_2$
+\begin{align*}
+||\nabla \cdot u||_0^2 \leq ||u||_1^2 = ||u||_0^2 + ||\nabla u ||_0^2 \\
+||u||_0^2 + ||\nabla u ||_0^2 \leq C_2^2 |u|_1 + ||\nabla u||_0^2 = (C_2^2 + 1)||\nabla u ||_0^2 = C_2^2||\nabla u ||_0^2
+\end{align*}
+Hence, to show the implied boundedness of b, it holds to show $||\nabla \cdot u||_0^2 \leq (C_2^2 + 1)||\nabla u ||_0^2$
+For simplicity we write out the terms for the $R^2$ case, but the same proof can be showed for the general case $R^n$. 
+
+\begin{align*}
+ ||\nabla \cdot u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\big)^2 \hspace{1mm} dx \\
+ ||\nabla u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2}\big)^2 + \big(\frac{\partial^2 u}{\partial y^2} \big)^2 + 
+ \big(\frac{\partial^2 v}{\partial x^2} \big)^2 + \big( \frac{\partial^2 v}{\partial y^2} \big)^2 \hspace{1mm} dx
+\end{align*}
+Remembering that since we are in a normed vector space V, the triangle inequality holds.
+\begin{align*}
+||x + y || \leq ||x|| + ||y|| \hspace{2mm} \forall x,y \in V
+\end{align*}
+Rearrangeing the terms we observe that 
+\begin{align*}
+ ||\nabla \cdot u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\big)^2 \hspace{1mm} dx \\
+ ||\nabla u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2}\big)^2 
+ +  \big( \frac{\partial^2 v}{\partial y^2} \big)^2 \hspace{1mm} dx
+ + \int \big(\frac{\partial^2 v}{\partial x^2} \big)^2 + 
+  \big(\frac{\partial^2 u}{\partial y^2} \big)^2  \hspace{1mm} dx \\
+  \sqrt{ \int \big(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\big)^2 \hspace{1mm} dx }\leq 
+ \sqrt{ \int \big(\frac{\partial^2 u}{\partial x^2}\big)^2} 
+ + \sqrt{ \big( \frac{\partial^2 v}{\partial y^2} \big)^2 \hspace{1mm} dx }
+\end{align*}
+Hence $||\nabla \cdot u||_0^2 \leq C_2^2 ||\nabla u ||_0^2$, and the inequality holds. \\
+\textbf{Condition 7.16, Coersivity of a}
+\begin{align*}
+ a(u_h, v_h) \geq C_3 ||u_h||_{V_h}^2 \hspace{2mm} \forall u_h \in V_h
+\end{align*}
+Using the Cauchy-Schwarts inequality as in the other proofs, we get similar result
+
+\begin{align*}
+ a(u_h, v_h) = \int \nabla u : \nabla v \hspace{1mm} dx = \langle \nabla u_h \,, \nabla v_h \rangle \\
+ |\langle \nabla u_h \,, \nabla v_h \rangle| \leq ||\nabla u|| \cdot ||\nabla v||
+\end{align*}
 
 
 
