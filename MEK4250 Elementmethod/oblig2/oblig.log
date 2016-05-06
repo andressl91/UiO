@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.10.31)  5 MAY 2016 18:41
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013) (format=pdflatex 2013.10.31)  6 MAY 2016 14:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -894,31 +894,37 @@ Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
 \tabu@hleads=\box37
 \tabu@vleads=\box38
 \tabu@cellskip=\skip62
+)
+(/mn/anatu/modules/opt/texlive/2013-uio/uio-texmf/texmf-dist/tex/latex/colortbl
+/colortbl.sty
+Package: colortbl 2012/02/13 v1.0a Color table columns (DPC)
+\everycr=\toks29
+\minrowclearance=\skip63
 ) (./oblig.aux)
 \openout1 = `oblig.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 5.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 5.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 8.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 8.
 
 (/mn/anatu/modules/opt/texlive/2013-uio/uio-texmf/texmf-dist/tex/latex/base/ts1
 cmr.fd
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 5.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 5.
-LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    ... okay on input line 8.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 8.
+LaTeX Font Info:    ... okay on input line 8.
 
 (/mn/anatu/modules/opt/texlive/2013-uio/uio-texmf/texmf-dist/tex/context/base/s
 upp-pdf.mkii
@@ -928,12 +934,12 @@ upp-pdf.mkii
 \scratchbox=\box39
 \nofMPsegments=\count136
 \nofMParguments=\count137
-\everyMPshowfont=\toks29
+\everyMPshowfont=\toks30
 \MPscratchCnt=\count138
 \MPscratchDim=\dimen161
 \MPnumerator=\count139
 \makeMPintoPDFobject=\count140
-\everyMPtoPDFconversion=\toks30
+\everyMPtoPDFconversion=\toks31
 )
 (/mn/anatu/modules/opt/texlive/2013-uio/uio-texmf/texmf-dist/tex/latex/oberdiek
 /epstopdf-base.sty
@@ -994,7 +1000,7 @@ Package caption Info: End \AtBeginDocument code.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring OFF on input line 5.
+Package hyperref Info: Link coloring OFF on input line 8.
 
 (/mn/anatu/modules/opt/texlive/2013-uio/uio-texmf/texmf-dist/tex/latex/hyperref
 /nameref.sty
@@ -1006,20 +1012,20 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count142
 )
-LaTeX Info: Redefining \ref on input line 5.
-LaTeX Info: Redefining \pageref on input line 5.
-LaTeX Info: Redefining \nameref on input line 5.
+LaTeX Info: Redefining \ref on input line 8.
+LaTeX Info: Redefining \pageref on input line 8.
+LaTeX Info: Redefining \nameref on input line 8.
  (./oblig.out) (./oblig.out)
 \@outlinefile=\write3
 \openout3 = `oblig.out'.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 7.
+LaTeX Font Info:    Try loading font information for U+msa on input line 10.
 
 (/mn/anatu/modules/opt/texlive/2013-uio/uio-texmf/texmf-dist/tex/latex/amsfonts
 /umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 7.
+LaTeX Font Info:    Try loading font information for U+msb on input line 10.
 
 (/mn/anatu/modules/opt/texlive/2013-uio/uio-texmf/texmf-dist/tex/latex/amsfonts
 /umsb.fd
@@ -1027,22 +1033,46 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {/mn/anatu/modules/opt/texlive/2013-uio/uio-texmf/texmf-var/fonts/map/pdftex/up
-dmap/pdftex.map}] [2]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 132.
- [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 132.
+dmap/pdftex.map}] [2] [3] [4]
+<velocity.png, id=47, 578.16pt x 433.62pt>
+File: velocity.png Graphic file (type png)
+ <use velocity.png>
+Package pdftex.def Info: velocity.png used on input line 225.
+(pdftex.def)             Requested size: 185.01497pt x 138.76123pt.
+
+<pressure.png, id=49, 578.16pt x 433.62pt>
+File: pressure.png Graphic file (type png)
+ <use pressure.png>
+Package pdftex.def Info: pressure.png used on input line 226.
+(pdftex.def)             Requested size: 185.01497pt x 138.76123pt.
+
+<comb.png, id=50, 578.16pt x 433.62pt>
+File: comb.png Graphic file (type png)
+ <use comb.png>
+Package pdftex.def Info: comb.png used on input line 232.
+(pdftex.def)             Requested size: 231.2599pt x 173.44492pt.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 238.
+ [5 <./velocity.png> <./pressure.png> <./comb.png>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 238.
  (./oblig.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 132.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 132.
-Package rerunfilecheck Info: File `oblig.out' has not changed.
-(rerunfilecheck)             Checksum: B985B39E8E298184A055D542C415E0E9;45.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 132.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 238.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 238.
+
+
+Package rerunfilecheck Warning: File `oblig.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `oblig.out':
+(rerunfilecheck)             Before: 2BFB4CA16E631D0E6FB5200544AF0064;106
+(rerunfilecheck)             After:  8D241D491443838FBF609550A6090A62;167.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 238.
  ) 
 Here is how much of TeX's memory you used:
- 12526 strings out of 493308
- 186639 string characters out of 6135157
- 296869 words of memory out of 5000000
- 15786 multiletter control sequences out of 15000+600000
+ 12599 strings out of 493308
+ 187741 string characters out of 6135157
+ 298151 words of memory out of 5000000
+ 15843 multiletter control sequences out of 15000+600000
  17594 words of font info for 50 fonts, out of 8000000 for 9000
  957 hyphenation exceptions out of 8191
  44i,13n,45p,256b,357s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1065,11 +1095,12 @@ super/sfbx1200.pfb></mn/anatu/modules/opt/texlive/2013-uio/uio-texmf/texmf-dist
 io/uio-texmf/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></mn/anatu/mod
 ules/opt/texlive/2013-uio/uio-texmf/texmf-dist/fonts/type1/public/cm-super/sfrm
 1200.pfb></mn/anatu/modules/opt/texlive/2013-uio/uio-texmf/texmf-dist/fonts/typ
-e1/public/cm-super/sfrm1728.pfb>
-Output written on oblig.pdf (3 pages, 167880 bytes).
+e1/public/cm-super/sfrm1728.pfb></mn/anatu/modules/opt/texlive/2013-uio/uio-tex
+mf/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb>
+Output written on oblig.pdf (5 pages, 275697 bytes).
 PDF statistics:
- 84 PDF objects out of 1000 (max. 8388607)
- 64 compressed objects within 1 object stream
- 6 named destinations out of 1000 (max. 500000)
- 9 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 115 PDF objects out of 1000 (max. 8388607)
+ 86 compressed objects within 1 object stream
+ 14 named destinations out of 1000 (max. 500000)
+ 32 words of extra memory for PDF output out of 10000 (max. 10000000)
 

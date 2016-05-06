@@ -1,6 +1,9 @@
 \documentclass[a4paper,norsk]{article}
 \usepackage{preamble}
 \usepackage{tabu}
+\usepackage{color, colortbl}
+\definecolor{LightCyan}{rgb}{0.88,1,1}
+
 
 \begin{document}
 \maketitle
@@ -115,18 +118,121 @@ Rearrangeing the terms we observe that
  \sqrt{ \int \big(\frac{\partial^2 u}{\partial x^2}\big)^2} 
  + \sqrt{ \big( \frac{\partial^2 v}{\partial y^2} \big)^2 \hspace{1mm} dx }
 \end{align*}
-Hence $||\nabla \cdot u||_0^2 \leq C_2^2 ||\nabla u ||_0^2$, and the inequality holds. \\
+Hence $||\nabla \cdot u||_0^2 \leq C_2^2 ||\nabla u ||_0^2$, and the inequality holds. 
+
 \textbf{Condition 7.16, Coersivity of a}
 \begin{align*}
- a(u_h, v_h) \geq C_3 ||u_h||_{V_h}^2 \hspace{2mm} \forall u_h \in V_h
+ a(u_h, u_h) \geq C_3 ||u_h||_{V_h}^2 \hspace{2mm} \forall u_h \in V_h
 \end{align*}
-Using the Cauchy-Schwarts inequality as in the other proofs, we get similar result
+Expanding the $H^1$ norm of $u_h$, and applying the Cauchy-Schwarts inequality we find the relations
 
 \begin{align*}
- a(u_h, v_h) = \int \nabla u : \nabla v \hspace{1mm} dx = \langle \nabla u_h \,, \nabla v_h \rangle \\
- |\langle \nabla u_h \,, \nabla v_h \rangle| \leq ||\nabla u|| \cdot ||\nabla v||
+||u_h||_1^2 = ||u_h||_0^2 + ||\nabla u_h||_0^2 \leq C|u_h|_1^2 + ||\nabla u_h||_0^2 \\
+= C||\nabla u_h||_0^2 + ||\nabla u_h||_0^2 = \big(C + 1\big)||\nabla u_h||_0^2 = C_3 ||\nabla u_h||_0^2 \\
+\end{align*}
+Dividing the constant on both sides of the inequality and let $C_3 = 1/C_3$ we get our final result which proofs the coersivity of a
+\begin{align*}
+C_3||u_h||_1^2 \leq ||\nabla u_h||_0^2 = \int \nabla u_h : \nabla u_h \hspace{1mm} dx = a(u_h, u_h)
 \end{align*}
 
+\newpage
+\subsection{Exercise 7.6}
+Looking on the poiseuille flow, we are to investigate if the anticipated convergence rates applies for the problem
 
+\begin{align*}
+-\Delta u - \nabla p = f \hspace{2mm} \text{in} \hspace{2mm} \Omega \\
+\nabla \cdot v = 0 \hspace{2mm} \text{in} \hspace{2mm} \partial\Omega \\
+\end{align*}
+We will make use of the "manufactured solution" approach defining the analytical solution in $\Omega$ and finding the appropriate
+soruce function as
+
+\begin{align*}
+ u = (sin(\pi y), cos(\pi x)); \hspace{4mm} p = sin(2 \pi x) \\
+ f = (\pi^2 sin(\pi y) - 2 \pi cos(2 \pi x), \pi^2 cos(\pi x)) 
+\end{align*}
+
+We will this exercise examinate the error estimate 
+\begin{align*}
+ ||u - u_h||_1 + ||p - p_h||_0 \leq Ch^k||u||_{k+1} + Dh^{l+1} ||p||{l+1}
+\end{align*}
+Where \textit{k}, \textit{l} denotes the polynomial degree of the velocity and pressure. The error estimate will be
+examined using $(P_4 - P_3)$, $(P_4 - P_2)$, $(P_3 - P_2)$ and $(P_3 - P_1)$ elements for velocity and pressure accordingly. 
+The problem will be solved on a UnitSquareMesh(N, N), for $N = [8, 16, 32, 64]$. Order of convergence is calculated for each choice
+of elements, between to neighbouring N values defined as
+
+\begin{align*}
+ r  = \frac{log \big( \frac{E[i+1]}{E[i]} \big)} {log \big( \frac{(h[i+1]}{h[i]} \big)}
+\end{align*}
+Where E is a list of errornorms and h is a list of the facetlength in the mesh defined as $\frac{1}{N}$
+
+
+
+\begin{table}[ht]
+\caption {Convergence rate velocity, $E = ||u-u_h||_1$} 
+\centering
+\begin{tabular}{c|ccccccc}
+\hline
+\rowcolor{LightCyan}
+N  & Conv 4 to 8  &  Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64 \\  
+\hline
+4-3   &     4.53315  &       4.2951   &        4.11514  & 4.03954 \\ \hline
+4-2    &    2.6871   &       2.88045  &        2.96138 & 2.98766 \\ \hline
+3-2    &    2.57912  &       2.84778  &        2.9518 & 2.98466 \\ \hline
+3-1    &    2.17924  &       2.08939  &        2.04646 & 2.02452 \\
+\hline
+\end{tabular}
+\end{table}
+       
+
+\begin{table}[ht]
+\caption {Convergence rate velocity, $E = ||p-p_h||_0$} 
+\centering
+\begin{tabular}{c|ccccccc}
+\hline
+\rowcolor{LightCyan}
+N  & Conv 4 to 8  &  Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64\\
+\hline
+4-3   &     4.22147   &      4.08419   &       4.02915 & 4.01063  \\ \hline
+4-2   &     2.71627   &      2.89978   &       2.97342 & 2.99382  \\ \hline 
+3-2   &     2.71694   &      2.90114   &       2.97394 & 2.99397   \\ \hline 
+3-1   &     2.35349   &      2.19402   &       2.09554 & 2.04362   \\ 
+\hline
+\end{tabular}
+\end{table}
+
+To describe these results we have to take a closer look on the error estimate. Let us choose the dataset from the $(P_4 - P_3)$
+computation. For $k=4$ and $p=3$ we get.  
+
+\begin{align*}
+ ||u - u_h||_1 + ||p - p_h||_0 \leq Ch^4||u||_{5} + Dh^{4} ||p||{4}
+\end{align*}
+Observing that C,D, $||u||_{5}$ and $||p||_{4}$ are some constants and will not effect the trend of the error estimate, we see that
+the error is limited to $h^4$, both for the velocity and pressure norm. From our result this seems reasonable as we can see the order of convergence
+approach 4.
+
+What  about if we choose some elements which differ in degree by 2? Let's choose the $(P_4 - P_2$ computation and see what is going on. Our error estimate then yields
+\begin{align*}
+ ||u - u_h||_1 + ||p - p_h||_0 \leq Ch^4||u||_{5} + Dh^{3} ||p||_{3}
+\end{align*}
+Now as the velocity norm on the right side of the inequality is dominated by the h term, we obsere that this term will go faster to zero than the pressure norm. Hence our 
+calculations should be dominated by the pressure norm. From this logic we would expect the order of convergence to be limited by 3. As we can see from the numerical results, this seems 
+legit as we can see that the rate of convergence approaches 3 as the mesh gets finer. 
+
+
+\begin{figure}[h!]
+	\centering
+	\caption*{loglogplot}
+	\includegraphics[scale=0.32]{velocity.png}
+		\includegraphics[scale=0.32]{pressure.png}
+\end{figure}
+
+\begin{figure}[h!]
+	\centering
+	\caption*{loglogplot}
+	\includegraphics[scale=0.4]{comb.png}
+\end{figure}
+
+\subsection{Exercise 7.7}
+In this exercise we where to calculate the order of convergence for the shear stress in the same domain presented en exercise 7.6.
 
 \end{document}

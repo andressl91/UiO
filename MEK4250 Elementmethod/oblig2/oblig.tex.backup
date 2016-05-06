@@ -1,6 +1,9 @@
 \documentclass[a4paper,norsk]{article}
 \usepackage{preamble}
 \usepackage{tabu}
+\usepackage{color, colortbl}
+\definecolor{LightCyan}{rgb}{0.88,1,1}
+
 
 \begin{document}
 \maketitle
@@ -90,9 +93,104 @@ determine the upper bound of b. Applying the poincare inequality on line 2, we c
 determined by some constant $C_2$
 \begin{align*}
 ||\nabla \cdot u||_0^2 \leq ||u||_1^2 = ||u||_0^2 + ||\nabla u ||_0^2 \\
-||u||_0^2 + ||\nabla u ||_0^2 \leq C_2^2 |u|_1 + ||\nabla u||_0^2 = (C_2^2 + 1)||\nabla u ||_0^2
+||u||_0^2 + ||\nabla u ||_0^2 \leq C_2^2 |u|_1 + ||\nabla u||_0^2 = (C_2^2 + 1)||\nabla u ||_0^2 = C_2^2||\nabla u ||_0^2
 \end{align*}
 Hence, to show the implied boundedness of b, it holds to show $||\nabla \cdot u||_0^2 \leq (C_2^2 + 1)||\nabla u ||_0^2$
 For simplicity we write out the terms for the $R^2$ case, but the same proof can be showed for the general case $R^n$. 
+
+\begin{align*}
+ ||\nabla \cdot u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\big)^2 \hspace{1mm} dx \\
+ ||\nabla u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2}\big)^2 + \big(\frac{\partial^2 u}{\partial y^2} \big)^2 + 
+ \big(\frac{\partial^2 v}{\partial x^2} \big)^2 + \big( \frac{\partial^2 v}{\partial y^2} \big)^2 \hspace{1mm} dx
+\end{align*}
+Remembering that since we are in a normed vector space V, the triangle inequality holds.
+\begin{align*}
+||x + y || \leq ||x|| + ||y|| \hspace{2mm} \forall x,y \in V
+\end{align*}
+Rearrangeing the terms we observe that 
+\begin{align*}
+ ||\nabla \cdot u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\big)^2 \hspace{1mm} dx \\
+ ||\nabla u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2}\big)^2 
+ +  \big( \frac{\partial^2 v}{\partial y^2} \big)^2 \hspace{1mm} dx
+ + \int \big(\frac{\partial^2 v}{\partial x^2} \big)^2 + 
+  \big(\frac{\partial^2 u}{\partial y^2} \big)^2  \hspace{1mm} dx \\
+  \sqrt{ \int \big(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\big)^2 \hspace{1mm} dx }\leq 
+ \sqrt{ \int \big(\frac{\partial^2 u}{\partial x^2}\big)^2} 
+ + \sqrt{ \big( \frac{\partial^2 v}{\partial y^2} \big)^2 \hspace{1mm} dx }
+\end{align*}
+Hence $||\nabla \cdot u||_0^2 \leq C_2^2 ||\nabla u ||_0^2$, and the inequality holds. 
+
+\textbf{Condition 7.16, Coersivity of a}
+\begin{align*}
+ a(u_h, u_h) \geq C_3 ||u_h||_{V_h}^2 \hspace{2mm} \forall u_h \in V_h
+\end{align*}
+Expanding the $H^1$ norm of $u_h$, and applying the Cauchy-Schwarts inequality we find the relations
+
+\begin{align*}
+||u_h||_1^2 = ||u_h||_0^2 + ||\nabla u_h||_0^2 \leq C|u_h|_1^2 + ||\nabla u_h||_0^2 \\
+= C||\nabla u_h||_0^2 + ||\nabla u_h||_0^2 = \big(C + 1\big)||\nabla u_h||_0^2 = C_3 ||\nabla u_h||_0^2 \\
+\end{align*}
+Dividing the constant on both sides of the inequality and let $C_3 = 1/C_3$ we get our final result which proofs the coersivity of a
+\begin{align*}
+C_3||u_h||_1^2 \leq ||\nabla u_h||_0^2 = \int \nabla u_h : \nabla u_h \hspace{1mm} dx = a(u_h, u_h)
+\end{align*}
+
+\newpage
+\subsection{Exercise 7.6}
+Looking on the poiseuille flow, we are to investigate if the anticipated convergence rates applies for the problem
+
+\begin{align*}
+-\Delta u - \nabla p = f \hspace{2mm} \text{in} \hspace{2mm} \Omega \\
+\nabla \cdot v = 0 \hspace{2mm} \text{in} \hspace{2mm} \partial\Omega \\
+\end{align*}
+We will make use of the "manufactured solution" approach defining the analytical solution in $\Omega$ and finding the appropriate
+soruce function as
+
+\begin{align*}
+ u = (sin(\pi y), cos(\pi x)); \hspace{4mm} p = sin(2 \pi x) \\
+ f = (\pi^2 sin(\pi y) - 2 \pi cos(2 \pi x), \pi^2 cos(\pi x)) 
+\end{align*}
+
+We will this exercise examinate the error estimate 
+\begin{align*}
+ ||u - u_h||_1 + ||p - p_h||_0 \leq Ch^k||u||_{k+1} + Dh^{l} ||p||{l+1}
+\end{align*}
+Where \textit{k}, \textit{l} denotes the polynomial degree of the velocity and pressure. The error estimate will be
+examined using $(P_4 - P_3)$, $(P_4 - P_2)$, $(P_3 - P_2)$ and $(P_3 - P_1)$ elements for velocity and pressure accordingly. 
+The problem will be solved on a UnitSquareMesh(N, N), for $N = [8, 16, 32, 64]$. My program yields the following result
+
+\textit{Velocity}
+\begin{table}[ht]
+\centering
+\begin{tabular}{c|ccccccc}
+\hline
+\rowcolor{LightCyan}
+N  & Conv 4 to 8  &  Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64 \\  
+\hline
+4-3   &     4.53315  &       4.2951   &        4.11514 \\ \hline
+4-2    &    2.6871   &       2.88045  &        2.96138 \\ \hline
+3-2    &    2.57912  &       2.84778  &        2.9518 \\ \hline
+3-1    &    2.17924  &       2.08939  &        2.04646 \\
+\hline
+\end{tabular}
+\end{table}
+       Conv 4 to 8    Conv 8 to 16    Conv 16 to 32
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{c|ccccccc}
+\hline
+\rowcolor{LightCyan}
+N  & Conv 4 to 8  &  Conv 8 to 16  &  Conv 16 to 32 \\
+\hline
+4-3   &     4.22147   &      4.08419   &       4.02915 \\ \hline
+4-2   &     2.71627   &      2.89978   &       2.97342 \\ \hline 
+3-2   &     2.71694   &      2.90114   &       2.97394 \\ \hline 
+3-1   &     2.35349   &      2.19402   &       2.09554 \\ 
+\hline
+\end{tabular}
+\end{table}
+
+
 
 \end{document}

@@ -8,7 +8,7 @@
 from dolfin import *
 import matplotlib.pyplot as plt
 import numpy as np
-from tabulate import tabulate
+#from tabulate import tabulate
 
 def poiseuille(N, v_deg, p_deg, mu):
     mesh = UnitSquareMesh(N, N)
@@ -85,7 +85,7 @@ v_d = [4,4,3,3]; p_d = [3,2,2,1]
 table = []; headers = ['',]
 table2 = [] ; headers2 = ['',]
 table3 = [] ; table4 = []
-N = [2**i for i in range(2, 7)]
+N = [2**i for i in range(2, 6)]
 for i in range(len(v_d)):
     E = []; E_p = []; h = []; E_shear = []
     Right = []; Left = []
@@ -129,23 +129,37 @@ for i in range(len(v_d)):
             if i == len(v_d)-1:
                 headers2.append("Conv %d to %d" % (N[k], N[k+1]))
 
+	E = np.asarray(E); E_p = np.asarray(E_p)
         #PLOT ERROR AGAINST h, loglog
+        plt.figure(4);
+        #plt.subplot(211)
+        plt.title("Velocity norm H1 + pressure norm L2")
+        plt.loglog(h, E+E_p, marker='o', linestyle='--', label = 'Elements, P%d-P%d ' % ( v_d[i], p_d[i]))
+        plt.legend(loc=4)
+        plt.savefig("comb1.png")
+        
         plt.figure(1);
+        #plt.subplot(211)
         plt.title("Velocity norm H1")
-        plt.loglog(h, E, marker='o', linestyle='--', label = 'Velocity, P%d-P%d ' % ( v_d[i], p_d[i]))
-        plt.legend()
+        plt.loglog(h, E, marker='o', linestyle='--', label = 'Velocity, P%d ' % ( v_d[i]))
+        plt.legend(loc=4)
+        plt.savefig("velocity1.png")
+        
         plt.figure(2)
         plt.title("Pressure norm L2")
-        plt.loglog(h, E_p, marker='o', linestyle='--', label = 'Pressure, P%d-P%d ' % ( v_d[i], p_d[i]))
-        plt.legend()
+        plt.loglog(h, E_p, marker='o', linestyle='--', label = 'Pressure, P%d' % ( p_d[i]))
+        plt.legend(loc=4)
+        plt.savefig("pressure1.png")
+        
         plt.figure(3)
         plt.title("Shear STRESS")
         plt.loglog(h, E_shear, marker='o', linestyle='--', label = 'Shear, P%d-P%d ' % ( v_d[i], p_d[i]))
-        plt.legend()
+        plt.legend(loc=4)
+        plt.savefig("shear.png")
         table2.append(u_h1)
         table3.append(p_l2)
         table4.append(u_shearl2)
-
+   
 plt.show()
 if MPI.rank(mpi_comm_world()) == 0:
     print "L2 norm VELOCITY"
