@@ -232,7 +232,19 @@ legit as we can see that the rate of convergence approaches 3 as the mesh gets f
 	\includegraphics[scale=0.4]{comb.png}
 \end{figure}
 
+\newpage
 \subsection{Exercise 7.7}
 In this exercise we where to calculate the order of convergence for the shear stress in the same domain presented en exercise 7.6.
+Let \textit{P} denote the stress tensor. The wall stress on a surface in the domain is given by $\textit{P} \cdot \textbf{n}$, where \textbf{n} is the normal vector 
+pointing perpendicular to the surface out of the domain. Hence we have the following relations
 
+\begin{align*}
+ &\textbf{\textit{P}}_n = \textit{P} \cdot \textbf{n} \hspace{12mm} \text{Shear stress} \\
+	&P_{nn} = \textbf{n} \cdot \textbf{\textit{P}}_n \hspace{8mm} \text{Normal stress component} \\
+	&P_{nt} = |\textbf{\textit{P}}_n \times \textbf{n}| \hspace{5mm} \text{Tangential stress component}
+	\end{align*}
+
+	In this exercise we are interested in the wall shear stress, hence we will for this time focus on the tagential stress.
+
+	
 \end{document}
