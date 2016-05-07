@@ -327,18 +327,29 @@ resolution, and the convergence rate approaches 3 which is reasonable. For $\lam
 a grade in comparison with $\lambda \leq 10$. This observation of failure to converge towards the solution, as well as poor $L_2$ norm, is explained by a numerical artifact called \textit{locking}. As $\lambda$ gets bigger the material reaches an 
 incompressible state, where the displacements in the material gets small.
 These elements we are using doesn't approximate the divergence fairly well, hence as the 
-$\lambda \nabla \nabla \textbf{u}$ term gets bigger, the error from the divergence pollutes our numerical results. Take for 
+$\lambda \nabla \nabla \cdot \textbf{u}$ term gets bigger, the error from the divergence pollutes our numerical results. Take for 
 instance $\lambda = 100$ and $N = 32$.. GET PICTURE AND COMPARE
 
 
 \textbf{Workaround}
-So is there a way to avoid \textit{locking}? Clairy we have to do something about the $\lambda \nabla \nabla \textbf{u}$ term as
-this ruins our numerical efforts.
+So is there a way to avoid \textit{locking}? Clairy we have to do something about the $\lambda \nabla \nabla \cdot \textbf{u}$ term as this ruins our numerical efforts.
 One approach to limit the effects from this numerical artifact is to rewrite
 the problem by introducing a mixedfunctionspace, in such a way that.
 
 \begin{align*}
+p =  \lambda \nabla \cdot \textbf{u} 
+\end{align*}
+This simple but powerfull rewriting of the problem, transforms our system into a well known Stokes problem, written a
+\begin{align*}
+-\mu \Delta \textbf{u} - \nabla p = \textbf{f} \\
+\nabla \cdot \textbf{u} = \frac{p}{\lambda}
+\end{align*}
+The familiar Stokes problem can be solved using Stokes stable elements, as we choose $P2-P1$ elements for the velocity and
+pressure. This system of equations effects our variatonal form as follows.
 
+\begin{align*}
+\mu \langle \nabla u_h \,, \nabla v_h \rangle + \langle p \,, \nabla \cdot v \rangle 
+= \langle f \,, v \rangle
 \end{align*}
 
 
