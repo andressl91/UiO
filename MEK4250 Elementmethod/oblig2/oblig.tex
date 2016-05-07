@@ -243,8 +243,104 @@ pointing perpendicular to the surface out of the domain. Hence we have the follo
 	&P_{nn} = \textbf{n} \cdot \textbf{\textit{P}}_n \hspace{8mm} \text{Normal stress component} \\
 	&P_{nt} = |\textbf{\textit{P}}_n \times \textbf{n}| \hspace{5mm} \text{Tangential stress component}
 	\end{align*}
+	
+In this exercise we are interested in the wall shear stress, hence we will for this time focus on the tagential stress.
 
-	In this exercise we are interested in the wall shear stress, hence we will for this time focus on the tagential stress.
+\begin{figure}[h!]
+	\centering
+	\caption*{loglogplot}
+	\includegraphics[scale=0.4]{shear.png}
+\end{figure}
+
+\section*{Exersize 2, Linear Elasticity}
+In this exercise we are to take a closer look on linear elasticity, and familiarize ourselfs with
+the numerical artifact locking. We are presented with the following problem
+
+\begin{align*}
+-\mu \Delta \textbf{u} - \lambda \nabla \nabla \textbf{u} = \textbf{f} \hspace{2mm} \text{in} \hspace{2mm} \Omega \\
+\textbf{u} = u_e \hspace{2mm} \text{on} \hspace{2mm} \partial \Omega \\
+u_e = \big(\frac{\partial \phi}{\partial y}, -\frac{\partial \phi}{\partial x} \big) \hspace{3mm}
+\phi = sin(\pi x y)
+\end{align*}
+
+First and foremost since we are makeing a "manufactured solution", we need to determine the sourceterm \textbf{f}. The equation
+to solve for \textbf{f} is $\textbf{f} =\mu  \Delta \textbf{u}_e$, due to by construction $\nabla \cdot \textbf{u}_e = 0$
+ Hand calculations and verification with sympy gives us the following result.
+
+\begin{align*}
+\textbf{f} = \mu \big(\pi^3 x^3 cos(\pi x y) -\pi^2y (2sin(\pi x y) + \pi x y cos(\pi x y)   ) \big) \textbf{i} + \\
+\mu \big( \pi^3y^3 cos(\pi x y) + \pi^2 x (2 sin(\pi x y) + \pi x y cos(\pi x y)   )  \big)
+\end{align*}
+Now how do we assess the problem? 
+Why not try stright forward Galerkin method on the problem, since we have had many good results with this approach.
+Integration by parts gives us the following variational form and numerical results.
+
+\begin{align*}
+\mu \int \Delta u v \hspace{1mm} dx - \lambda \int \nabla \nabla \cdot u v \hspace{1mm} dx = \int f v dx\\ 
+\mu \langle \nabla u_h \,, \nabla v_h \rangle + \lambda \langle \nabla \cdot u_h \,, \nabla \cdot v_h \rangle 
+= \langle f \,, v \rangle
+\end{align*}
+Now for our numerical calulations, the problem will be solved on a UnitSquareMesh(N,N) for $N = [8, 16, 32, 64]$, for 
+choices of $\lambda = [1, 100, 10000]$. We choice second order polynomials for the velocity.  
+
+
+\begin{table}[ht]
+\caption {L2 norm velocity} 
+\centering
+\begin{tabular}{c|ccccccc}
+\hline
+\rowcolor{LightCyan}
+$\lambda$ / N  & 8 & 16 & 32 & 64\\
+\hline
+ 1     & 0.000662282 & 4.40431e-05 & 2.81081e-06 & 1.76953e-07 \\ \hline 
+ \rowcolor{LightCyan} 
+10    & 0.00290596  & 0.000209755 & 1.38052e-05 & 8.78212e-07 \\ \hline
+100   & 0.0142522   & 0.00147779  & 0.000115406 & 7.83639e-06 \\ \hline
+\rowcolor{LightCyan} \hline
+1000  & 0.0269102   & 0.00513695  & 0.000689253 & 6.3586e-05  \\ \hline
+10000 & 0.029816    & 0.00716993  & 0.00157688  & 0.000272168 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\caption {Convergence rate velocity} 
+\centering
+\begin{tabular}{c|cccccc}
+\hline
+\rowcolor{LightCyan}
+$\lambda$ / N  & Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64\\
+\hline
+1     & 3.91046 & 3.96985 & 3.98955 &  \\ \hline
+\rowcolor{LightCyan} \hline
+10    & 3.79224 & 3.92542 & 3.9745  &  \\ \hline
+100   & 3.26967 & 3.67864 & 3.88039 &  \\ \hline
+\rowcolor{LightCyan} \hline
+1000  & 2.38917 & 2.89781 & 3.43825 &  \\ \hline
+10000 & 2.05606 & 2.18488 & 2.53451 & \\
+\hline
+\end{tabular}
+\end{table}
+ 
+As we can see, the first run with $\lambda = 1$ gives us reasonable results. The $L_2$ norm decreases nicely for finer mesh
+resolution, and the convergence rate approaches 3 which is reasonable. For $\lambda = 10$ we observe the same trend, but as $\lambda$ gets bigger, we definatly see that the error gets worse. Same goes for the convergence rate, sa we can see drop over 
+a grade in comparison with $\lambda \leq 10$. This observation of failure to converge towards the solution, as well as poor $L_2$ norm, is explained by a numerical artifact called \textit{locking}. As $\lambda$ gets bigger the material reaches an 
+incompressible state, where the displacements in the material gets small.
+These elements we are using doesn't approximate the divergence fairly well, hence as the 
+$\lambda \nabla \nabla \textbf{u}$ term gets bigger, the error from the divergence pollutes our numerical results. Take for 
+instance $\lambda = 100$ and $N = 32$.. GET PICTURE AND COMPARE
+
+
+\textbf{Workaround}
+So is there a way to avoid \textit{locking}? Clairy we have to do something about the $\lambda \nabla \nabla \textbf{u}$ term as
+this ruins our numerical efforts.
+One approach to limit the effects from this numerical artifact is to rewrite
+the problem by introducing a mixedfunctionspace, in such a way that.
+
+\begin{align*}
+
+\end{align*}
+
 
 	
 \end{document}

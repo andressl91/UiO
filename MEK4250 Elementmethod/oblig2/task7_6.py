@@ -8,7 +8,7 @@
 from dolfin import *
 import matplotlib.pyplot as plt
 import numpy as np
-#from tabulate import tabulate
+from tabulate import tabulate
 
 def poiseuille(N, v_deg, p_deg, mu):
     mesh = UnitSquareMesh(N, N)
@@ -21,7 +21,7 @@ def poiseuille(N, v_deg, p_deg, mu):
 
     u_e = Expression(("sin(pi*x[1])", "cos(pi*x[0])"))
     p_e = Expression("sin(2*pi*x[0])")
-    #plot(u_e, interactive=True)
+    u_e = interpolate(u_e,V)
 
     f = Expression(("pi*pi*sin(pi*x[1]) - 2*pi*cos(2*pi*x[0])", "pi*pi*cos(pi*x[0])"))
 
@@ -51,32 +51,36 @@ def poiseuille(N, v_deg, p_deg, mu):
     E_p.append(L2)
 
     #WALL SHEAR STRESS
-    sides = DomainBoundary() #AutoSubDomain(lambda x: "on_boundary" and near(x[1],0))
+    sides = AutoSubDomain(lambda x: "on_boundary" and x[1] < 1E-5)
+
     boundaries = FacetFunction("size_t", mesh)
     boundaries.set_all(0)
     sides.mark(boundaries, 1)
     ds = Measure("ds", subdomain_data=boundaries)
 
-    def sigma (u_o):
-        return 2.0*mu*sym(grad(u_o)) #- p_o*Identity(len(u_o))
+    u_e = project(u_e, V)
+    p_e = project(p_e, Q)
+
+    def sigma (u_o, p_o):
+        return 2.0*mu*sym(grad(u_o)) - p_o*Identity(len(u_o))
 
     def eps(u):
         return sym(grad(u))
 
-
-    #SHEAR STRESS
     n = FacetNormal(mesh)
     t = as_vector((n[1], -n[0]))
 
-    u_e = project(u_e, V)
     #comp = assemble( dot(dot(sigma(u_h), n), t) * ds(1) )
     #exact =  assemble( dot(dot(sigma(u_e), n), t) * ds(1) )
 
-    comp = assemble( dot(sigma(u_h), n)[0] * ds(1) )
-    exact =  assemble( dot(sigma(u_e), n)[0] * ds(1) )
-    Err = exact - comp
-    L2_shear = np.sqrt(Err*Err)
-    E_shear.append(L2_shear)
+    #comp = assemble( dot(t, dot(sigma(u_h, p_h), n)) * ds(1) )
+    #exact = assemble( dot(t, dot(sigma(u_e, p_e), n)) * ds(1) )
+
+    #comp = assemble( dot(sigma(u_h, p_h), n)[0] * ds(1) )
+    #exact =  assemble( dot(sigma(u_e, p_e), n)[0] * ds(1) )
+    #Err = exact - comp
+    Es = sqrt(assemble((u_h.dx(1)[0]-u_e.dx(1)[0])**2*ds(1)))
+    E_shear.append(abs(Es))
 
 
 set_log_active(False)
@@ -85,7 +89,7 @@ v_d = [4,4,3,3]; p_d = [3,2,2,1]
 table = []; headers = ['',]
 table2 = [] ; headers2 = ['',]
 table3 = [] ; table4 = []
-N = [2**i for i in range(2, 6)]
+N = [2**i for i in range(3, 7)]
 for i in range(len(v_d)):
     E = []; E_p = []; h = []; E_shear = []
     Right = []; Left = []
@@ -129,7 +133,8 @@ for i in range(len(v_d)):
             if i == len(v_d)-1:
                 headers2.append("Conv %d to %d" % (N[k], N[k+1]))
 
-	E = np.asarray(E); E_p = np.asarray(E_p)
+
+	    E = np.asarray(E); E_p = np.asarray(E_p)
         #PLOT ERROR AGAINST h, loglog
         plt.figure(4);
         #plt.subplot(211)
@@ -137,29 +142,30 @@ for i in range(len(v_d)):
         plt.loglog(h, E+E_p, marker='o', linestyle='--', label = 'Elements, P%d-P%d ' % ( v_d[i], p_d[i]))
         plt.legend(loc=4)
         plt.savefig("comb1.png")
-        
+
         plt.figure(1);
         #plt.subplot(211)
         plt.title("Velocity norm H1")
         plt.loglog(h, E, marker='o', linestyle='--', label = 'Velocity, P%d ' % ( v_d[i]))
         plt.legend(loc=4)
         plt.savefig("velocity1.png")
-        
+
         plt.figure(2)
         plt.title("Pressure norm L2")
         plt.loglog(h, E_p, marker='o', linestyle='--', label = 'Pressure, P%d' % ( p_d[i]))
         plt.legend(loc=4)
         plt.savefig("pressure1.png")
-        
+
         plt.figure(3)
         plt.title("Shear STRESS")
         plt.loglog(h, E_shear, marker='o', linestyle='--', label = 'Shear, P%d-P%d ' % ( v_d[i], p_d[i]))
         plt.legend(loc=4)
         plt.savefig("shear.png")
+
         table2.append(u_h1)
         table3.append(p_l2)
         table4.append(u_shearl2)
-   
+
 plt.show()
 if MPI.rank(mpi_comm_world()) == 0:
     print "L2 norm VELOCITY"

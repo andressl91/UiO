@@ -1,14 +1,16 @@
 from dolfin import *
 import numpy as np
+from tabulate import tabulate
 
-def singlespace(N, count):
+def singlespace(N, v_deg, mu, lamb):
     mesh = UnitSquareMesh(N, N)
-    V = VectorFunctionSpace(mesh, 'Lagrange', 2)
+    V = VectorFunctionSpace(mesh, 'Lagrange', v_deg)
 
     u = TrialFunction(V)
     v = TestFunction(V)
 
-    mu = 1.; lamb = 100.;
+    mu = mu;
+    lamb = lamb;
 
     f = Expression(("-mu*(-pow(pi,3)*pow(x[0],3)*cos(pi*x[0]*x[1]) \
         -pi*pi*x[1]*(2*sin(pi*x[0]*x[1]) + pi*x[0]*x[1]*cos(pi*x[0]*x[1])))",\
@@ -21,6 +23,7 @@ def singlespace(N, count):
 
     bc = DirichletBC(V, analytical, "on_boundary")
 
+    #a = mu*inner(grad(u), grad(v))*dx + lamb*inner(div(u), div(v))*dx
     a = mu*inner(grad(u), grad(v))*dx + lamb*inner(div(u), div(v))*dx
     L = dot(f,v)*dx
 
@@ -31,15 +34,14 @@ def singlespace(N, count):
     #plot(u_, interactive=True)
     #plot(u_e, interactive=True)
 
-    L2 = errornorm(u_, u_e, norm_type='l2')
-    print "The L2 norm of the numerical experiment is %.5f" % L2
-    h_single[count] = mesh.hmin()
-    E_single[count] = L2
+    L2 = errornorm(u_e, u_, norm_type='l2', degree_rise=3)
+    print "The L2 norm of the numerical experiment is %g" % L2
+    E.append(L2)
 
-def mixedspace(N, count):
+def mixedspace(N, v_deg, p_deg, mu, lamb):
     mesh = UnitSquareMesh(N, N)
-    V = VectorFunctionSpace(mesh, 'Lagrange', 2)
-    Q = FunctionSpace(mesh, 'Lagrange', 1)
+    V = VectorFunctionSpace(mesh, 'Lagrange', v_deg)
+    Q = FunctionSpace(mesh, 'Lagrange', p_deg)
     VQ = V*Q
 
     up = Function(VQ)
@@ -47,7 +49,7 @@ def mixedspace(N, count):
     vq = TestFunction(VQ)
     v, q = split(vq)
 
-    mu = 1.; lamb = 1.;
+    #mu = 1.; lamb = 1.;
 
     f = Expression(("-mu*(-pow(pi,3)*pow(x[0],3)*cos(pi*x[0]*x[1]) \
         -pi*pi*x[1]*(2*sin(pi*x[0]*x[1]) + pi*x[0]*x[1]*cos(pi*x[0]*x[1])))",\
@@ -78,25 +80,56 @@ def mixedspace(N, count):
 
     L2 = errornorm(u_, u_e, norm_type='l2')
     print "The L2 norm of the numerical experiment is %.5f" % L2
-    h_mixed[count] = mesh.hmin()
-    E_mixed[count] = L2
+    h.append( mesh.hmin())
+    E.append(L2)
+
+    if lamb == 100 and N == 32:
+        file = File("calc%s.pvd") % str(lamb);
+        file << u_h;
+        file = File("ex%s.pvd");
+        file << u_e;
 
 
-N = [2**i for i in range(3, 5)]
+N = [2**i for i in range(3, 7)]
+la = [1, 10, 100, 1000, 10000]
 
-E_single = np.zeros(len(N)); E_mixed = np.zeros(len(N))
-h_single = np.zeros(len(N)); h_mixed = np.zeros(len(N))
-count = 0
-for i in N:
-    singlespace(i, count)
-    mixedspace(i, count)
-    count += 1
-print E_single, h_single
+h = [1./i for i in N]
+table = []; headers = ['N']
+tab_con = []; head2 = ['']
 
-r_mixed = np.zeros(len(N)-1); r_single = np.zeros(len(N)-1)
+solver = "single"
+for i in range(len(la)):
+    E = [];
+    for j in N:
+        print "N = %d, lamb = %d" % (j, la[i])
+        if i == len(la)-1:
+            headers.append(str(j))
+        if solver == "single":
+            singlespace(N = j, v_deg = 2, mu = 1., lamb = la[i])
+        else:
+            mixedspace(N = j, v_deg = 2, p_deg = 1, mu = 1., lamb = la[i])
 
-for j in range(len(E_single)-1):
-    r_single[j] = np.log(E_single[j+1]/E_single[j]) / np.log(h_single[j+1]/h_single[j])
-    r_mixed[j] = np.log(E_mixed[j+1]/E_mixed[j]) / np.log(h_mixed[j+1]/h_mixed[j])
 
-print r_single
+
+    #L2 norm error
+    li = [];
+    li.append(str(la[i]) )
+    for k in range(len(E)):
+        li.append(E[k])
+    table.append(li)
+
+    #Convergence
+    u_h = []
+    u_h.append(str(la[i]))
+    for k in range(len(E)-1):
+        #Velocity
+        E_u = abs(E[k+1]/E[k]); h_ = abs(h[k+1]/h[k])
+        r = np.log(E_u)/np.log(h_)
+        u_h.append(r)
+
+        if i == len(la)-1:
+            head2.append("Conv %d to %d" % (N[k], N[k+1]))
+
+    tab_con.append(u_h)
+print tabulate(table, headers)
+print tabulate(tab_con, head2)
