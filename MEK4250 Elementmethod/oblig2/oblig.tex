@@ -245,12 +245,52 @@ pointing perpendicular to the surface out of the domain. Hence we have the follo
 	\end{align*}
 	
 In this exercise we are interested in the wall shear stress, hence we will for this time focus on the tagential stress.
+It can be shown that the tagential stress on a wall, perpendicular to the x-axis can be written as 
+$\tau = \mu \frac{\partial u}{\partial y}$. We will use the same parameters in the previous exercise in the numerical
+calculations. My result yields.
+
+\begin{table}[ht]
+\caption {L2 norm wall shear stress} 
+\centering
+\begin{tabular}{c|cccc}
+\hline
+\rowcolor{LightCyan}
+N  &  8  &  16  &  32 &  64\\
+\hline
+4-3 & 3.62512e-05 & 2.35592e-06 & 1.50416e-07 & 9.47586e-09 \\ \hline
+4-2 & 0.00218017  & 0.000283408 & 3.55504e-05 & 4.42797e-06 \\ \hline
+3-2 & 0.00118138  & 0.00014241  & 1.6705e-05  & 1.98931e-06 \\ \hline
+3-1 & 0.0217495   & 0.00446278  & 0.00100643  & 0.000242272 \\
+\hline
+\end{tabular}
+\end{table}
+
+\begin{table}[ht]
+\caption {Convergence rate wall shear stress} 
+\centering
+\begin{tabular}{c|ccc}
+\hline
+\rowcolor{LightCyan}
+N  & Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64 \\
+\hline
+4-3 & 3.94367 & 3.96926 & 3.98856   \\ \hline
+4-2 & 2.94349 & 2.99494 & 3.00515  \\ \hline
+3-2 & 3.05234 & 3.0917  & 3.06995  \\ \hline
+3-1 & 2.28497 & 2.1487  & 2.05454  \\
+\hline
+\end{tabular}
+\end{table}
 
 \begin{figure}[h!]
 	\centering
 	\caption*{loglogplot}
 	\includegraphics[scale=0.4]{shear.png}
 \end{figure}
+
+As we can see, the inital look on the convergence rate something feels wrong. Even though we used the $L_2$ norm
+to compute error, we observe that the convergence rate follows the trend of a $H_1$ norm. It is important to take a closer of what
+we compute the errornorm of. As we can see the wall shear stress is calculated using the derivative of the velocity \textbf{u}, as does the $H^1$ norm. As a consequence the convergence rate is limited to the same order as we saw in the previous exercise.
+
 
 \section*{Exersize 2, Linear Elasticity}
 In this exercise we are to take a closer look on linear elasticity, and familiarize ourselfs with
@@ -281,13 +321,13 @@ Integration by parts gives us the following variational form and numerical resul
 = \langle f \,, v \rangle
 \end{align*}
 Now for our numerical calulations, the problem will be solved on a UnitSquareMesh(N,N) for $N = [8, 16, 32, 64]$, for 
-choices of $\lambda = [1, 100, 10000]$. We choice second order polynomials for the velocity.  
+choices of $\lambda = [1, 10, 100, 1000, 10000]$. We choice second order polynomials for the velocity.  
 
 
 \begin{table}[ht]
 \caption {L2 norm velocity} 
 \centering
-\begin{tabular}{c|ccccccc}
+\begin{tabular}{c|cccc}
 \hline
 \rowcolor{LightCyan}
 $\lambda$ / N  & 8 & 16 & 32 & 64\\
@@ -339,19 +379,63 @@ the problem by introducing a mixedfunctionspace, in such a way that.
 \begin{align*}
 p =  \lambda \nabla \cdot \textbf{u} 
 \end{align*}
-This simple but powerfull rewriting of the problem, transforms our system into a well known Stokes problem, written a
+This simple but powerfull rewriting of the problem transforms our system written as
 \begin{align*}
 -\mu \Delta \textbf{u} - \nabla p = \textbf{f} \\
 \nabla \cdot \textbf{u} = \frac{p}{\lambda}
 \end{align*}
-The familiar Stokes problem can be solved using Stokes stable elements, as we choose $P2-P1$ elements for the velocity and
+The familiar set of equations resembles a similar problem of the Stokes problem. Which
+can be solved using Stokes stable elements,$P2-P1$ elements for the velocity and
 pressure. This system of equations effects our variatonal form as follows.
 
 \begin{align*}
-\mu \langle \nabla u_h \,, \nabla v_h \rangle + \langle p \,, \nabla \cdot v \rangle 
-= \langle f \,, v \rangle
+\mu \langle \nabla u_h \,, \nabla v_h \rangle + \langle p \,, \nabla \cdot v \rangle = \langle f \,, v \rangle \\
+\lambda \langle \nabla \cdot u \,, q \rangle - \langle p \,, q \rangle = 0
 \end{align*}
+ 
+We will again solve this problem, the problem will be solved on a UnitSquareMesh(N,N) for $N = [8, 16, 32, 64]$, for 
+choices of $\lambda = [1, 10, 100, 1000, 10000]$. 
 
+\begin{table}[ht]
+\caption {L2 norm velocity} 
+\centering
+\begin{tabular}{c|ccccc}
+\hline
+\rowcolor{LightCyan}
+$\lambda$ / N  & 8 & 16 & 32 & 64\\
+\hline
+1     & 0.000350744 & 2.30646e-05 & 1.46642e-06 & 9.22282e-08 \\ \hline
+\rowcolor{LightCyan} \hline
+10    & 0.000352729 & 2.29796e-05 & 1.45951e-06 & 9.19713e-08 \\ \hline
+100   & 0.000389985 & 2.54407e-05 & 1.62708e-06 & 1.03417e-07 \\ \hline
+\rowcolor{LightCyan} 
+1000  & 0.000398393 & 2.60367e-05 & 1.66973e-06 & 1.0645e-07  \\ \hline
+10000 & 0.000399331 & 2.61038e-05 & 1.67457e-06 & 1.06797e-07 \\
+\hline
+\end{tabular}
+\end{table}
 
+\begin{table}[ht]
+\caption {L2 norm convergence rate} 
+\centering
+\begin{tabular}{c|cccc}
+\hline
+\rowcolor{LightCyan}
+$\lambda$ / N  & Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64 \\
+\hline
+1     & 3.92667 & 3.97531 & 3.99095 &  \\ \hline
+\rowcolor{LightCyan} \hline
+10    & 3.94014 & 3.9768  & 3.98816 &  \\ \hline
+100   & 3.93821 & 3.96678 & 3.97574 &  \\ \hline
+\rowcolor{LightCyan} \hline
+1000  & 3.93558 & 3.96286 & 3.97136 &  \\ \hline
+10000 & 3.93525 & 3.9624  & 3.97085 &  \\
+\hline
+\end{tabular}
+\end{table}
+Jugding from the results, we seemed to have found a workaround . Low $L^2$ norms combined with satisfactory
+convergence, gives a good verification that the solution method is a good approximation of the system. 
 	
 \end{document}
+
+

@@ -37,6 +37,11 @@ def singlespace(N, v_deg, mu, lamb):
     L2 = errornorm(u_e, u_, norm_type='l2', degree_rise=3)
     print "The L2 norm of the numerical experiment is %g" % L2
     E.append(L2)
+    if lamb == 100 and N == 32:
+        ufile_pvd = File("vel_cal.pvd")
+        ufile_pvd << u_
+        uefile_pvd = File("vel_ex.pvd")
+        uefile_pvd << u_e
 
 def mixedspace(N, v_deg, p_deg, mu, lamb):
     mesh = UnitSquareMesh(N, N)
@@ -44,12 +49,10 @@ def mixedspace(N, v_deg, p_deg, mu, lamb):
     Q = FunctionSpace(mesh, 'Lagrange', p_deg)
     VQ = V*Q
 
-    up = Function(VQ)
-    u, p = split(up)
-    vq = TestFunction(VQ)
-    v, q = split(vq)
-
-    #mu = 1.; lamb = 1.;
+    u, p = TrialFunctions(VQ)
+    v, q = TestFunctions(VQ)
+    #up = Function(VQ); u, p = split(up)
+    #vq = TestFunction(VQ); v, q = split(vq)
 
     f = Expression(("-mu*(-pow(pi,3)*pow(x[0],3)*cos(pi*x[0]*x[1]) \
         -pi*pi*x[1]*(2*sin(pi*x[0]*x[1]) + pi*x[0]*x[1]*cos(pi*x[0]*x[1])))",\
@@ -57,37 +60,28 @@ def mixedspace(N, v_deg, p_deg, mu, lamb):
             +pi*pi*x[0]*(2*sin(pi*x[0]*x[1]) + pi*x[0]*x[1]*cos(pi*x[0]*x[1])))"), mu = mu)
 
 
-    a1 = mu*inner(grad(u), grad(v))*dx + lamb*inner(p, div(v))*dx - inner(f,v)*dx
-    a2 = lamb*p*q*dx -lamb*div(u)*q*dx
-    F = a1 - a2
+    a1 = mu*inner(grad(u), grad(v))*dx + div(v)*p*dx - inner(f,v)*dx
+    a2 = lamb*div(u)*q*dx  - p*q*dx
+    #L = inner(f,v)*dx
+    F = a1 + a2
 
     analytical = Expression( ("pi*x[0]*cos(pi*x[0]*x[1])", "-pi*x[1]*cos(pi*x[0]*x[1])") )
-
-
     bc = DirichletBC(VQ.sub(0), analytical, "on_boundary")
-
 
     up_ = Function(VQ)
 
-    solve(F == 0, up, bc)
+    solve(lhs(F) == rhs(F), up_, bc)
 
-    u_, p_ = split(up)
-    u_e = project(analytical, V)
-    u_ = project(u_, V)
+    u_, p_ = up_.split(True)
 
-    plot(u_, interactive=False)
-    plot(u_e, interactive=False)
+    u_e = interpolate(analytical, V)
 
-    L2 = errornorm(u_, u_e, norm_type='l2')
+    #plot(u_, interactive=False)
+    #plot(u_e, interactive=False)
+
+    L2 = errornorm(u_e, u_, norm_type='l2', degree_rise=3)
     print "The L2 norm of the numerical experiment is %.5f" % L2
-    h.append( mesh.hmin())
     E.append(L2)
-
-    if lamb == 100 and N == 32:
-        file = File("calc%s.pvd") % str(lamb);
-        file << u_h;
-        file = File("ex%s.pvd");
-        file << u_e;
 
 
 N = [2**i for i in range(3, 7)]
@@ -97,7 +91,7 @@ h = [1./i for i in N]
 table = []; headers = ['N']
 tab_con = []; head2 = ['']
 
-solver = "single"
+solver = "mixed"
 for i in range(len(la)):
     E = [];
     for j in N:
@@ -106,7 +100,7 @@ for i in range(len(la)):
             headers.append(str(j))
         if solver == "single":
             singlespace(N = j, v_deg = 2, mu = 1., lamb = la[i])
-        else:
+        if solver == "mixed":
             mixedspace(N = j, v_deg = 2, p_deg = 1, mu = 1., lamb = la[i])
 
 

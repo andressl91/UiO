@@ -12,8 +12,8 @@ from tabulate import tabulate
 
 def poiseuille(N, v_deg, p_deg, mu):
     mesh = UnitSquareMesh(N, N)
-    V = VectorFunctionSpace(mesh, 'CG', v_deg)
-    Q = FunctionSpace(mesh, 'CG', p_deg)
+    V = VectorFunctionSpace(mesh, 'Lagrange', v_deg)
+    Q = FunctionSpace(mesh, 'Lagrange', p_deg)
 
     VQ = V*Q
     u, p = TrialFunctions(VQ)
@@ -25,41 +25,51 @@ def poiseuille(N, v_deg, p_deg, mu):
 
     f = Expression(("pi*pi*sin(pi*x[1]) - 2*pi*cos(2*pi*x[0])", "pi*pi*cos(pi*x[0])"))
 
-    a = inner(grad(u), grad(v))*dx + p*div(v)*dx + div(u)*q*dx
+    a = inner(grad(u), grad(v))*dx + div(v)*p*dx + div(u)*q*dx
     L = inner(f, v)*dx
 
     #F = inner(grad(u), grad(v))*dx +p*div(v)*dx + div(v)*q*dx - inner(f,v)*dx
 
     #Define boundaries and BCS
 
-    u_bc = DirichletBC(VQ.sub(0),u_e , "on_boundary")
+    u_bc = DirichletBC(VQ.sub(0), u_e , "on_boundary")
     p_bc = DirichletBC(VQ.sub(1), p_e, "on_boundary")
 
     bcs = [u_bc, p_bc]
 
     up = Function(VQ)
     #A = assemble(a); b = assemble(L)
-    #solve(A, up.vector(), b, 'gmres')
+    #A, b = assemble_system(a, L, bcs)
+    #solve(A, up.vector(), b)
     solve(a == L, up, bcs)
 
-    u_h, p_h = up.split()
-
-    #plot(u, interactive=True)
-    H1 = errornorm(u_e, u_h, norm_type='h1', degree_rise=1)
-    L2 = errornorm(p_e, p_h, norm_type='l2', degree_rise=1)
+    u_h, p_h = up.split(True)
+    #plot(u_h.dx(1))
+    #plot(u_e.dx(1))
+    #plot(u_e)
+    #plot(u_h);
+    #interactive()
+    H1 = errornorm(u_e, u_h, norm_type='h1', degree_rise=2)
+    L2 = errornorm(p_e, p_h, norm_type='l2', degree_rise=2)
     E.append(H1); h.append(mesh.hmin())
     E_p.append(L2)
 
     #WALL SHEAR STRESS
-    sides = AutoSubDomain(lambda x: "on_boundary" and x[1] < 1E-5)
+    sides = AutoSubDomain(lambda x:  ( x[1] < DOLFIN_EPS or x[1] > 1 - DOLFIN_EPS ) )
+    class Wall(SubDomain):
+        def inside(self, x, on_boundary):
+            return  x[1] < DOLFIN_EPS or x[1] > 1 - DOLFIN_EPS
 
+    wall = Wall()
     boundaries = FacetFunction("size_t", mesh)
     boundaries.set_all(0)
-    sides.mark(boundaries, 1)
-    ds = Measure("ds", subdomain_data=boundaries)
+    wall.mark(boundaries, 1)
+    #ds = Measure("ds", subdomain_data=boundaries)
+    ds = Measure("ds", domain = mesh, subdomain_data=boundaries)
 
-    u_e = project(u_e, V)
-    p_e = project(p_e, Q)
+    #V1 = VectorFunctionSpace(mesh, 'Lagrange', v_deg+1)
+    u_e = interpolate(u_e, V)
+    p_e = interpolate(p_e, Q)
 
     def sigma (u_o, p_o):
         return 2.0*mu*sym(grad(u_o)) - p_o*Identity(len(u_o))
@@ -79,8 +89,8 @@ def poiseuille(N, v_deg, p_deg, mu):
     #comp = assemble( dot(sigma(u_h, p_h), n)[0] * ds(1) )
     #exact =  assemble( dot(sigma(u_e, p_e), n)[0] * ds(1) )
     #Err = exact - comp
-    Es = sqrt(assemble((u_h.dx(1)[0]-u_e.dx(1)[0])**2*ds(1)))
-    E_shear.append(abs(Es))
+    Err = sqrt( assemble( ( u_h.dx(1)[0]-u_e.dx(1)[0] )**2 * ds(1)) )
+    E_shear.append(Err)
 
 
 set_log_active(False)
@@ -134,37 +144,37 @@ for i in range(len(v_d)):
                 headers2.append("Conv %d to %d" % (N[k], N[k+1]))
 
 
-	    E = np.asarray(E); E_p = np.asarray(E_p)
-        #PLOT ERROR AGAINST h, loglog
-        plt.figure(4);
-        #plt.subplot(211)
-        plt.title("Velocity norm H1 + pressure norm L2")
-        plt.loglog(h, E+E_p, marker='o', linestyle='--', label = 'Elements, P%d-P%d ' % ( v_d[i], p_d[i]))
-        plt.legend(loc=4)
-        plt.savefig("comb1.png")
+    E = np.asarray(E); E_p = np.asarray(E_p)
+    #PLOT ERROR AGAINST h, loglog
+    plt.figure(4);
+    #plt.subplot(211)
+    plt.title("Velocity norm H1 + pressure norm L2")
+    plt.loglog(h, E+E_p, marker='o', linestyle='--', label = 'Elements, P%d-P%d ' % ( v_d[i], p_d[i]))
+    plt.legend(loc=4)
+    plt.savefig("comb1.png")
 
-        plt.figure(1);
-        #plt.subplot(211)
-        plt.title("Velocity norm H1")
-        plt.loglog(h, E, marker='o', linestyle='--', label = 'Velocity, P%d ' % ( v_d[i]))
-        plt.legend(loc=4)
-        plt.savefig("velocity1.png")
+    plt.figure(1);
+    #plt.subplot(211)
+    plt.title("Velocity norm H1")
+    plt.loglog(h, E, marker='o', linestyle='--', label = 'Velocity, P%d ' % ( v_d[i]))
+    plt.legend(loc=4)
+    plt.savefig("velocity1.png")
 
-        plt.figure(2)
-        plt.title("Pressure norm L2")
-        plt.loglog(h, E_p, marker='o', linestyle='--', label = 'Pressure, P%d' % ( p_d[i]))
-        plt.legend(loc=4)
-        plt.savefig("pressure1.png")
+    plt.figure(2)
+    plt.title("Pressure norm L2")
+    plt.loglog(h, E_p, marker='o', linestyle='--', label = 'Pressure, P%d' % ( p_d[i]))
+    plt.legend(loc=4)
+    plt.savefig("pressure1.png")
 
-        plt.figure(3)
-        plt.title("Shear STRESS")
-        plt.loglog(h, E_shear, marker='o', linestyle='--', label = 'Shear, P%d-P%d ' % ( v_d[i], p_d[i]))
-        plt.legend(loc=4)
-        plt.savefig("shear.png")
+    plt.figure(3)
+    plt.title("Shear STRESS")
+    plt.loglog(h, E_shear, marker='o', linestyle='--', label = 'Shear, P%d-P%d ' % ( v_d[i], p_d[i]))
+    plt.legend(loc=4)
+    plt.savefig("shear.png")
 
-        table2.append(u_h1)
-        table3.append(p_l2)
-        table4.append(u_shearl2)
+    table2.append(u_h1)
+    table3.append(p_l2)
+    table4.append(u_shearl2)
 
 plt.show()
 if MPI.rank(mpi_comm_world()) == 0:
