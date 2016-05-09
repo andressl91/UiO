@@ -4,12 +4,9 @@
 \usepackage{tabu}
 \usepackage{color, colortbl}
 \definecolor{LightCyan}{rgb}{0.88,1,1}
-
-
 \begin{document}
 \maketitle
-
-\section{Exercise 1}
+\section*{Exercise 1}
 In these set of exercises we will study the Stokes problem defined as 
 \begin{align*}
 -\Delta u + \nabla p = f \hspace{2mm} \text{in} \hspace{2mm} \Omega \\
@@ -17,7 +14,6 @@ In these set of exercises we will study the Stokes problem defined as
 u = g \hspace{2mm} \text{in} \hspace{2mm} \partial\Omega_N \\
 \frac{\partial u}{\partial x} - pn = h \hspace{2mm} \text{in} \hspace{2mm} \partial\Omega_N\\
 \end{align*}
-
 First off we will define the weak formulation for the stokes problem. Let u $\in H_{D,g}^1$ and $p \in L^2$. Then
 the stokes problem can be defined as 
 \begin{align*}
@@ -25,14 +21,12 @@ a(u, v) + b(p, v) = f(v) \hspace{2mm} v \in H_{D,0}^1 \\
 b(q, u) = 0 \hspace{2mm} q \in L^2 
 \end{align*}
 Where a and b defines the bilinear form, and f defines the linear form as
-
 \begin{align*}
 a(u, v) = \int \nabla u : \nabla v \hspace{1mm} dx \\
 b(p, v) = \int p \nabla \cdot v \hspace{1mm} dx \\
 f(v) = \int f v \hspace{1mm} dx + \int_{\Omega_N} h v \hspace{1mm} ds
 \end{align*}
-
-Further we will define to properties which will be usefull for solving the exercises \newline \newline
+Further we will define to properties which will be useful for solving the exercises \newline \newline
 \textbf{Cauchy-Schwarts inequality} \\
 Let V be a inner product space, then
 \begin{align*}
@@ -44,10 +38,9 @@ Let $v \in H_0^1(\Omega)$
 \begin{align*}
 ||v||_{L^2(\Omega)} \leq C |v|_{H^1} (\Omega) 
 \end{align*}
-
 \newpage
 \subsection*{Exercise 7.1}
-In this section we are to prove the conditions (7.14-7.16) from the course lecturenotes. 
+In this section we are to prove the conditions (7.14-7.16) from the course lecture notes. 
 Starting off with the first 
 \textbf{Condition 7.14}
 \begin{align*}
@@ -64,23 +57,20 @@ a(u_h, v_h) = \int_\Omega \nabla u_h : \nabla v_h \hspace{1mm} dx  = \langle \na
 \end{align*}
 Now since we have defined that $u_h, v_h \in V_h \in H_0^1$ we can use the Poincare inequality. Since we know that the norms 
 are positive, we are allowed to square the norm. We get the following relations.
-
 \begin{align*}
 ||\nabla u_h ||^2_{0} \leq ||u_h||^2_{1} = ||u_h||^2_{0} + ||\nabla u_h||^2_{0} \leq D |u_h|^2_{1} +  ||\nabla u_h||^2_{0} =
 D ||\nabla u_h||^2_{0} +  ||\nabla u_h||^2_{0} \\
 (D + 1) ||\nabla u_h||^2_{0} \leq C_1 ||u_h||^2_{1} 
 \end{align*}
-The following can be showed for $||\nabla v_h ||^2_{0}$ aswell, hence it is clear that 
+The following can be showed for $||\nabla v_h ||^2_{0}$ as well, hence it is clear that 
 \begin{align*}
 ||\nabla u_h ||_0 \cdot ||\nabla v_h ||_0 \leq C_1 ||u_h||_1 \cdot ||v_h||_1
 \end{align*}
-
 \textbf{Condition 7.15}
 \begin{align*}
 b(u_h, q_h) \leq C_2 ||u_h||_{V_h} ||q_h||_{Q_h} \hspace{2mm}  V_h \in H_0^1, \hspace{2mm} Q_h \in L^2,
 \end{align*}
 By direct insertion we get 
-
 \begin{align*}
 b(u_h, q_h) = \int p \nabla \cdot v \hspace{1mm} dx = \langle p \,, \nabla \cdot u \rangle \leq | \langle p \,, \nabla \cdot u \rangle |_0
 \end{align*}
@@ -102,7 +92,6 @@ determined by some constant $C_2$
 \end{align*}
 Hence, to show the implied boundedness of b, it holds to show $||\nabla \cdot u||_0^2 \leq C_2||\nabla u ||_0^2$
 For simplicity we write out the terms for the $R^2$ case, but the same proof can be showed for the general case $R^n$. 
-
 \begin{align*}
  ||\nabla \cdot u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\big)^2 \hspace{1mm} dx \\
  ||\nabla u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2}\big)^2 + \big(\frac{\partial^2 u}{\partial y^2} \big)^2 + 
@@ -112,7 +101,7 @@ Remembering that since we are in a normed vector space V, the triangle inequalit
 \begin{align*}
 ||x + y || \leq ||x|| + ||y|| \hspace{2mm} \forall x,y \in V
 \end{align*}
-Rearrangeing the terms we observe that 
+Rearranging the terms we observe that 
 \begin{align*}
  ||\nabla \cdot u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2} + \frac{\partial^2 v}{\partial y^2}\big)^2 \hspace{1mm} dx \\
  ||\nabla u||_0^2 = \int \big(\frac{\partial^2 u}{\partial x^2}\big)^2 
@@ -124,13 +113,11 @@ Rearrangeing the terms we observe that
  + \sqrt{ \big( \frac{\partial^2 v}{\partial y^2} \big)^2 \hspace{1mm} dx }
 \end{align*}
 Hence $||\nabla \cdot u||_0^2 \leq C_2 ||\nabla u ||_0^2$, and the inequality holds. 
-
 \textbf{Condition 7.16, Coersivity of a}
 \begin{align*}
  a(u_h, u_h) \geq C_3 ||u_h||_{V_h}^2 \hspace{2mm} \forall u_h \in V_h
 \end{align*}
 Expanding the $H^1$ norm of $u_h$, and applying the Cauchy-Schwarts inequality we find the relations
-
 \begin{align*}
 ||u_h||_1^2 = ||u_h||_0^2 + ||\nabla u_h||_0^2 \leq C|u_h|_1^2 + ||\nabla u_h||_0^2 \\
 = C||\nabla u_h||_0^2 + ||\nabla u_h||_0^2 = \big(C + 1\big)||\nabla u_h||_0^2 = C_3 ||\nabla u_h||_0^2 \\
@@ -139,39 +126,31 @@ Dividing the constant on both sides of the inequality and let $C_3 = 1/C_3$ we g
 \begin{align*}
 C_3||u_h||_1^2 \leq ||\nabla u_h||_0^2 = \int \nabla u_h : \nabla u_h \hspace{1mm} dx = a(u_h, u_h)
 \end{align*}
-
 \newpage
-\subsection{Exercise 7.6}
+\subsection*{Exercise 7.6}
 Looking on the poiseuille flow, we are to investigate if the anticipated convergence rates applies for the problem
-
 \begin{align*}
 -\Delta u - \nabla p = f \hspace{2mm} \text{in} \hspace{2mm} \Omega \\
 \nabla \cdot u = 0 \hspace{2mm} \text{in} \hspace{2mm} \partial\Omega \\
 \end{align*}
 We will make use of the "manufactured solution" approach defining an analytical solution in $\Omega$ and finding the appropriate
 source function f. By using hand calculations and verification of sympy we get. 
-
 \begin{align*}
  u = (sin(\pi y), cos(\pi x)); \hspace{4mm} p = sin(2 \pi x) \\
  f = (\pi^2 sin(\pi y) - 2 \pi cos(2 \pi x), \pi^2 cos(\pi x)) 
 \end{align*}
-
-We will this exercise examinate the error estimate 
+We will this exercise examine the error estimate 
 \begin{align*}
  ||u - u_h||_1 + ||p - p_h||_0 \leq Ch^k||u||_{k+1} + Dh^{l+1} ||p||{l+1}
 \end{align*}
 Where \textit{k}, \textit{l} denotes the polynomial degree of the velocity and pressure. The error estimate will be
 examined using $(P_4 - P_3)$, $(P_4 - P_2)$, $(P_3 - P_2)$ and $(P_3 - P_1)$ elements for velocity and pressure accordingly. 
 The problem will be solved on a UnitSquareMesh(N, N), for $N = [8, 16, 32, 64]$. Order of convergence is calculated for each choice
-of elements, between to neighbouring N values defined as
-
+of elements, between to neighboring N values defined as
 \begin{align*}
  r  = \frac{log \big( \frac{E[i+1]}{E[i]} \big)} {log \big( \frac{(h[i+1]}{h[i]} \big)}
 \end{align*}
-Where E is a list of errornorms and h is a list of the facetlength in the mesh defined as $\frac{1}{N}$
-
-
-
+Where E is a list of error norms and h is a list of the facet length in the mesh defined as $\frac{1}{N}$
 \begin{table}[ht]
 \caption {Convergence rate velocity, $E = ||u-u_h||_1$} 
 \centering
@@ -190,7 +169,6 @@ N  & Conv 4 to 8  &  Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64 \\
 \end{tabular}
 \end{table}
        
-
 \begin{table}[ht]
 \caption {Convergence rate velocity, $E = ||p-p_h||_0$} 
 \centering
@@ -208,57 +186,48 @@ N  & Conv 4 to 8  &  Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64\\
 \hline
 \end{tabular}
 \end{table}
-
 To describe these results we have to take a closer look on the error estimate. Let us choose the dataset from the $(P_4 - P_3)$
 computation. For $k=4$ and $p=3$ we get.  
-
 \begin{align*}
  ||u - u_h||_1 + ||p - p_h||_0 \leq Ch^4||u||_{5} + Dh^{4} ||p||{4}
 \end{align*}
 Observing that C,D, $||u||_{5}$ and $||p||_{4}$ are some constants and will not effect the trend of the error estimate, we see that
 the error is limited to $h^4$, both for the velocity and pressure norm. From our result this seems reasonable as we can see the order of convergence
 approach 4.
-
 What  about if we choose some elements which differ in degree by 2? Let's choose the $(P_4 - P_2$ computation and see what is going on. Our error estimate then yields
 \begin{align*}
  ||u - u_h||_1 + ||p - p_h||_0 \leq Ch^4||u||_{5} + Dh^{3} ||p||_{3}
 \end{align*}
-Now as the velocity norm on the right side of the inequality is dominated by the h term, we obsere that this term will go faster to zero than the pressure norm. Hence our 
+Now as the velocity norm on the right side of the inequality is dominated by the h term, we observe that this term will go faster to zero than the pressure norm. Hence our 
 calculations should be dominated by the pressure norm. From this logic we would expect the order of convergence to be limited by 3. As we can see from the numerical results, this seems legit as we can see that the rate of convergence 
-approaches 3 as the mesh gets finer.  Same reasoning also conserns the choice of
+approaches 3 as the mesh gets finer.  Same reasoning also concerns the choice of
 $P_3-P_2$ and $P_3 - P_1$ elements, just for lower degrees of convergence.
-
-
 \begin{figure}[h!]
-	\centering
-	\caption*{\textbf{loglog plots of norms and facet length}}
-	\includegraphics[scale=0.36]{velocity.png}
-		\includegraphics[scale=0.36]{pressure.png}
+        \centering
+        \caption*{\textbf{loglog plots of norms and facet length}}
+        \includegraphics[scale=0.36]{velocity.png}
+                \includegraphics[scale=0.36]{pressure.png}
 \end{figure}
-
 \begin{figure}[h!]
-	\centering
-	\caption*{loglogplot}
-	\includegraphics[scale=0.5]{comb.png}
+        \centering
+        \caption*{loglogplot}
+        \includegraphics[scale=0.5]{comb.png}
 \end{figure}
-
 \newpage
-\subsection{Exercise 7.7}
+\subsection*{Exercise 7.7}
 In this exercise we where to calculate the order of convergence for the shear stress in the same domain presented en exercise 7.6.
 Let \textit{P} denote the stress tensor. The wall stress on a surface in the domain is given by $\textit{P} \cdot \textbf{n}$, where \textbf{n} is the normal vector 
 pointing perpendicular to the surface out of the domain. Hence we have the following relations
-
 \begin{align*}
  &\textbf{\textit{P}}_n = \textit{P} \cdot \textbf{n} \hspace{12mm} \text{Shear stress} \\
-	&P_{nn} = \textbf{n} \cdot \textbf{\textit{P}}_n \hspace{8mm} \text{Normal stress component} \\
-	&P_{nt} = |\textbf{\textit{P}}_n \times \textbf{n}| \hspace{5mm} \text{Tangential stress component}
-	\end{align*}
-	
-In this exercise we are interested in the wall shear stress, hence we will for this time focus on the tagential stress.
-It can be shown that the tagential stress on a wall, perpendicular to the y-axis can be written as 
+        &P_{nn} = \textbf{n} \cdot \textbf{\textit{P}}_n \hspace{8mm} \text{Normal stress component} \\
+        &P_{nt} = |\textbf{\textit{P}}_n \times \textbf{n}| \hspace{5mm} \text{Tangential stress component}
+        \end{align*}
+        
+In this exercise we are interested in the wall shear stress, hence we will for this time focus on the tangential stress.
+It can be shown that the tangential stress on a wall, perpendicular to the y-axis can be written as 
 $\tau = \mu \frac{\partial u}{\partial y}$. We will use the same parameters in the previous exercise in the numerical
 calculations. My result yields.
-
 \begin{table}[ht]
 \caption {L2 norm wall shear stress} 
 \centering
@@ -274,7 +243,6 @@ N  &  8  &  16  &  32 &  64\\
 \hline
 \end{tabular}
 \end{table}
-
 \begin{table}[ht]
 \caption {Convergence rate wall shear stress} 
 \centering
@@ -290,52 +258,42 @@ N  & Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64 \\
 \hline
 \end{tabular}
 \end{table}
-
 \begin{figure}[h!]
-	\centering
-	\caption*{loglogplot}
-	\includegraphics[scale=0.4]{shear.png}
+        \centering
+        \caption*{loglogplot}
+        \includegraphics[scale=0.4]{shear.png}
 \end{figure}
-
-As we can see, the inital look on the convergence rate something feels wrong. Even though we used the $L_2$ norm
+As we can see, the initial look on the convergence rate something feels wrong. Even though we used the $L_2$ norm
 to compute error, we observe that the convergence rate follows the trend of a $H_1$ norm. It is important to take a closer of what
-we compute the errornorm of. As we can see the wall shear stress is calculated using the derivative of the velocity \textbf{u}, as does the $H^1$ norm. As a consequence the convergence rate is limited to the same order as we saw in the previous exercise.
-
-
+we compute the error norm of. As we can see the wall shear stress is calculated using the derivative of the velocity \textbf{u}, as does the $H^1$ norm. As a consequence the convergence rate is limited to the same order as we saw in the previous exercise.
 \section*{Exersize 2, Linear Elasticity}
-In this exercise we are to take a closer look on linear elasticity, and familiarize ourselfs with
+In this exercise we are to take a closer look on linear elasticity, and familiarize ourself with
 the numerical artifact locking. We are presented with the following problem
-
 \begin{align*}
 -\mu \Delta \textbf{u} - \lambda \nabla \nabla \cdot \textbf{u} = \textbf{f} \hspace{2mm} \text{in} \hspace{2mm} \Omega \\
 \textbf{u} = u_e \hspace{2mm} \text{on} \hspace{2mm} \partial \Omega \\
 u_e = \big(\frac{\partial \phi}{\partial y}, -\frac{\partial \phi}{\partial x} \big) \hspace{3mm}
 \phi = sin(\pi x y)
 \end{align*}
-
-First and foremost since we are makeing a "manufactured solution", we need to determine the sourceterm \textbf{f}. The equation
+First and foremost since we are making a "manufactured solution", we need to determine the sourceterm \textbf{f}. The equation
 to solve for \textbf{f} is $\textbf{f} =\mu  \Delta \textbf{u}_e$, due to by construction $\nabla \cdot \textbf{u}_e = 0$
  Hand calculations and verification with sympy gives us the following result.
-
 \begin{align*}
 \textbf{f} = \mu \big(\pi^3 x^3 cos(\pi x y) -\pi^2y (2sin(\pi x y) + \pi x y cos(\pi x y)   ) \big) \textbf{i} \hspace{1mm} + \\
 \mu \big( \pi^3y^3 cos(\pi x y) + \pi^2 x (2 sin(\pi x y) + \pi x y cos(\pi x y)   ) \textbf{j} \big)
 \end{align*}
 Now how do we assess the problem? 
-Why not try stright forward Galerkin method on the problem, since we have had many good results with this approach.
+Why not try straight forward Galerkin method on the problem, since we have had many good results with this approach.
 Firstly lets try not alter the second term of the problem $\lambda \nabla \nabla \cdot \textbf{u}$ by integration by parts. 
 This gives us the following variational form.
-
 \begin{align*}
 \mu \int \Delta u v \hspace{1mm} dx + \lambda \int \nabla \nabla \cdot u v \hspace{1mm} dx = \int f v dx\\ 
 \mu \langle \nabla u_h \,, \nabla v_h \rangle + \lambda \langle \nabla \nabla \cdot u_h \,, v_h \rangle 
 = \langle f \,, v \rangle
 \end{align*}
-
-Now for our numerical calulations, the problem will be solved on a UnitSquareMesh(N,N) for $N = [8, 16, 32, 64]$, for 
+Now for our numerical calculations, the problem will be solved on a UnitSquareMesh(N,N) for $N = [8, 16, 32, 64]$, for 
 choices of $\lambda = [1, 10, 100, 1000, 10000]$. We choice second order polynomials for the velocity. We get the following
 results.
-
 \begin{table}[ht]
 \caption {L2 norm velocity} 
 \centering
@@ -354,7 +312,6 @@ $\lambda$ / N  & 8 & 16 & 32 & 64\\
 \hline
 \end{tabular}
 \end{table}
-
 \begin{table}[ht]
 \caption {Convergence rate velocity} 
 \centering
@@ -370,34 +327,29 @@ $\lambda$ / N  & Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64\\
 10000 & -0.236928 & -1.2353   & 1.79089  & \\ \hline
 \end{tabular}
 \end{table}
-
 As we can see, the first run with $\lambda = 1$ gives us reasonable results. The $L_2$ norm decreases nicely for finer mesh
-resolution, and the convergence rate approaches 2 which is reasonable. For $\lambda = 10$ we observe the same trend the $L_2$ norm, but allredy we observe some strange fluctations in the converegence rate.
-As $\lambda$ gets bigger, we definatly see that the error gets worse. Same goes for the convergence rate. This observation of failure to converge towards the solution, as well as poor $L_2$ norm, is explained by a numerical artifact called \textit{locking}. As $\lambda$ gets bigger the material reaches an 
+resolution, and the convergence rate approaches 2 which is reasonable. For $\lambda = 10$ we observe the same trend the $L_2$ norm, but already we observe some strange fluctuations in the convergence rate.
+As $\lambda$ gets bigger, we defiantly see that the error gets worse. Same goes for the convergence rate. This observation of failure to converge towards the solution, as well as poor $L_2$ norm, is explained by a numerical artifact called \textit{locking}. As $\lambda$ gets bigger the material reaches an 
 incompressible state, where the displacements in the material gets small.
 These elements we are using doesn't approximate the divergence fairly well, hence as the 
 $\lambda \nabla \nabla \cdot \textbf{u}$ term gets bigger, the error from the divergence pollutes our numerical results. Take for 
 instance $\lambda = 100$ and $N = 32$.
 \begin{figure}[h!]
-	\centering
-	\caption*{Locking VS Exact solution $\lambda = 100$, $N = 32$}
-	\includegraphics[scale=0.4]{lock.png}
-	\includegraphics[scale=0.4]{exnolock.png}
+        \centering
+        \caption*{Locking VS Exact solution $\lambda = 100$, $N = 32$}
+        \includegraphics[scale=0.4]{lock.png}
+        \includegraphics[scale=0.4]{exnolock.png}
 \end{figure}
-
-
-Now, let us try to improve our results by using integration by parts on the divergenve term.
+\newpage
+Now, let us try to improve our results by using integration by parts on the divergence term.
 Integration by parts gives us the following variational form and numerical results.
-
 \begin{align*}
 \mu \int \Delta u v \hspace{1mm} dx - \lambda \int \nabla \nabla \cdot u v \hspace{1mm} dx = \int f v dx\\ 
 \mu \langle \nabla u_h \,, \nabla v_h \rangle + \lambda \langle \nabla \cdot u_h \,, \nabla \cdot v_h \rangle 
 = \langle f \,, v \rangle
 \end{align*}
-Now for our numerical calulations, the problem will be solved using the same 
-UnitSquareMesh(N,N)  for the same physical edentities.
-
-
+Now for our numerical calculations, the problem will be solved using the same 
+UnitSquareMesh(N,N)  for the same physical identities.
 \begin{table}[ht]
 \caption {L2 norm velocity} 
 \centering
@@ -416,7 +368,6 @@ $\lambda$ / N  & 8 & 16 & 32 & 64\\
 \hline
 \end{tabular}
 \end{table}
-
 \begin{table}[ht]
 \caption {Convergence rate velocity} 
 \centering
@@ -435,29 +386,26 @@ $\lambda$ / N  & Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64\\
 \hline
 \end{tabular}
 \end{table}
-The numerical results have clearly improved. The $L_2$ norm have decreased, and our convergencerate have increased due 
+The numerical results have clearly improved. The $L_2$ norm have decreased, and our convergence rate have increased due 
 to the fact that we are now evaluating first derivatives of the velocity \textbf{u}, and not the second derivative
 as we did in the naive approach. Still we observe traces of locking for higher values of $\lambda$ as we see that the $L_2$
 norm and the convergence rate decreases.
-
-
-\textbf{Workaround}
-So is there a way to avoid \textit{locking}? Clairy we have to do something about the $\lambda \nabla \nabla \cdot \textbf{u}$ term as this ruins our numerical efforts.
+\newpage
+\textbf{Workaround} \newline
+So is there a way to avoid \textit{locking}? Clary we have to do something about the $\lambda \nabla \nabla \cdot \textbf{u}$ term as this ruins our numerical efforts.
 One approach to limit the effects from this numerical artifact is to rewrite
 the problem by introducing a mixedfunctionspace, in such a way that.
-
 \begin{align*}
 p =  \lambda \nabla \cdot \textbf{u} 
 \end{align*}
-This simple but powerfull rewriting of the problem transforms our system written as
+This simple but powerful rewriting of the problem transforms our system written as
 \begin{align*}
 -\mu \Delta \textbf{u} - \nabla p = \textbf{f} \\
 \nabla \cdot \textbf{u} = \frac{p}{\lambda}
 \end{align*}
-The familiar set of equations resembles a similar problem of the Stokes problem. Which
+The familiar set of equations resembles a similar problem of the Stokes problem. Which 
 can be solved using Stokes stable elements,$P2-P1$ elements for the velocity and
-pressure. This system of equations effects our variatonal form as follows.
-
+pressure. This system of equations effects our variational form as follows.
 \begin{align*}
 \mu \langle \nabla u_h \,, \nabla v_h \rangle + \langle p \,, \nabla \cdot v \rangle = \langle f \,, v \rangle \\
 \lambda \langle \nabla \cdot u \,, q \rangle - \langle p \,, q \rangle = 0
@@ -465,7 +413,6 @@ pressure. This system of equations effects our variatonal form as follows.
  
 We will again solve this problem, the problem will be solved on a UnitSquareMesh(N,N) for $N = [8, 16, 32, 64]$, for 
 choices of $\lambda = [1, 10, 100, 1000, 10000]$. 
-
 \begin{table}[ht]
 \caption {L2 norm velocity} 
 \centering
@@ -484,7 +431,6 @@ $\lambda$ / N  & 8 & 16 & 32 & 64\\
 \hline
 \end{tabular}
 \end{table}
-
 \begin{table}[ht]
 \caption {L2 norm convergence rate} 
 \centering
@@ -503,9 +449,7 @@ $\lambda$ / N  & Conv 8 to 16  &  Conv 16 to 32 &  Conv 32 to 64 \\
 \hline
 \end{tabular}
 \end{table}
-Jugding from the results, we seemed to have found a workaround . Low $L^2$ norms combined with satisfactory
+Judging from the results, we seemed to have found a workaround . Low $L^2$ norms combined with satisfactory
 convergence, gives a good verification that the solution method is a good approximation of the system. 
-	
+        
 \end{document}
-
-

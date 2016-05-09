@@ -23,7 +23,10 @@ def singlespace(N, v_deg, mu, lamb):
 
     bc = DirichletBC(V, analytical, "on_boundary")
 
-    #a = mu*inner(grad(u), grad(v))*dx + lamb*inner(div(u), div(v))*dx
+    #Naive
+    #a = mu*inner(grad(u), grad(v))*dx - lamb*inner(grad(div(u)), v)*dx
+
+    #Integration by parts
     a = mu*inner(grad(u), grad(v))*dx + lamb*inner(div(u), div(v))*dx
     L = dot(f,v)*dx
 
@@ -91,7 +94,7 @@ h = [1./i for i in N]
 table = []; headers = ['N']
 tab_con = []; head2 = ['']
 
-solver = "mixed"
+solver = "single"
 for i in range(len(la)):
     E = [];
     for j in N:
