@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 void read_matrix_binaryformat (char* filename, double*** matrix,
                                 int* num_rows, int* num_cols){
-
     int i;
     FILE* fp = fopen (filename,"rb");
     fread (num_rows, sizeof(int), 1, fp);

@@ -3,15 +3,22 @@
 
 typedef struct
 {
-  double** A; /* a 2D array of floats */
-  double** x;
-  double** C;
+  double** mat; /* a 2D array of floats */
   int rows;               /* # m-rows */
   int cols;               /* # n-columns */
 
-} matsys;
+} matrix;
 
-void read_matrix_binaryformat (char* filename, double*** matrix,
+void read_matrix_binaryformat (char* filename, double *** matrix,
                                 int* num_rows, int* num_cols);
 
+void get_my_share(matrix * A, matrix * my_mat, int start);
+void deallocate_matrix (matrix * mat);
+
 #endif
+
+
+/*
+void read_matrix_binaryformat (char* filename, double*** matrix,
+                                int* num_rows, int* num_cols);
+*/
