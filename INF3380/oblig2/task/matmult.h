@@ -12,8 +12,10 @@ typedef struct
 void read_matrix_binaryformat (char* filename, double *** matrix,
                                 int* num_rows, int* num_cols);
 
-void get_my_share(matrix * A, matrix * my_mat, int start);
+double ** allocate_matrix(int rows, int cols);
+double ** get_my_share(matrix * A, double ** my_matrix, int start, int row, int cols);
 void deallocate_matrix (matrix * mat);
+
 
 #endif
 
