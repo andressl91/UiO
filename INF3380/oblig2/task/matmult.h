@@ -4,6 +4,7 @@
 typedef struct
 {
   double** mat; /* a 2D array of floats */
+  double** matB; /* a 2D array of floats */
   int rows;               /* # m-rows */
   int cols;               /* # n-columns */
 

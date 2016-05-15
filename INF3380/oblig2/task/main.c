@@ -38,49 +38,46 @@ void main(int nargs, char **args) {
     if ( my_rank < num_rows % num_procs) {
         ++my_rows;
     }
-    my_cols = num_cols;
+    my_cols = num_cols / num_procs;
+    if ( my_rank < num_cols % num_procs) {
+        ++my_cols;
+    }
 
 /*Idea allocate_and write own matrix */
     matrix *my_matrix;
     my_matrix = malloc(sizeof(my_matrix));
-    my_matrix->mat = allocate_matrix(my_rows, my_cols);
+    my_matrix->mat = allocate_matrix(my_rows, num_cols);
+    my_matrix->matB = allocate_matrix(num_cols, my_rows);
 
     if(my_rank == 0){
-    /*    matrix *send;
-        send = malloc(sizeof(matrix));
-        send->mat = allocate_matrix(my_rows, my_cols);*/
         start = 0;
         for (j = 1; j < num_procs; j++){
             MPI_Recv(&row_tmp, 1, MPI_INT, j, 0, MPI_COMM_WORLD, &status);
             start = start + row_tmp;
-            my_matrix->mat = get_my_share(&A, my_matrix->mat, start, row_tmp, my_cols);
-            MPI_Send(&(my_matrix->mat[0][0]), row_tmp*my_cols, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
-            //MPI_Send(&start, 1, MPI_INT, j, 0, MPI_COMM_WORLD);
-            /*
-            MPI_Recv(&row_tmp, 1, MPI_INT, j, 0, MPI_COMM_WORLD, &status);
-            start = start + row_tmp;
-            send->mat = get_my_share(&A, send->mat, start, row_tmp, my_cols);
-            MPI_Send(&(send->mat[0][0]), row_tmp*my_cols, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
-            //MPI_Send(&start, 1, MPI_INT, j, 0, MPI_COMM_WORLD);
-            free(send);*/
+            printf("%d\n", start);
+            my_matrix->mat = get_my_share(&A, my_matrix->mat, start, row_tmp, num_cols);
+            MPI_Send(&(my_matrix->mat[0][0]), row_tmp*num_cols, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
+
 
         }
         //Need to reset Thread 0 start value before
         //assigning matrix to local matrix
         start = 0;
+        my_matrix->mat = get_my_share(&A, my_matrix->mat, start, my_rows, num_cols);
     }
 
     else {
         MPI_Send(&my_rows, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-        MPI_Recv(&(my_matrix->mat[0][0]), my_rows*my_cols, MPI_DOUBLE, 0, 0,
+        MPI_Recv(&(my_matrix->mat[0][0]), my_rows*num_cols, MPI_DOUBLE, 0, 0,
                 MPI_COMM_WORLD, &status);
         int l,m;
         //for (l=0; l < my_rows; l++)
-            //for (m=0; m<my_cols; m++)
-                //printf("FOR A[%d][%d]%f\n" , l, m, my_matrix->mat[l][m]);
+        //    for (m=0; m<num_cols; m++)
+        //        printf("FOR A[%d][%d]%f\n" , l, m, my_matrix->mat[l][m]);
     }
-    printf("Thread %d, with rows%d, start at %d \n", my_rank, my_rows, start);
+    printf("Thread %d, with rows%d of matrix A \n", my_rank, my_rows);
+    printf("Thread %d, with cols%d of matrix B \n", my_rank, my_cols);
     //deallocate_matrix(&my_matrix);
-    
+
     MPI_Finalize();
 }
