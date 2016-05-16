@@ -3,11 +3,17 @@
 #include "matmult.h"
 
 
-void deallocate_matrix (matrix * matrix)
+void deallocate_matrix (matrix * matr)
 {
-    int i;
-        for (i = 0; i < matrix->rows; i++){
-            free(matrix->mat[i]);
+    int i, j;
+        for (i = 0; i < matr->rows; i++){
+            free(matr->mat[i]);
         }
-        free(matrix->mat);
+        free(matr->mat);
+/*
+        for (j = 0; j < mat->cols; j++){
+            free(mat->matB[j]);
+        }
+        free(mat->matB);
+        */
 }
