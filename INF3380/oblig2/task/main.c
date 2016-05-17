@@ -1,177 +1,168 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <mpi.h>
 #include "matmult.h"
 
-double **alloc2d(int m, int n, int a) {
-    int i,j;
-    double *data = malloc(n*m*sizeof(double));
-    double **array = malloc(m*sizeof(double *));
-    for (i=0; i<m; i++) {
-        array[i] = &(data[i*n]);
-    }
-    for (i=0; i<m; i++) {
-        for (j=0; j<n; j++) {
-            array[i][j] = i*a;
-        }
-    }
-    return array;
-}
+void main(int argc, char *argv[]){
+    double **mat_A, **mat_B, **my_mat_A, **my_mat_B, **mat_C, **my_mat_C;
+    int A_m, A_n, B_m, B_n;
+    int my_Am, my_An, my_Bm, my_Bn;
+    int dimentions[4];
 
+    int i, j;
 
-void main(int nargs, char **args) {
-    int size, my_rank, num_procs, n;
-    int start_row, start_rowB;
-    int i, j, row_tmp, rowB_tmp;
-    //ROWS AND COLUMNS FOR THE A MATRIX
-    int num_rows, num_cols;
-    int my_rows, my_rowsB, my_cols;
-    matrix A, B;
-    matrix *my_matrix;
-    /*double ** matA;
-    double **matB;*/
-
-    int a = 3;
-    int b = 5;
-    int c = 2;
-    int f, g;
-
+    int my_rank, num_procs;
     MPI_Status status;
-    MPI_Init(&nargs, &args);
-    MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
+    MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &my_rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &num_procs);
 
+
+    double *send_mat_A = NULL, *send_mat_B = NULL, *recv_mat = NULL;
     if(my_rank == 0){
-        //Reads matrix binary file and applies row, column size in
-        //typedef struct matrix
-        /*read_matrix_binaryformat ("small_matrix_a.bin", &A.mat,
-                                &A.rows, &A.cols);
-        read_matrix_binaryformat ("small_matrix_b.bin", &B.mat,
-                                &B.rows, &B.cols);
-        num_rows = A.rows;
-        num_cols = A.cols;
+        read_matrix_binaryformat("small_matrix_a.bin", &mat_A, &A_m, &A_n);
+        read_matrix_binaryformat("small_matrix_b.bin", &mat_B, &B_m, &B_n);
+
+        allocate_array(&mat_C, A_m, B_n);
+        send_mat_A = &(mat_A[0][0]);
+        send_mat_B = &(mat_B[0][0]);
+        recv_mat = &(mat_C[0][0]);
+
+        dimentions[0] = A_m;
+        dimentions[1] = A_n;
+        dimentions[2] = B_m;
+        dimentions[3] = B_n;
+    }
+
+    MPI_Bcast(&dimentions, 4, MPI_INT, 0, MPI_COMM_WORLD);
+    A_m = dimentions[0];
+    A_n = dimentions[1];
+    B_m = dimentions[2];
+    B_n = dimentions[3];
+
+    my_Am = A_m / num_procs;
+    if ( my_rank < A_m % num_procs) {
+        ++my_Am;
+    }
+
+    my_Bm = B_m / num_procs;
+    if ( my_rank <B_m % num_procs) {
+        ++my_Bm;
+    }
+    my_An = A_n;
+    my_Bn = B_n;
+
+    /* Allocates memory for each processes array
+    * and each calculated part of the result matrix
+    */
+    allocate_array(&my_mat_A, my_Am, my_An);
+    allocate_array(&my_mat_B, my_Bm, my_Bn);
+    allocate_array(&my_mat_C, my_Am, my_Bn);
+
+    MPI_Datatype MPImat_A, MPImat_B, MPImat_send;
+    //create_matrix_type(&MPImat_A, A_m, A_n, my_Am, my_An);
+    //create_matrix_type(&MPImat_B, B_m, B_n, my_Bn, my_Bm);
+    //create_matrix_type(&MPImat_send, A_m, B_n, my_Am, my_Bn);
+
+
+    int my_len_A = my_Am*my_An;
+    int *sendcount_A = NULL;
+    int my_len_B = my_Bm*my_Bn;
+    int *sendcount_B = NULL;
+    int my_len_C = my_Am*B_n;
+    int *sendcount_C = NULL;
+    if (my_rank == 0){
+       sendcount_A = malloc( num_procs * sizeof(int)) ;
+       sendcount_B = malloc( num_procs * sizeof(int)) ;
+       sendcount_C = malloc( num_procs * sizeof(int)) ;
+   }
+     MPI_Gather(&my_len_A, 1, MPI_INT, sendcount_A, 1, MPI_INT,
+          0, MPI_COMM_WORLD);
+     MPI_Gather(&my_len_B, 1, MPI_INT, sendcount_B, 1, MPI_INT,
+               0, MPI_COMM_WORLD);
+     MPI_Gather(&my_len_C, 1, MPI_INT, sendcount_C, 1, MPI_INT,
+                 0, MPI_COMM_WORLD);
+        /*
+        * Figure out the total length of array,
+        * and displacements for each rank
         */
-        num_rows = a;
-        num_cols = b;
-        A.mat = alloc2d(a, b, c);
-        B.mat = alloc2d(b, a, c+1);
 
-        printf("INITIAL B MATRIX\n");
-        for (f=0; f<b; f++) {
-         printf("%f ",B.mat[f][0]);
-            for (g=1; g<a; g++) {
-                printf("%f ", B.mat[f][g]);
+        int totlen_A = 0;
+        int *displs_A = NULL;
+
+        int totlen_B = 0;
+        int *displs_B = NULL;
+
+        int totlen_C = 0;
+        int *displs_C = NULL;
+
+       if (my_rank == 0) {
+           displs_A = malloc( num_procs * sizeof(int) );
+           displs_A[0] = 0;
+           totlen_A += sendcount_A[0];//+1;
+
+           displs_B = malloc( num_procs * sizeof(int) );
+           displs_B[0] = 0;
+           totlen_B += sendcount_B[0];//+1;
+
+           displs_C = malloc( num_procs * sizeof(int) );
+           displs_C[0] = 0;
+           totlen_C += sendcount_C[0];//+1;
+
+           for (i=1; i<num_procs; i++) {
+              totlen_A += sendcount_A[i];//+1;
+              displs_A[i] = displs_A[i-1] + sendcount_A[i-1]+ 1;
+
+              totlen_B += sendcount_B[i];//+1;
+              displs_B[i] = displs_B[i-1] + sendcount_B[i-1]+ 1;
+
+              totlen_C += sendcount_C[i];//+1;
+              displs_C[i] = displs_C[i-1] + sendcount_C[i-1]+ 1;
+           }
+        }
+        MPI_Scatterv(send_mat_A, sendcount_A, displs_A, MPI_DOUBLE,
+            &(my_mat_A[0][0]), my_Am*my_An,
+                 MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+        ///MPI_Scatterv(send_mat_B, sendcount_B, displs_B, MPI_DOUBLE,
+        ///     &(my_mat_B[0][0]), my_Bm*my_Bn,
+        //          MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+        if(my_rank != 0)
+            allocate_array(&mat_B, B_m, B_n);
+
+        MPI_Bcast(&mat_B[0][0], B_m*B_n, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+        MPI_Barrier(MPI_COMM_WORLD);
+
+        //FIX POINTER ARGUMENT TO 
+        find_sum(my_mat_C, my_mat_A, mat_B, my_Am, A_m, A_n);
+
+        if(my_rank == 0){
+            for(i = 0; i < my_Am; i++){
+                for(j = 0; j < B_n; j++){
+                    //if(my_mat_C[i][j]!= 0)
+                    //printf("%f\n",my_mat_C[i][j]);
+                }
             }
-             printf("\n");
         }
 
-        }
+        MPI_Gatherv(&(my_mat_C[0][0]), my_Am*B_n, MPI_DOUBLE,
+        recv_mat, sendcount_C, displs_C,
+                MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
-    MPI_Bcast(&num_rows, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    MPI_Bcast(&num_cols, 1, MPI_INT, 0, MPI_COMM_WORLD);
-    /*printf("%g\n", full_mat.A[1][1]);*/
+    //    MPI_Allgatherv(&(my_mat_B[0][0]), my_Bm*my_Bn, MPI_DOUBLE,
+    //&(my_whole_B[0][0]), sendcount_B, displs_B, MPI_DOUBLE, MPI_COMM_WORLD);
 
-
-    my_rows = num_rows / num_procs;
-    if ( my_rank < num_rows % num_procs) {
-        ++my_rows;
-    }
-    //Notive inverted choice of cols and rows for the B matrix
-    my_rowsB = num_cols / num_procs;
-    if ( my_rank < num_cols % num_procs) {
-        ++my_rowsB;
-    }
-
-    my_matrix = malloc(sizeof(my_matrix));
-    my_matrix->mat = allocate_matrix(my_rows, num_cols);
-    //Notive more memory allocated due to every process need a full copy of B
-    //Each process needs full array of B, gets after alltoall Broadcast
-    my_matrix->matB = allocate_matrix(my_rowsB, num_rows);
-    my_matrix->wholeB = allocate_matrix(num_cols, num_rows);
-
-
-
-    //Distribute chunks of matrix A and B
     if(my_rank == 0){
-        start_row = my_rows;
-        start_rowB = my_rowsB;
-        printf("thread %d with row %d is given %d as start\n", my_rank, my_rowsB, start_rowB);
-        for (j = 1; j < num_procs; j++){
-            MPI_Recv(&row_tmp, 1, MPI_INT, j, 0, MPI_COMM_WORLD, &status);
-            MPI_Recv(&rowB_tmp, 1, MPI_INT, j, 0, MPI_COMM_WORLD, &status);
+        double * exact = NULL;
+        double **C_ex;
+        read_matrix_binaryformat("small_matrix_c.bin", &C_ex, &A_m, &A_n);
 
-            //SOMETHING WRONG WITH PARTITIONS OF B
-
-
-            printf("thread %d with row %d is given %d as start\n", j, rowB_tmp, start_rowB);
-
-            my_matrix->mat = get_my_share(&A, my_matrix->mat, start_row, row_tmp, num_cols);
-            MPI_Send(&(my_matrix->mat[0][0]), row_tmp*num_cols, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
-            //The rows of matrix A is the cols of matri B
-            my_matrix->matB = get_my_share(&B, my_matrix->matB, start_rowB, rowB_tmp, num_rows);
-            MPI_Send(&(my_matrix->matB[0][0]), rowB_tmp*num_rows, MPI_DOUBLE, j, 0, MPI_COMM_WORLD);
-            start_row = start_row + row_tmp;
-            start_rowB = start_rowB + rowB_tmp;
-        }
-        //Need to reset Thread 0 start value before
-        //assigning matrix to local matrix
-        start_row = 0;
-        start_rowB = 0;
-        my_matrix->mat = get_my_share(&A, my_matrix->mat, start_row, my_rows, num_cols);
-        my_matrix->matB = get_my_share(&B, my_matrix->matB, start_rowB, my_rowsB, num_rows);
-
-        printf("THREAD %d B matrix\n", my_rank);
-        for (f=0; f<my_rowsB; f++) {
-         printf("%f ",my_matrix->matB[f][0]);
-            for (g=1; g<num_rows; g++) {
-                printf("%f ", my_matrix->matB[f][g]);
+        for(i = 0; i < my_Am; i++){
+            for(j = 0; j < B_n; j++){
+                printf("%f\n",C_ex[i][j]);
             }
-             printf("\n");
         }
     }
-
-    else {
-        MPI_Send(&my_rows, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-        MPI_Send(&my_rowsB, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-
-        MPI_Recv(&(my_matrix->mat[0][0]), my_rows*num_cols, MPI_DOUBLE, 0, 0,
-                MPI_COMM_WORLD, &status);
-        MPI_Recv(&(my_matrix->matB[0][0]), my_rowsB*num_rows, MPI_DOUBLE, 0, 0,
-                MPI_COMM_WORLD, &status);
-
-        printf("THREAD %d B matrix\n", my_rank);
-        for (f=0; f<my_rowsB; f++) {
-         printf("%f ",my_matrix->matB[f][0]);
-            for (g=1; g<num_rows; g++) {
-                printf("%f ", my_matrix->matB[f][g]);
-            }
-             printf("\n");
-        }
-    }
-    MPI_Barrier(MPI_COMM_WORLD);
-    //printf("Thread %d, with %d rows of matrix B \n", my_rank, my_rowsB);
-
-/*
-    MPI_Alltoall(&(my_matrix->matB[0][1]), 3, MPI_DOUBLE,
-                  &(my_matrix->wholeB[0][0]), 3, MPI_DOUBLE,
-                  MPI_COMM_WORLD);
-                  */
-    if(my_rank == 0){
-        int e,r;
-      printf("THREAD %d WHOLE B matrix AFTER ALLTOALL\n", my_rank);
-      for (e=0; e< num_cols; e++) {
-       printf("%f ",my_matrix->wholeB[e][0]);
-          for (r=1; r < num_rows; r++) {
-              printf("%f ", my_matrix->wholeB[e][r]);
-          }
-           printf("\n");
-      }
-  }
-
-
-
-    //deallocate_matrix(my_matrix);
-
     MPI_Finalize();
 }

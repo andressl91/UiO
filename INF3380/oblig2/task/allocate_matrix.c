@@ -3,7 +3,8 @@
 #include "matmult.h"
 
 
-double ** allocate_matrix( int rows, int cols)
+
+double ** allocate_matrix(int rows, int cols)
 {
     int i;
     double *data = malloc(rows*cols*sizeof(double));

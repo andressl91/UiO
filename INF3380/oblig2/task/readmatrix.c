@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "matmult.h"
+
 
 void read_matrix_binaryformat (char* filename, double*** matrix,
                                 int* num_rows, int* num_cols){
