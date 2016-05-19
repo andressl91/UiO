@@ -1,21 +1,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "matmult.h"
+#include <omp.h>
 
 
 void find_sum(double ** C, double **A, double **B, int my_rows, int num_rows, int num_cols){
     int i, j, k;
     int count = 0;
-    int sum;
+    double sum = 0;
+
+    #pragma omp parallel default (private) shared (A, B, C, num_rows, num_cols) num_threads(4)
+    {
+    #pragma omp for schedule (static)
     for(k=0; k < my_rows; k++){
         for(i=0; i < num_rows; i++){
             for(j = 0; j < num_cols; j++){
-                sum = sum + A[k][j]*B[j][i];
-                }
-            C[k][count] = sum;
-            count += 1;
-            }
-            count = 0;
+                C[k][j] = C[k][j] + A[k][i]*B[i][j];
 
+                }
+            }
+        }
     }
 }
