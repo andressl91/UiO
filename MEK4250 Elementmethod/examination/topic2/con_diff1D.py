@@ -69,7 +69,7 @@ mu = [1, 0.5, 0.1, 0.05, 0.01]
 #mu = [0.01]
 
 set_log_active(False)
-for k in ["naive"]:
+for k in ["artificial"]:
     E = []; h = []
     for i in range(len(mu)):
         condiff(N, mu[i], i, len(mu)-1, typ = k)

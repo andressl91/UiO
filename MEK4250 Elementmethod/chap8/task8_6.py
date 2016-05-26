@@ -3,15 +3,6 @@ import time
 import numpy as np
 import matplotlib.pyplot as plt
 
-#parameters["krylov_solver"]["relative_tolerance"] = 1e-6
-#parameters["krylov_solver"]["absolute_tolerance"] = 1e-6
-#parameters["krylov_solver"]["maximum_iterations"] = 100000
-"""
-if len(sol) == 1:
-    it = solve(A, u_.vector(), b, sol[0])
-else:
-    it = solve(A, u_.vector(), b, sol[0], sol[1])
-"""
 def solving_time(A, b, solv, V, tab):
 
     bc1 = DirichletBC(V, 0, "on_boundary")
@@ -40,8 +31,12 @@ def poission(N, dim, degree):
     u = TrialFunction(V)
     v = TestFunction(V)
 
-    f = Constant(1)
+    f = Constant(-2)
+    #OTHER PROBLEM EXERCISE 8.6
+    #u - u'' = f
     #a = u*v*dx + inner(grad(u), grad(v))*dx
+
+    #Poission
     a = inner(grad(u), grad(v))*dx
     L = f*v*dx
 
@@ -65,24 +60,10 @@ def poission(N, dim, degree):
 
     cg_jac.append(solving_time(A, b, ["cg", "jacobi"], V, cgjac_table))
 
-    """
-    pc = PETScPreconditioner("jacobi")
-    sol = PETScKrylovSolver("cg", pc)
-    t0 = time.time()
-    it = sol.solve(A, u_.vector(), b)
-    t1 = time.time()
-
-    cgjac_table.append(it)
-    cg_jac.append(t1-t0)
-    """
     dof.append(V.dim())
 
 
 
-
-
-
-#N = [32, 64, 128, 256, 512, 1024]
 N = [32, 64, 128, 256, 512]
 
 from tabulate import tabulate
@@ -96,7 +77,17 @@ for i in [2]:
     lu = ["lu"];
     cg = ["cg"]; cg_ilu = ["cg_ilu"]; cg_amg = ["cg_amg"]; cg_jac = ["cg_jac"]
     for n in N:
+        print "Calculating for n = %d, P-%d elements" % (n, i)
         poission(N = n, dim = i, degree = 1)
+
+
+    table = [lu, cg,cg_ilu,cg_amg, cg_jac]
+    print "TIME vs N, P-%d elements" % i
+    print tabulate(table, headers = ['N', 32, 64, 128, 256, 512], tablefmt="fancy_grid")
+
+    print "ITERATIONS vs N, P-%d elements" % i
+    table = [lu_table, cg_table,cgilu_table,cgamg_table, cgjac_table]
+    print tabulate(table, headers = ['N', 32, 64, 128, 256, 512], tablefmt="fancy_grid")
 
     np.asarray(lu_table); np.asarray(cg_table)
     np.asarray(cgilu_table); np.asarray(cgamg_table)
@@ -124,22 +115,10 @@ for i in [2]:
     plt.plot(N, cgilu_table[1:], label="cg_ilu" )
     plt.plot(N, cgamg_table[1:], label="cg_amg" )
     plt.plot(N, cgjac_table[1:], label="cg_jac" )
-
-
     plt.xlabel("DEGREES OF FREEDOM")
     plt.ylabel("TIME ")
     plt.legend(loc=2)
     plt.title("ITERATIONS  %d-D problem" % i)
     """
-#plt.show()
 
-
-
-
-table = [lu, cg,cg_ilu,cg_amg, cg_jac]
-print "TIME vs N"
-print tabulate(table, headers = ['N', 32, 64, 128, 256, 512], tablefmt="fancy_grid")
-
-print "ITERATIONS vs N"
-table = [lu_table, cg_table,cgilu_table,cgamg_table, cgjac_table]
-print tabulate(table, headers = ['N', 32, 64, 128, 256, 512], tablefmt="fancy_grid")
+plt.show()
