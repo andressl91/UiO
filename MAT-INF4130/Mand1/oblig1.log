@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.9.28)  28 SEP 2016 12:54
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.9.28)  28 SEP 2016 16:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1015,21 +1015,44 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 57.
- [2]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 57.
+<sym10.png, id=34, 578.16pt x 433.62pt>
+File: sym10.png Graphic file (type png)
+ <use sym10.png>
+Package pdftex.def Info: sym10.png used on input line 60.
+(pdftex.def)             Requested size: 208.13744pt x 156.10307pt.
+
+<num10.png, id=36, 578.16pt x 433.62pt>
+File: num10.png Graphic file (type png)
+ <use num10.png>
+Package pdftex.def Info: num10.png used on input line 61.
+(pdftex.def)             Requested size: 208.13744pt x 156.10307pt.
+
+<n23.png, id=37, 578.16pt x 433.62pt>
+File: n23.png Graphic file (type png)
+ <use n23.png>
+Package pdftex.def Info: n23.png used on input line 68.
+(pdftex.def)             Requested size: 208.13744pt x 156.10307pt.
+
+<n24.png, id=38, 578.16pt x 433.62pt>
+File: n24.png Graphic file (type png)
+ <use n24.png>
+Package pdftex.def Info: n24.png used on input line 69.
+(pdftex.def)             Requested size: 208.13744pt x 156.10307pt.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 72.
+ [2 <./sym10.png> <./num10.png> <./n23.png> <./n24.png>]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 72.
  (./oblig1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 57.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 57.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 72.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 72.
 Package rerunfilecheck Info: File `oblig1.out' has not changed.
 (rerunfilecheck)             Checksum: D41D8CD98F00B204E9800998ECF8427E;0.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 57.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 72.
  ) 
 Here is how much of TeX's memory you used:
- 11974 strings out of 493014
- 173853 string characters out of 6133351
+ 12001 strings out of 493014
+ 174183 string characters out of 6133351
  281129 words of memory out of 5000000
- 15317 multiletter control sequences out of 15000+600000
+ 15335 multiletter control sequences out of 15000+600000
  18080 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  44i,16n,45p,260b,367s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1050,10 +1073,10 @@ e/2016/texmf-dist/fonts/type1/public/cm-super/sfbx1000.pfb></usr/local/texlive/
 16/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texlive/2016
 /texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texlive/2016/t
 exmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb>
-Output written on oblig1.pdf (2 pages, 155676 bytes).
+Output written on oblig1.pdf (2 pages, 365765 bytes).
 PDF statistics:
- 97 PDF objects out of 1000 (max. 8388607)
- 77 compressed objects within 1 object stream
- 16 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 111 PDF objects out of 1000 (max. 8388607)
+ 83 compressed objects within 1 object stream
+ 20 named destinations out of 1000 (max. 500000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

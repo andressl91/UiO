@@ -5,8 +5,7 @@ from scipy.linalg import hilbert
 def hilb(i, j):
     return 1 / ((i+1) + (j+1) - 1)
 
-
-n = 3
+n = 23
 Pnum = np.eye(n+1)
 
 Hilbert = np.fromfunction(lambda i, j: 1 / ((i+1) + (j+1) - 1), (n+1, n+1), dtype=float)
@@ -15,28 +14,23 @@ altsign = [(-1)**i for i in range(n+1)]
 altsign = np.asarray(altsign)
 altsignmatrix = np.matrix([altsign*(-1)**i for i in range(n+1)])
 Nnum = Hilbert + np.multiply(altsignmatrix, Hilbert)
-print Nnum
 #print Nnum
-#for i in range(1, n):
-#    print "i = %d" % i
-#    for j in range(i):
-#        print Nnum[j, j]
-        #print  (-1*(Nnum[j, i]))
-        #Pnum[j, i] = Nnum[j, j]/(-1*(Nnum[j, i]))
-#for i in range(n+1):
-#print Pnum
 
 for i in range(1, n+1):
-    print "I is %d" % i
-    #print Nnum[:i, :i]
-    #print  (-1*(Nnum[:i, i]))
-    print np.divide( Nnum[:i, :i],(-1*(Nnum[:i, i])))
+    A = Nnum[:i, :i]
+    b = (-1*(Nnum[:i, i]))
+    x = np.linalg.solve(A, b)
+    x = np.transpose(x[:i])
+    Pnum[:i, i] = x
 
+#print "Numerical matrix N"
+#print Nnum
+#print "Numerical matrix P"
+#print Pnum
 
 #Symbolic
 from sympy import *
-from mpmath import hilbert
-#from sympy.matrices import *
+from mpmath import norm
 from IPython.display import display
 
 def f(i, j):
@@ -47,8 +41,46 @@ def f(i, j):
 
 altsignmatrix = Matrix(n+1, n+1, f)
 mat = Matrix(n+1, n+1, hilb)
-m = eye(n+1)
+Nnumsym = eye(n+1)
+Pnumsym = eye(n+1)
 for i in range(n+1):
     for j in range(n+1):
-        m[i, j] = mat[i, j] + altsignmatrix[i,j]*mat[i, j]
-#display(m)
+        Nnumsym[i, j] = mat[i, j] + altsignmatrix[i,j]*mat[i, j]
+
+
+for i in range(1, n+1):
+    A = Nnumsym[:i, :i]
+    b = (-1*(Nnumsym[:i, i]))
+    x = A.LUsolve(b)
+    Pnumsym[:i, i] = x
+"""
+print "Symbolic matrix N"
+display(Nnumsym)
+print "Symbolic matrix P"
+display(Pnumsym)
+"""
+
+#basis = [lambda x: x**i for i in range(n)]
+#coeff = [i for i in range(n)]
+#coeff = Pnum[:, 3]
+evalPoly = lambda coeff, x: sum((x**power) * coeff for power, coeff in enumerate(coeff))
+import matplotlib.pyplot as plt
+x_points = np.linspace(-1, 1, 500)
+error = []
+plt.figure(1) #Numerical
+plt.title("First %d polynomials \n Numerical approximation" % n)
+for i in range(n):
+    plt.plot(evalPoly(Pnum[:,i], x_points))
+plt.figure(2)
+plt.title("First %d polynomials \n Symbolic approximation" % n)
+for i in range(n):
+    plt.plot(evalPoly(Pnumsym[:,i], x_points))
+
+
+
+plt.figure(3) #Compare symbolic and numerical for given n
+plt.title("Legendre polynomial %d" % (n))
+plt.plot(evalPoly(Pnum[:,n], x_points), label="Numerical")
+plt.plot(evalPoly(Pnumsym[:,n], x_points), label="Symbolic")
+plt.legend()
+plt.show()
