@@ -1,5 +1,6 @@
 \documentclass[a4paper,norsk]{article}
 \usepackage{preamble}
+\usepackage{amsmath}
 \begin{document}
 \maketitle
 
@@ -38,6 +39,20 @@ Defining $N_j(x) = x^{j-1} \hspace{2mm} 1 \leq j \leq n$, we are ought to show t
 \begin{align}
 \mathbf{N} = \langle N_i, N_j \rangle = \int_0^1 x^{i - 1} x^{j - 1} dx = \int_0^1 x^{i + j- 2} dx = \Big[\frac{1}{i+j+1} x^{i+j+1} \Big]_0^1 = \frac{1}{i+j+1} 
 \end{align}
+
+\section*{Problem 4}
+Showing that $P_n(x) = x^n + \sum_{k=0}^{n-1} c_k x^k$ is orthogonal to $1, x, ...., x^{n-1}$ on [-1, 1], we require that $\langle P_n,  N_j\rangle = 0$ \\
+Since $\langle P_n,  N_j\rangle = 0$, then using the same arguments as in problem 3, we have to solve the linear system $\mathbf{Nc = b}$, where b in this will be a contribution from the $x^n$ term.
+\begin{align}
+\langle P_n,  N_j\rangle = \int_{-1}^1  \Big[x^n + \sum_{k=0}^{n-1} c_k x^k\Big]x^{j-1} dx = 0 \\
+ \int_{-1}^1 \sum_{k=0}^{n-1} c_k x^k x^{j-1} dx = -\int_{-1}^1  x^n x^{-j} dx = -\langle x^n, x^{j-1}\rangle \\
+ -\langle x^n, x^{j-1}\rangle = -\Big[\frac{x^{n+j} }{n+j} \Big]_{-1}^1  = 
+ \begin{cases} 
+      0 \hspace{2mm} \text{if n + j is even } \\
+      -\frac{2}{n+j} \hspace{2mm} \text{if n + j is odd}
+   \end{cases}
+\end{align}
+
 
 \end{document}
 
