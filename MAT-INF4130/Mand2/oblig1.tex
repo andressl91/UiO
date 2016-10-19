@@ -43,13 +43,16 @@ As introduced, if $\textbf{X} = \textbf{U} \Sigma \textbf{V}^*$ is and SVD of \t
 
 From SVD we know that the unitary matrix \textbf{U} spans an orthonormal basis of \textbf{X} such that $(\textbf{u}_1, \textbf{u}_2 .... \textbf{u}_k)$ for $k=rank(X)$. Now to minimize 
 $||\textbf{X}^T \textbf{W}||_F^2$ we want in some sence to construct W such that W is in the same span as \textbf{X}, hence we want to construct W such that W spans the same space as the
-orthonormal basis \textbf{U} of \textbf{X}. \newline
-Since W is a k-dimensional subspace of $\mathbb{R}$, we can orientate W such that $\{w_i\}_{i=1}^{k}$ spans the same space as the components $\textbf{u}_i$ for $i=1,2..k$.  
-Then $\sum_{i=1}^k || proj_{w^{\perp}} \textbf{u}_i||^2 = 0$ \newline
+orthonormal basis \textbf{U} of \textbf{X}. \newline \newline
+Since W is a k-dimensional subspace of $\mathbb{R}$, we can orientate W such that $\{w_i\}_{i=1}^{k}$ spans the same space as the components $\textbf{u}_i$ for $i=1,2..k$, in other words
+$W = span(\textbf{u}_1, ..., \textbf{u}_k )$. \newline
+Then $\sum_{i=1}^k || proj_{w^{\perp}} \textbf{u}_i||^2 = 0$ (Mark the upper limit of the sum) \newline
 Now $\textbf{u}_i$ for $i=k+1, k+2...m$ will lie in $span(W^\perp)$, and therefore $\sum_{i=k+1}^m || proj_{w^{\perp}} \textbf{u}_i||^2 = m-k$ since both  $\{w_i\}_{i=k+1}^{m}$ and
- $\{u_i\}_{i=k+1}^{m}$ is an orthonormal basis. \newline \newline
+ $\{u_i\}_{i=k+1}^{m}$ spans an orthonormal basis. \newline \newline
 From this argumentation, finding the optimal subspace of W is equivalent to minimizing the system $\sum_{i=1}^m \sigma_i^2 x_i$ which will happen when the conditions
-$x_1 = \cdots = x_k = 0$, \hspace{2mm} $x_{k+1} = \cdots = x_m = 1 $ and $\sum_{i=1}^m x_i = m - k$ 
+$x_1 = \cdots = x_k = 0$, \hspace{2mm} $x_{k+1} = \cdots = x_m = 1 $ and $\sum_{i=1}^m x_i = m - k$. \newline \newline
+And finally since $|| proj_{w^{\perp}} \textbf{u}_i||^2 = 1$ for $i=k+1, k+2...m$, \newline \newline
+$\sum_{i=k+1}^m \sigma_i^2 || proj_{w^{\perp}} \textbf{u}_i||^2 = \sum_{i=k+1}^m \sigma_i^2 = ||\textbf{X}^T \textbf{W}||_F^2$
 
 
 \newpage
@@ -83,6 +86,37 @@ And we find that
 2(\sum_{i=1}^n x_1^{(i)} \hspace{2mm} \sum_{i=1}^n x_2^{(i)} \cdots \hspace{2mm} \sum_{i=1}^n x_m^{(i)})\textbf{w}_i\textbf{w}_i^T\textbf{c} +
 n\textbf{c}_i^T \textbf{w}_i \textbf{w}_i^T \textbf{c}
 \end{align*}
+
+\newpage
+
+\section{Problem 4}
+In general the Lagrange method or method of Lagrange multipliers we want to find a local maxima or minima of a function f, with some constraints evalued from a function g. 
+We define a Lagrange function $\mathcal{L}$ such that 
+\begin{align*}
+\mathcal{L}(x_1, x_2,...,x_n, \lambda_1, ..., \lambda_n) = f(_1, x_2,...,x_n) - \sum_{i=1}^n \lambda_i g_i(x_1, x_2,...,x_n)  
+\end{align*}
+where $\lambda_i$ yields some scalar value to each constraint. Here the funtion g is limited to the set of points such that
+$g(x_1, x_2,...x_n) = 0$
+Further from a mathematical evaluation these local maxima or minima occur when the function f and g are parallel, which is equivalent to that the gradient of f and g are paralell. Hence the problem is reduced on the form
+\begin{align}
+\nabla f(\textbf{x}) = \sum_{i=1}^n \lambda_i \nabla g_i(\textbf{x})
+\end{align}
+
+In our case these multiple constraints is defined as $\textbf{w}_i^T \textbf{c} = 0$ for $i = 1, ..,k$ as set in exercise 3 by the assumtion that  vector $\textbf{c} \in W$. Further the function f, generalized to our problem is to minimize 
+$||\tilde{\textbf{X}}^T \textbf{W} ||_F^2  $, and the gradient is taken with respect to \textbf{c}, as this is the value of interest to find the best approximation. \newline \newline
+
+Now by (1) we easily see that the left hand side is just the gradient of $||\tilde{\textbf{X}}^T \textbf{W} ||_F^2  $
+with respect to \textbf{c} as defined in exercise 3. For the right hand side we get the result by
+\begin{align*}
+\frac{\partial}{\partial \textbf{c}} g(\textbf{x}) = \frac{\partial}{\partial \textbf{c}} \textbf{w}_i^T c = \textbf{w}_i^T \hspace{4mm} \text{for i = 1, ..., k} \\
+\sum_{i=1}^k \lambda_i \nabla g_i(\textbf{x}) = \sum_{i=1}^n \lambda_i \textbf{w}_i^T =
+(\textbf{w}_1 \hspace{2mm} \textbf{w}_2 \cdots \textbf{w}_k) 
+\begin{pmatrix}\lambda_{1} \\ \lambda_{2} \\ \vdots \\ \lambda_{k} \end{pmatrix}
+\end{align*}
+\newline \newline
+
+
+
 
 \end{document}
 

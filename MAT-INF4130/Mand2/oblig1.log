@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.9.28)  19 OCT 2016 12:53
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.9.28)  19 OCT 2016 17:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1025,34 +1025,69 @@ Underfull \hbox (badness 10000) in paragraph at lines 38--39
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 44--53
+Underfull \hbox (badness 10000) in paragraph at lines 44--56
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--56
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--56
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 44--56
 
  []
 
 [2]
-Overfull \hbox (2.73502pt too wide) in paragraph at lines 75--78
+Overfull \hbox (2.73502pt too wide) in paragraph at lines 78--81
 []\T1/cmr/m/n/10 The two fi-nal terms can be rewrit-ten in-to one term. By a cl
 o-ser look at the $[][][]\OT1/cmr/m/n/10 (1 1 [] 1)[][][]$
  []
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 87.
 [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 87.
+Underfull \hbox (badness 10000) in paragraph at lines 105--107
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 105--107
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--117
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--117
+
+ []
+
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 121.
+[4]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 121.
  (./oblig1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 87.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 87.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 121.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 121.
 Package rerunfilecheck Info: File `oblig1.out' has not changed.
-(rerunfilecheck)             Checksum: 1CD3581CFC13DBF42D20EBCA254D4CCB;132.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 87.
+(rerunfilecheck)             Checksum: 90AE73199322C9F6183311E370309EE5;176.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 121.
  ) 
 Here is how much of TeX's memory you used:
- 11964 strings out of 493014
- 173706 string characters out of 6133351
+ 11968 strings out of 493014
+ 173744 string characters out of 6133351
  280129 words of memory out of 5000000
- 15315 multiletter control sequences out of 15000+600000
+ 15316 multiletter control sequences out of 15000+600000
  18378 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 44i,16n,45p,260b,349s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 44i,16n,45p,267b,349s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2016/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}
 </usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><
 /usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></
@@ -1069,10 +1104,10 @@ xlive/2016/texmf-dist/fonts/type1/public/cm-super/sfrm1000.pfb></usr/local/texl
 ive/2016/texmf-dist/fonts/type1/public/cm-super/sfrm1200.pfb></usr/local/texliv
 e/2016/texmf-dist/fonts/type1/public/cm-super/sfrm1728.pfb></usr/local/texlive/
 2016/texmf-dist/fonts/type1/public/cm-super/sfti1000.pfb>
-Output written on oblig1.pdf (3 pages, 163560 bytes).
+Output written on oblig1.pdf (4 pages, 168785 bytes).
 PDF statistics:
- 100 PDF objects out of 1000 (max. 8388607)
- 79 compressed objects within 1 object stream
- 10 named destinations out of 1000 (max. 500000)
- 25 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 110 PDF objects out of 1000 (max. 8388607)
+ 88 compressed objects within 1 object stream
+ 13 named destinations out of 1000 (max. 500000)
+ 33 words of extra memory for PDF output out of 10000 (max. 10000000)
 
