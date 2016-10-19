@@ -25,7 +25,63 @@ $proj_u v = \frac{\langle v , u\rangle}{\langle u, u \rangle}$ as the projection
 Now using this operator to find the projection of the columns of the matrix of observations $x_i$ on the space $W^\perp$ we get 
 
 \begin{align*}
-\sum_{i=1}^n	
+\sum_{i=1}^n ||proj_{W^\perp} x_i||^2 = \sum_{i=1}^n \frac{\langle x_i^T , W^\perp \rangle}{\langle W^\perp, W^\perp \rangle} = 
+\sum_{i=1}^n \sum_{i=k+1}^m \frac{\langle x_i^T , w_j \rangle}{\langle w_j, w_j \rangle}
+\end{align*}
+Since $\{w_i\}_{i=k+1}^{m}$ spans an orthonormal basis for $W^\perp$, by definition $\langle w_i, w_i \rangle = 1$.
+From this we can  rewrite the last sum in a more compact form 
+as the frobenius norm of the matrix product ||\textbf{$X^T$ W}||, where \textbf{W} is 
+the matrix with columns  $\{w_i\}_{i=k+1}^{m}$
+\newpage
+
+\section{Problem 2}
+As introduced, if $\textbf{X} = \textbf{U} \Sigma \textbf{V}^*$ is and SVD of \textbf{X} then  $\textbf{X}^T = \textbf{V} \Sigma^T \textbf{U}^*$ we have the relation \newline
+\begin{align*}
+||\textbf{X}^T \textbf{W}||_F^2 = ||\Sigma^T \textbf{U}^* \textbf{W}||_F^2 = \sum_{i=1}^m \sum_{j=k+1}^m \sigma_i^2  \langle \textbf{u}_i , \textbf{w}_j\rangle^2 =
+\sum_{i=1}^m \sigma_i^2 || proj_{w^{\perp}} \textbf{u}_i||^2 
+\end{align*}
+
+From SVD we know that the unitary matrix \textbf{U} spans an orthonormal basis of \textbf{X} such that $(\textbf{u}_1, \textbf{u}_2 .... \textbf{u}_k)$ for $k=rank(X)$. Now to minimize 
+$||\textbf{X}^T \textbf{W}||_F^2$ we want in some sence to construct W such that W is in the same span as \textbf{X}, hence we want to construct W such that W spans the same space as the
+orthonormal basis \textbf{U} of \textbf{X}. \newline
+Since W is a k-dimensional subspace of $\mathbb{R}$, we can orientate W such that $\{w_i\}_{i=1}^{k}$ spans the same space as the components $\textbf{u}_i$ for $i=1,2..k$.  
+Then $\sum_{i=1}^k || proj_{w^{\perp}} \textbf{u}_i||^2 = 0$ \newline
+Now $\textbf{u}_i$ for $i=k+1, k+2...m$ will lie in $span(W^\perp)$, and therefore $\sum_{i=k+1}^m || proj_{w^{\perp}} \textbf{u}_i||^2 = m-k$ since both  $\{w_i\}_{i=k+1}^{m}$ and
+ $\{u_i\}_{i=k+1}^{m}$ is an orthonormal basis. \newline \newline
+From this argumentation, finding the optimal subspace of W is equivalent to minimizing the system $\sum_{i=1}^m \sigma_i^2 x_i$ which will happen when the conditions
+$x_1 = \cdots = x_k = 0$, \hspace{2mm} $x_{k+1} = \cdots = x_m = 1 $ and $\sum_{i=1}^m x_i = m - k$ 
+
+
+\newpage
+
+\section{Problem 3}
+In exercise 2 we introduced the a vector \textbf{c} to help find the best approximation for the matrix \textbf{X} on \textbf{W} such that the distance from $\textbf{x}_i - \textbf{c}$ to \textbf{W} is as small
+as possible. Using the results from exercise 2 we replace $\textbf{x}_i$ with $\textbf{x}_i - \textbf{c}$. This relation is the same as replacing \textbf{X} with 
+$\tilde{\textbf{X}} = \textbf{X} - \textbf{c}(1 \hspace{2mm} 1 \cdots \hspace{2mm} 1)$ 
+Using this relation we get 
+\begin{align*}
+||\tilde{\textbf{X}}^T \textbf{w}_i ||^2 = (\tilde{\textbf{X}}^T \textbf{w}_i)^T (\tilde{\textbf{X}}^T \textbf{w}_i) =  \textbf{w}_i^T \tilde{\textbf{X}} \tilde{\textbf{X}}^T \textbf{w}_i \\
+\textbf{w}_i^T (\textbf{X} - \textbf{c} (1 \hspace{2mm} 1 \cdots 1 )  ) (\textbf{X} - \textbf{c} (1 \hspace{2mm} 1 \cdots 1))^T \textbf{w}_i \\=
+\textbf{w}_i^T (\textbf{X} - \textbf{c} (1 \hspace{2mm} 1 \cdots 1 )  ) (\textbf{X}^T - (1 \hspace{2mm} 1 \cdots 1)^T \textbf{c}^T) \textbf{w}_i \\=
+\textbf{w}_i^T (\textbf{X}\textbf{X}^T - \textbf{X}(1 \hspace{2mm} 1 \cdots 1)^T\textbf{c}^T - \textbf{c}(1 \hspace{2mm} 1 \cdots 1)\textbf{X}^T +
+ \textbf{c}(1 \hspace{2mm} 1 \cdots 1)(1 \hspace{2mm} 1 \cdots 1)^T \textbf{c}^T )\textbf{w}_i 
+\end{align*}
+
+\begin{enumerate}
+\item $\textbf{w}^T \textbf{X}\textbf{X}^T\textbf{w}$ falls out directly from multiplication
+\item From $\textbf{w}_i^T\textbf{c}(1 \hspace{2mm} 1 \cdots 1)(1 \hspace{2mm} 1 \cdots 1)^T \textbf{c}^T \textbf{w}_i$ \newline 
+we observe that the matrix multiplication $\textbf{c}(1 \hspace{2mm} 1 \cdots 1) \textbf{c}(1 \hspace{2mm} 1 \cdots 1)^T$ \newline(which is a scalar $(1 \times n) (n \times 1)$)
+will just be sum n, and by rearranging the terms we get $n\textbf{c}_i^T \textbf{w}_i \textbf{w}_i^T \textbf{c}$
+\item The two final terms can be rewritten into one term. By a closer look at the $\textbf{w}^T \textbf{c}(1 \hspace{2mm} 1 \cdots 1)\textbf{X}^T \textbf{w}$ we change the order
+of multiplication and still get the equivalent expression \newline 
+$(\sum_{i=1}^n x_i^{(i)} \hspace{2mm} \sum_{i=1}^n x_i^{(i)} \cdots \hspace{2mm} \sum_{i=1}^n x_m^{(i)})\textbf{w}_i\textbf{w}_i^T\textbf{c}$. Equivalent argument yields for the last term
+\end{enumerate}
+
+And we find that
+\begin{align*}
+||\tilde{\textbf{X}}^T \textbf{w}_i ||^2 = n\textbf{c}_i^T \textbf{w}_i \textbf{w}_i^T \textbf{c} - 
+2(\sum_{i=1}^n x_1^{(i)} \hspace{2mm} \sum_{i=1}^n x_2^{(i)} \cdots \hspace{2mm} \sum_{i=1}^n x_m^{(i)})\textbf{w}_i\textbf{w}_i^T\textbf{c} +
+n\textbf{c}_i^T \textbf{w}_i \textbf{w}_i^T \textbf{c}
 \end{align*}
 
 \end{document}
