@@ -18,10 +18,13 @@ We define the \textit{matrix of observations} \textbf{X} as \\
  \end{pmatrix}
 \end{align*}
 
-\section{Problem 1}
+\section*{Problem 1}
 First we assume that W is known such that $\{w_i\}_{i=1}^{k}$ is an orthonormal basis for W, and let $\{w_i\}_{i=k+1}^{m}$
 be an orthonormal basis for $W^{\perp}$. We define the projection operator 
-$proj_u v = \frac{\langle v , u\rangle}{\langle u, u \rangle}$ as the projection of a vector v onto the vector u. \\
+\begin{align*}
+proj_u v = \frac{\langle v , u\rangle}{\langle u, u \rangle} v
+\end{align*}
+ as the projection of a vector v onto the vector u. \\
 Now using this operator to find the projection of the columns of the matrix of observations $x_i$ on the space $W^\perp$ we get 
 
 \begin{align*}
@@ -34,7 +37,7 @@ as the frobenius norm of the matrix product ||\textbf{$X^T$ W}||, where \textbf{
 the matrix with columns  $\{w_i\}_{i=k+1}^{m}$
 \newpage
 
-\section{Problem 2}
+\section*{Problem 2}
 As introduced, if $\textbf{X} = \textbf{U} \Sigma \textbf{V}^*$ is and SVD of \textbf{X} then  $\textbf{X}^T = \textbf{V} \Sigma^T \textbf{U}^*$ we have the relation \newline
 \begin{align*}
 ||\textbf{X}^T \textbf{W}||_F^2 = ||\Sigma^T \textbf{U}^* \textbf{W}||_F^2 = \sum_{i=1}^m \sum_{j=k+1}^m \sigma_i^2  \langle \textbf{u}_i , \textbf{w}_j\rangle^2 =
@@ -57,16 +60,16 @@ $\sum_{i=k+1}^m \sigma_i^2 || proj_{w^{\perp}} \textbf{u}_i||^2 = \sum_{i=k+1}^m
 
 \newpage
 
-\section{Problem 3}
+\section*{Problem 3}
 In exercise 2 we introduced the a vector \textbf{c} to help find the best approximation for the matrix \textbf{X} on \textbf{W} such that the distance from $\textbf{x}_i - \textbf{c}$ to \textbf{W} is as small
 as possible. Using the results from exercise 2 we replace $\textbf{x}_i$ with $\textbf{x}_i - \textbf{c}$. This relation is the same as replacing \textbf{X} with 
 $\tilde{\textbf{X}} = \textbf{X} - \textbf{c}(1 \hspace{2mm} 1 \cdots \hspace{2mm} 1)$ 
 Using this relation we get 
 \begin{align*}
-||\tilde{\textbf{X}}^T \textbf{w}_i ||^2 = (\tilde{\textbf{X}}^T \textbf{w}_i)^T (\tilde{\textbf{X}}^T \textbf{w}_i) =  \textbf{w}_i^T \tilde{\textbf{X}} \tilde{\textbf{X}}^T \textbf{w}_i \\
-\textbf{w}_i^T (\textbf{X} - \textbf{c} (1 \hspace{2mm} 1 \cdots 1 )  ) (\textbf{X} - \textbf{c} (1 \hspace{2mm} 1 \cdots 1))^T \textbf{w}_i \\=
-\textbf{w}_i^T (\textbf{X} - \textbf{c} (1 \hspace{2mm} 1 \cdots 1 )  ) (\textbf{X}^T - (1 \hspace{2mm} 1 \cdots 1)^T \textbf{c}^T) \textbf{w}_i \\=
-\textbf{w}_i^T (\textbf{X}\textbf{X}^T - \textbf{X}(1 \hspace{2mm} 1 \cdots 1)^T\textbf{c}^T - \textbf{c}(1 \hspace{2mm} 1 \cdots 1)\textbf{X}^T +
+&||\tilde{\textbf{X}}^T \textbf{w}_i ||^2 = (\tilde{\textbf{X}}^T \textbf{w}_i)^T (\tilde{\textbf{X}}^T \textbf{w}_i) =  \textbf{w}_i^T \tilde{\textbf{X}} \tilde{\textbf{X}}^T \textbf{w}_i \\
+&\textbf{w}_i^T (\textbf{X} - \textbf{c} (1 \hspace{2mm} 1 \cdots 1 )  ) (\textbf{X} - \textbf{c} (1 \hspace{2mm} 1 \cdots 1))^T \textbf{w}_i =\\
+&s\textbf{w}_i^T (\textbf{X} - \textbf{c} (1 \hspace{2mm} 1 \cdots 1 )  ) (\textbf{X}^T - (1 \hspace{2mm} 1 \cdots 1)^T \textbf{c}^T) \textbf{w}_i =\\
+&\textbf{w}_i^T (\textbf{X}\textbf{X}^T - \textbf{X}(1 \hspace{2mm} 1 \cdots 1)^T\textbf{c}^T - \textbf{c}(1 \hspace{2mm} 1 \cdots 1)\textbf{X}^T +
  \textbf{c}(1 \hspace{2mm} 1 \cdots 1)(1 \hspace{2mm} 1 \cdots 1)^T \textbf{c}^T )\textbf{w}_i 
 \end{align*}
 
@@ -89,7 +92,7 @@ n\textbf{c}_i^T \textbf{w}_i \textbf{w}_i^T \textbf{c}
 
 \newpage
 
-\section{Problem 4}
+\section*{Problem 4}
 In general the Lagrange method or method of Lagrange multipliers we want to find a local maxima or minima of a function f, with some constraints evalued from a function g. 
 We define a Lagrange function $\mathcal{L}$ such that 
 \begin{align*}
@@ -114,7 +117,16 @@ with respect to \textbf{c} as defined in exercise 3. For the right hand side we 
 \begin{pmatrix}\lambda_{1} \\ \lambda_{2} \\ \vdots \\ \lambda_{k} \end{pmatrix}
 \end{align*}
 \newline \newline
-
+From this result we can show that $\textbf{c} - \bar{\textbf{x}} \in W$ where 
+$\bar{\textbf{x}} = \frac{1}{n} \sum_{i=1}^n \textbf{x}_i$. Considering the left hand side we can rewrite the terms using the relation from the Lagrange multiplier
+\begin{align*}
+&\sum_{i=k+1}^m \Bigg( 2n\textbf{w}_i \textbf{w}_i^T \textbf{c} - 2 \textbf{w} \textbf{w}_i^T 
+ \begin{pmatrix} \sum_{i=1}^n x_1^{(i)} \\ \sum_{i=1}^n x_2^{(i)} \\ \vdots \\ \sum_{i=1}^n x_m^{(i)} \end{pmatrix} \Bigg)	= 
+\sum_{i=k+1}^m  2\textbf{w}_i \textbf{w}_i^T \Bigg(\textbf{c} -  
+ \frac{1}{n} \begin{pmatrix} \sum_{i=1}^n x_1^{(i)} \\ \sum_{i=1}^n x_2^{(i)} \\ \vdots \\ \sum_{i=1}^n x_m^{(i)} \end{pmatrix} \Bigg)	\\
+&\sum_{i=k+1}^m  2\textbf{w}_i \textbf{w}_i^T (\textbf{c} - \bar{\textbf{x}})  = \begin{pmatrix} 0 \\ 0 \\ \vdots \\0 \end{pmatrix}
+\end{align*}
+And since $\textbf{w}_i \in W$ for $i = k+1,...,m$, cleary $\textbf{c} - \bar{\textbf{x}} \in W$ to fulfill the equation.
 
 
 
