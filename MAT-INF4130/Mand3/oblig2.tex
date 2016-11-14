@@ -17,35 +17,30 @@ data points. Further we define piecewise linear functions ${N_j(x, y)}_{j=1}^n$ 
 	\includegraphics[scale=0.36]{element.png}
 \end{figure}
 
-Deriving the matrix spanning the functions $N_j$ defined as B in the mandatory exercise we see that 
-\begin{align}
-\text{\textbf{B}} = 
-\begin{pmatrix}
- N_1(x_1,y_1) & N_2(x_1,y_1) & \cdots & N_n(x_1,y_1) \\
- N_1(x_2,y_2) & N_2(x_2,y_2) & \cdots & N_n(x_2,y_2) \\
- \vdots  & \vdots  & \ddots & \vdots  \\
- N_1(x_m,y_m) & N_2(x_m,y_m) & \cdots & N_n(x_m,y_m)
- \end{pmatrix}
-\end{align}
-
-Now let us assume that at least two ${u_j, v_j}$ are located at the same point, say $j = 1,2$. Then by definition $N_1(u_1, v_1)$ and $N_2(u_2, v_2)$ will be defined over same area with the same properties as introduced. Hence we end up with two equal columns in the \textbf{B} matrix, and we ha a linear dependent system. Therefore we can assure that the functions ${N_j(x, y)}_{j=1}^n$ are linearly independent as long as ${u_j, v_j}_{j=1}^n$ are located at different points.
+Our set of linear functions ${N_j(x, y)}_{j=1}^n$ are linear independent if \begin{align*}
+\sum_{j=1}^n c_j N_j(x,y) = c_1 N_1 + c_2 N_2 .... c_n N_n = 0 
+\end{align*}
+for the trivial solution $c_1 = c_2 .. c_n = 0$. 
+\\Let us assume that at least two ${u_j, v_j}$ are located at the same point, say $j = 1,2$. Then by definition $N_1(u_1, v_1)$ and $N_2(u_2, v_2)$ will be defined over same area with the same properties as introduced. Hence our linear system can be written as 
+$\sum_{j=1}^n c_j N_j(x,y) = c_1 N_1 + c_2 N_2 .... c_n N_n = (c_1 + c_2)N_2 + c_3 N_3 .... c_n N_n = 0$. Hence the system has a nontrivial solution, and the set of functions are linear dependent. We therefore must
+choose ${(u_j, v_j)}_{j=1}^n$ at different points to have a linear independent set of functions. 
 
 \newpage
 \section*{Exercise 2}
-Moving on, we want to show that if we choose our $(u_j, v_j)$ among our data points $(x_j, y_j)$, then the columns of \textbf{B} are linear independent. This 
-\textbf{B} matrix is defined from the least squares system trying to fit our datapoints $((x_k, y_k, z_k))_{k=1}^m$ using the defined functions $N_j$. The squared
-error is defined as 
-
+For simplicity let  ${(u_j, v_j)}_{j=1}^n$ for n < m, be our chosen coordinates from the dataset such that $(u_1, v_1) = (x_1, y_1), (u_2, v_2) = (x_2, y_2),.., (u_n, v_n) = (x_n, y_n)$ increasing index order. For a linear independent system we must have that that 
 \begin{align*}
-\sum_{k=1}^m \Big(\sum_{j=1}^n c_j N_j(x_k, y_k) - z_k  \Big)^2 = {||\textbf{Bc} - \textbf{z} ||_2^2}
+\sum_{k=1}^n \Big(\sum_{j=1}^n c_j N_j(x_k,y_k) \Big) + \sum_{k=n+1}^m \Big(\sum_{j=1}^n c_j N_j(x_k,y_k) \Big) = 0
 \end{align*}
-Where \textbf{B} is our coefficient matrix as defined in task 1. \\
-I don't know if I have misunderstood something critical in the argument, but from my point of view it seems that the answer follows directly from our result in task 1. It is reasonable to assume that the data points $(x_j, y_j)$ don't have any equal points. By this assumption we can always choose some $(u_j, v_j)$ 
-from $(x_j, y_j)$ such that none of these are located at the same point. Then from task 1, we can argue that the matrix \textbf{B} is linear independent, which follows that there exists a unique least squares solution.
+Since
+\begin{align*} 
+\sum_{k=1}^n \Big(\sum_{j=1}^n c_j N_j(x_k,y_k) \Big)= \sum_{k=1}^n \Big(\sum_{j=1}^n c_j N_j(u_k,v_k) \Big) = 0
+\end{align*}
+only has the trivial solution $c_1 + c_2 .... c_n  = 0$, this holds for the whole system and $B$ is linarly independent.
 
 \section*{Exercise 3}
-Now let's say that for some j, the triangles sharing $(u_j, v_j)$ as a vertex doesn't contain any datapoints. In other words for this j our our data points are only located where this $N_j = 0$. Think of it as from our figure in task 1, the points are located "outside" where this function $N_j$ has its linear properties.
-By this observation the function $N_j$ will only give 0 contributions to its column in the \textbf{B} matrix, yielding and linearly dependent system.  
+Now for some k, the triangles sharing $(u_k, v_k)$ as a vertex spans the function $N_k$. Clearly if these triangles doesn't contain any data point (x_j, y_j), then
+$\sum_{j=1}^n N_k(x_j,y_j) = 0$. As a result we have a zero column of $B$, and $\sum_{j=1}^n c_j N_j(x,y) = 0 $ has a non-trivial solution, since $c_k$ can be choosen freely.
+
 
 \newpage
 \section*{Exercise 4}
