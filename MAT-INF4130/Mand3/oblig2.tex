@@ -2,6 +2,7 @@
 \usepackage{preamble}
 \usepackage{tabu}
 \usepackage{color, colortbl}
+\usepackage{cancel}
 \definecolor{LightCyan}{rgb}{0.88,1,1}
 
 \begin{document}
@@ -20,32 +21,32 @@ data points. Further we define piecewise linear functions ${N_j(x, y)}_{j=1}^n$ 
 Our set of linear functions ${N_j(x, y)}_{j=1}^n$ are linear independent if \begin{align*}
 \sum_{j=1}^n c_j N_j(x,y) = c_1 N_1 + c_2 N_2 .... c_n N_n = 0 
 \end{align*}
-for the trivial solution $c_1 = c_2 .. c_n = 0$. 
+for the trivial solution $c_1 = c_2 \hspace{2mm}... \hspace{2mm} = c_n = 0$. 
 \\Let us assume that at least two ${u_j, v_j}$ are located at the same point, say $j = 1,2$. Then by definition $N_1(u_1, v_1)$ and $N_2(u_2, v_2)$ will be defined over same area with the same properties as introduced. Hence our linear system can be written as 
 $\sum_{j=1}^n c_j N_j(x,y) = c_1 N_1 + c_2 N_2 .... c_n N_n = (c_1 + c_2)N_2 + c_3 N_3 .... c_n N_n = 0$. Hence the system has a nontrivial solution, and the set of functions are linear dependent. We therefore must
 choose ${(u_j, v_j)}_{j=1}^n$ at different points to have a linear independent set of functions. 
 
 \newpage
 \section*{Exercise 2}
-For simplicity let  ${(u_j, v_j)}_{j=1}^n$ for n < m, be our chosen coordinates from the dataset such that $(u_1, v_1) = (x_1, y_1), (u_2, v_2) = (x_2, y_2),.., (u_n, v_n) = (x_n, y_n)$ increasing index order. For a linear independent system we must have that that 
-\begin{align*}
+For simplicity let  ${(u_j, v_j)}_{j=1}^n$ for n < m, be our chosen coordinates from the dataset such that $(u_1, v_1) = (x_1, y_1), (u_2, v_2) = (x_2, y_2),.., (u_n, v_n) = (x_n, y_n)$ for increasing index order. For a linear independent system we must have that that 
+\begin{align}
 \sum_{k=1}^n \Big(\sum_{j=1}^n c_j N_j(x_k,y_k) \Big) + \sum_{k=n+1}^m \Big(\sum_{j=1}^n c_j N_j(x_k,y_k) \Big) = 0
-\end{align*}
-Since
+\end{align}
+Using our results from task 1, assuming no chosen data points lay on the same coordinate then
 \begin{align*} 
 \sum_{k=1}^n \Big(\sum_{j=1}^n c_j N_j(x_k,y_k) \Big)= \sum_{k=1}^n \Big(\sum_{j=1}^n c_j N_j(u_k,v_k) \Big) = 0
 \end{align*}
-only has the trivial solution $c_1 + c_2 .... c_n  = 0$, this holds for the whole system and $B$ is linarly independent.
+only has the trivial solution $c_1 + c_2 .... c_n  = 0$. Hence this holds for the whole system and $B$ is linearly independent.
 
 \section*{Exercise 3}
-Now for some k, the triangles sharing $(u_k, v_k)$ as a vertex spans the function $N_k$. Clearly if these triangles doesn't contain any data point (x_j, y_j), then
-$\sum_{j=1}^n N_k(x_j,y_j) = 0$. As a result we have a zero column of $B$, and $\sum_{j=1}^n c_j N_j(x,y) = 0 $ has a non-trivial solution, since $c_k$ can be choosen freely.
+Now for some k, the triangles sharing $(u_k, v_k)$ as a vertex spans the function $N_k$. Clearly if these triangles doesn't contain any data point $(x_j, y_j)$, then
+$\sum_{j=1}^n N_k(x_j,y_j) = 0$. As a result we have a zero column of $B$, and $\sum_{j=1}^n c_j N_j(x,y) = 0 $ has a non-trivial solution, since $c_k$ can be chosen freely.
 
 
 \newpage
 \section*{Exercise 4}
 This simple program writes out the barycentric coordinates of \textbf{p}, relative to the triangle spanned by $\textbf{p}_1$, $\textbf{p}_2$ and $\textbf{p}_3$. 
-A simple run set by the coordinates $\textbf{p}_1 = (0, 0)$, $\textbf{p}_2 = (1, 1)$, $\textbf{p}_3 = (-1, 1)$ for $\textbf{p} = (0.5, 0)$ yeilds
+A simple run set by the coordinates $\textbf{p}_1 = (0, 0)$, $\textbf{p}_2 = (1, 1)$, $\textbf{p}_3 = (-1, 1)$ for $\textbf{p} = (0.5, 0)$ yields
 
 \begin{lstlisting}[style=terminal]
 Find the barycentric coordinates of (0, 0.5) 
@@ -101,6 +102,23 @@ barycentric(p1, p2, p3, p)
 \end{lstlisting}
 
 \newpage
+\section*{Exercise 5}
+From exercise 4 we learned that to find a datapoint $(x_k, y_k)$ within a triangle, we know that if the barycentric coordinates $b_1, b_2, b_3 \geq 0$, then our datapoint is within this triangle which we denote $\Delta$.
+We also know that if $(u_j, v_j)$ is a vertex of $\Delta$ then $N_j$ is a linear function on $\Delta$. Now for simplicity in comparison with exercise 4, let
+\begin{itemize} 
+\item	$(u_j, v_j) = (u_1, v_1) = \textbf{p1}$  
+\item   $(u_2, v_2) = \textbf{p2}$ 
+\item   $(u_3, v_3) = \textbf{p3}$ 
+\end{itemize}
+Locally on that triangle. We can then show that 
+
+\begin{align*}
+N_j(x) = N_j(b_1\textbf{p1} + b_2\textbf{p2} + b_3\textbf{p3}) = N_j(b_1(u_1,v_1) + b_2(u_2, v_2) + b_3(u_3, v_3)) =  \\
+ N_1(b_1(u_1,v_1) + b_2(u_2, v_2) + b_3(u_3, v_3)) = b_1 N_1(u_1,v_1) + b_2 \cancelto{0}{N_1(u_2,v_2)} + b_3 \cancelto{0}{N_1(u_3,v_3)} = b_1
+\end{align*}
+This can be generalised for all triangles in our domain.
+Indeed $N_j(x_k, y_k)$ equals the barycentric coordinate of $(x_k, y_k)$ corresponding to $(u_j,v_j)$ if $(u_j,v_j)$ is a vertex in $\Delta$ \newline
+And finally if $(u_j, v_j)$ is not a vertex in $\Delta$, then $N_j(x_k, y_k) = 0$ from our definition of $N_j$.
 
 
 \end{document}
